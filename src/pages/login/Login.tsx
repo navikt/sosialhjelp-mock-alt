@@ -8,6 +8,10 @@ export const Login = () => {
     const [fnr, setFnr] = useState('');
     const [mockAltAlleFnr, setMockAltAlleFnr] = useState([]);
 
+    const href = window.location.href;
+    const params = href.slice(href.indexOf('?') + 1, href.length);
+    console.log('params', params);
+
     useEffect(() => {
         fetch(`${process.env.REACT_APP_MOCK_ALT_API}/fiks/alle/fnr`)
             .then((response) => response.json())
@@ -15,7 +19,7 @@ export const Login = () => {
     }, []);
 
     const handleOnClick = () => {
-        window.location.href = `${process.env.REACT_APP_MOCK_ALT_API}/login/cookie?subject=${fnr}&redirect=http://localhost:3001/sosialhjelp/soknad/informasjon`;
+        window.location.href = `${process.env.REACT_APP_MOCK_ALT_API}/login/cookie?subject=${fnr}&${params}`;
     };
     return (
         <Panel border>
@@ -28,7 +32,11 @@ export const Login = () => {
                         label="Velg fra forhåndsdefinerte brukerIDer"
                     >
                         {mockAltAlleFnr.map((fnr) => {
-                            return <option value={fnr}>{fnr}</option>;
+                            return (
+                                <option key={fnr} value={fnr}>
+                                    {fnr}
+                                </option>
+                            );
                         })}
                     </Select>
                 )}

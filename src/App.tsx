@@ -8,7 +8,7 @@ function App() {
     return (
         <div id="app" className="app">
             <div className="container">
-                <Router>
+                <Router basename="sosialhjelp/mock-alt">
                     <Switch>
                         <Route path="/login">
                             <Login />

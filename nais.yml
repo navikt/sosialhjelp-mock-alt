@@ -1,0 +1,36 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: {{applicationName}}
+  namespace: {{namespace}}
+  labels:
+    team: teamdigisos
+spec:
+  image: {{image}}
+  port: 5000
+  ingresses:
+{{#each ingresses}}
+   - "{{this}}"
+{{/each}}
+  liveness:
+    path: /sosialhjelp/mock-alt/internal/isAlive
+    initialDelay: 20
+  readiness:
+    path: /sosialhjelp/mock-alt/internal/isReady
+    initialDelay: 20
+  resources:
+    limits:
+      cpu: 300m
+      memory: 256Mi
+    requests:
+      cpu: 40m
+      memory: 128Mi
+  replicas:
+    min: 2
+    max: 4
+    cpuThresholdPercentage: 70
+  env:
+{{#each env}}
+    - name: {{@key}}
+      value: "{{this}}"
+{{/each}}
