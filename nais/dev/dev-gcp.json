@@ -1,6 +1,6 @@
 {
     "namespace": "teamdigisos",
-    "ingress": ["https://sosialhjelp-mock-alt-gcp.dev.nav.no/sosialhjelp/mock-alt"],
+    "ingresses": ["https://sosialhjelp-mock-alt-gcp.dev.nav.no/sosialhjelp/mock-alt"],
     "env": {
         "HOST_ADDRESS": "https://digisos-gcp.dev.nav.no/",
         "COOKIE_DOMAIN": "digisos-gcp.dev.nav.no"
