@@ -1,4 +1,4 @@
-name: Deploy dev-sbs
+name: Deploy dev-gcp
 on: workflow_dispatch
 
 jobs:
