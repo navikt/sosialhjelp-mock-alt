@@ -1,6 +1,7 @@
 {
     "namespace": "teamdigisos",
-    "ingress": ["https://sosialhjelp-mock-alt.labs.nais.io/sosialhjelp/mock-alt"],
+    "applicationName": "sosialhjelp-mock-alt",
+    "ingresses": ["https://sosialhjelp-mock-alt.labs.nais.io/sosialhjelp/mock-alt"],
     "env": {
         "HOST_ADDRESS": "https://digisos.labs.nais.io/",
         "COOKIE_DOMAIN": "digisos.labs.nais.io"
