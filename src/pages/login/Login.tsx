@@ -3,6 +3,7 @@ import Panel from 'nav-frontend-paneler';
 import { Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Sidetittel } from 'nav-frontend-typografi';
 import React, { useEffect, useState } from 'react';
+import { getMockAltApiURL } from '../../utils/restUtils';
 
 export const Login = () => {
     const [fnr, setFnr] = useState('');
@@ -13,13 +14,13 @@ export const Login = () => {
     console.log('params', params);
 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_MOCK_ALT_API}/fiks/alle/fnr`)
+        fetch(`${getMockAltApiURL()}/fiks/alle/fnr`)
             .then((response) => response.json())
             .then((json) => setMockAltAlleFnr(json));
     }, []);
 
     const handleOnClick = () => {
-        window.location.href = `${process.env.REACT_APP_MOCK_ALT_API}/login/cookie?subject=${fnr}&${params}`;
+        window.location.href = `${getMockAltApiURL()}/login/cookie?subject=${fnr}&${params}`;
     };
     return (
         <Panel border>
