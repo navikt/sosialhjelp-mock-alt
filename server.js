@@ -6,9 +6,9 @@ const basePath = '/sosialhjelp/mock-alt';
 const app = express(); // create express app
 
 //app.use(basePath, express.static('public'));
-app.use(express.static(path.join(__dirname, './', 'build')));
+app.use(basePath, express.static(path.join(__dirname, './', 'build'), { index: false }));
 
-app.use((req, res, next) => {
+app.use(/^(?!.*\/(internal|static)\/).*$/, (req, res, next) => {
     res.sendFile(path.join(__dirname, './', 'build', 'index.html'));
 });
 
