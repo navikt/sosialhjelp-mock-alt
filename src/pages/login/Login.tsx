@@ -35,7 +35,7 @@ export const Login = () => {
         fetch(`${getMockAltApiURL()}/fiks/alle/fnr`)
             .then((response) => response.json())
             .then((json) => setMockAltAlleFnr(json));
-    }, []);
+    }, [fnr.length]);
     var brukerListe:Array<BrukerInfo> = [];
     if(mockAltDefaultFnr) brukerListe.push({navn:"Default", fnr:mockAltDefaultFnr});
     mockAltAlleFnr.forEach((it) => {brukerListe.push({navn:it, fnr:it})})
