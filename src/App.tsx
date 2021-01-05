@@ -1,8 +1,9 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import './App.css';
-import { SoknadMock } from './pages/SoknadMock';
-import { Login } from './pages/login/Login';
+import {PersonMockData} from './pages/person/PersonMockData';
+import {Login} from './pages/login/Login';
+import {Oversikt} from "./pages/Oversikt";
 
 function App() {
     return (
@@ -11,10 +12,13 @@ function App() {
                 <Router basename="sosialhjelp/mock-alt">
                     <Switch>
                         <Route path="/login">
-                            <Login />
+                            <Login/>
+                        </Route>
+                        <Route path="/person">
+                            <PersonMockData/>
                         </Route>
                         <Route path="/">
-                            <SoknadMock />
+                            <Oversikt/>
                         </Route>
                     </Switch>
                 </Router>
