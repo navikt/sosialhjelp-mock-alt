@@ -46,7 +46,6 @@ export const PersonMockData = () => {
             fetch(`${getMockAltApiURL()}/pdl/download_url?ident=` + queryFnr)
                 .then((response) => response.text())
                 .then((text) => {
-                    console.dir("DEBUG: " + text);
                     const nedlastet: Personalia = JSON.parse(text);
                     setEditMode(true);
                     setLockedMode(nedlastet.locked);
@@ -69,7 +68,7 @@ export const PersonMockData = () => {
     }, [fnr, queryFnr]);
 
     const onCreateUser = (event: ClickEvent): void => {
-        var personalia: Personalia = {
+        const personalia: Personalia = {
             fnr: fnr,
             navn: {
                 fornavn: fornavn,
@@ -109,7 +108,7 @@ export const PersonMockData = () => {
                 <Input value={fnr}
                        label="BrukerID"
                        disabled={editMode || lockedMode}
-                       onChange={(evt: any) => setFornavn(evt.target.value)}
+                       onChange={(evt: any) => setFnr(evt.target.value)}
                 />
             </SkjemaGruppe>
             {lockedMode && <AlertStripe type="info">Du kan ikke editere standardbrukerene.</AlertStripe>}
