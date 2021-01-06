@@ -111,7 +111,7 @@ export const Feilkonfiurering = () => {
                 />
             </SkjemaGruppe>
             {navn != null && navn.length > 0 &&
-            <div>({navn})<br/><br/></div>
+            <p>({navn})</p>
             }
             <SkjemaGruppe legend="Feilsituasjon">
                 <Input value={feilkode}
