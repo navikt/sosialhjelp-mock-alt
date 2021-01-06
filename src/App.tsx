@@ -4,6 +4,7 @@ import './App.css';
 import {PersonMockData} from './pages/person/PersonMockData';
 import {Login} from './pages/login/Login';
 import {Oversikt} from "./pages/Oversikt";
+import {Feilkonfiurering} from "./pages/feil/Feilkonfiurering";
 
 function App() {
     return (
@@ -16,6 +17,9 @@ function App() {
                         </Route>
                         <Route path="/person">
                             <PersonMockData/>
+                        </Route>
+                        <Route path="/feil">
+                            <Feilkonfiurering/>
                         </Route>
                         <Route path="/">
                             <Oversikt/>

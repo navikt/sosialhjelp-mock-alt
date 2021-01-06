@@ -29,18 +29,18 @@ export const Oversikt = () => {
         <Panel border>
             <Sidetittel>Oversikt</Sidetittel>
             <SkjemaGruppe legend="">
-                {personliste && personliste.length > 0 && (
-                    personliste.map((bruker:Personalia) => {
+                {
+                    personliste.map((bruker: Personalia) => {
                         return <div>
                             {bruker.navn.fornavn + " " + bruker.navn.mellomnavn +
-                            " " + bruker.navn.etternavn +" (" + bruker.fnr + ")"}
+                            " " + bruker.navn.etternavn + " (" + bruker.fnr + ")"}
                             <Link to={"/person?brukerID=" + bruker.fnr}>{bruker.locked ? "Se på" : "Edit"}</Link>
-                            {mockAltDefaultFnr === bruker.fnr &&
-                                <b> Default</b>
-                            }
+                            {" "}
+                            <Link to={"/feil?brukerID=" + bruker.fnr}>Feil?</Link>
+                            {mockAltDefaultFnr === bruker.fnr && <b> Default</b>}
                         </div>;
                     })
-                )}
+                }
                 <div>
                     <Link to={"/person"}>Opprett ny bruker</Link>
                 </div>
