@@ -35,9 +35,9 @@ export const Oversikt = () => {
                             {bruker.navn.fornavn + " " + bruker.navn.mellomnavn +
                             " " + bruker.navn.etternavn + " (" + bruker.fnr + ")"}
                             <Link to={"/person?brukerID=" + bruker.fnr}>{bruker.locked ? "Se på" : "Edit"}</Link>
-                            {mockAltDefaultFnr === bruker.fnr &&
-                            <b> Default</b>
-                            }
+                            {" "}
+                            <Link to={"/feil?brukerID=" + bruker.fnr}>Feil?</Link>
+                            {mockAltDefaultFnr === bruker.fnr && <b> Default</b>}
                         </div>;
                     })
                 }
