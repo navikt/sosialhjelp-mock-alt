@@ -55,7 +55,7 @@ export const Feilkonfiurering = () => {
                     }
                 })
                 .catch((error) => console.log(error));
-            fetch(`${getMockAltApiURL()}/feil/hent_feil?ident=` + fnr)
+            fetch(`${getMockAltApiURL()}/feil?ident=` + fnr)
                 .then((response) => response.text())
                 .then((text) => {
                     if (text.length > 1) {
@@ -84,7 +84,7 @@ export const Feilkonfiurering = () => {
             className: klasse,
             functionName: funksjon,
         }
-        fetch(`${getMockAltApiURL()}/feil/edit_feil`, {
+        fetch(`${getMockAltApiURL()}/feil`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
