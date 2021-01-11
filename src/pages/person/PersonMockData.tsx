@@ -15,6 +15,7 @@ export interface Personalia {
     addressebeskyttelse: string,
     sivilstand: string,
     starsborgerskap: string,
+    bostedsadresse: Bostedsadresse
     locked: boolean,
 }
 
@@ -22,6 +23,13 @@ export interface PersonaliaNavn {
     fornavn: string,
     mellomnavn: string,
     etternavn: string,
+}
+
+export interface Bostedsadresse {
+    adressenavn: string,
+    husnummer: number,
+    postnummer: string,
+    kommunenummer: string
 }
 
 function useQuery() {
@@ -38,6 +46,10 @@ export const PersonMockData = () => {
     const [addressebeskyttelse, setAddressebeskyttelse] = useState<string>("UGRADERT");
     const [sivilstand, setSivilstand] = useState<string>("UOPPGITT");
     const [starsborgerskap, setStatsborgerskap] = useState<string>("NOR");
+    const [adressenavn, setAdressenavn] = useState<string>("Mulholland Drive")
+    const [husnummer, setHusnummer] = useState<number>(42)
+    const [postnummer, setPostnummer] = useState<string>("0101")
+    const [kommunenummer, setKommunenummer] = useState<string>("0301")
 
     const queryFnr = useQuery().get("brukerID");
 
@@ -56,6 +68,10 @@ export const PersonMockData = () => {
                     setAddressebeskyttelse(nedlastet.addressebeskyttelse);
                     setSivilstand(nedlastet.sivilstand);
                     setStatsborgerskap(nedlastet.starsborgerskap);
+                    setAdressenavn(nedlastet.bostedsadresse.adressenavn);
+                    setHusnummer(nedlastet.bostedsadresse.husnummer);
+                    setPostnummer(nedlastet.bostedsadresse.postnummer);
+                    setKommunenummer(nedlastet.bostedsadresse.kommunenummer);
                 });
         }
         if (fnr.length < 1) {
@@ -78,6 +94,12 @@ export const PersonMockData = () => {
             addressebeskyttelse: addressebeskyttelse,
             sivilstand: sivilstand,
             starsborgerskap: starsborgerskap,
+            bostedsadresse: {
+                adressenavn: adressenavn,
+                husnummer: husnummer,
+                postnummer: postnummer,
+                kommunenummer: kommunenummer
+            },
             locked: false,
         }
         fetch(`${getMockAltApiURL()}/pdl/upload_url`, {
@@ -165,9 +187,31 @@ export const PersonMockData = () => {
                     <option value="DEN">Dansk</option>
                     <option value="GER">Tysk</option>
                     <option value="USA">Amerikansk</option>
-                    <option value="xxx">Statsløs</option>
-                    <option value="???">Mangler opplysninger</option>
+                    <option value="XXX">Statsløs</option>
+                    <option value="XUK">Ukjent/Mangler opplysninger</option>
                 </Select>
+            </SkjemaGruppe>
+            <SkjemaGruppe legend="Bostedsadresse">
+                <Input label="Adressenavn"
+                       disabled={lockedMode}
+                       value={adressenavn}
+                       onChange={(evt: any) => setAdressenavn(evt.target.value)}
+                />
+                <Input label="Husnummer"
+                       disabled={lockedMode}
+                       value={husnummer}
+                       onChange={(evt: any) => setHusnummer(evt.target.value)}
+                />
+                <Input label="Postnummer"
+                       disabled={lockedMode}
+                       value={postnummer}
+                       onChange={(evt: any) => setPostnummer(evt.target.value)}
+                />
+                <Input label="Kommunenummer"
+                       disabled={lockedMode}
+                       value={kommunenummer}
+                       onChange={(evt: any) => setKommunenummer(evt.target.value)}
+                />
             </SkjemaGruppe>
 
             <Hovedknapp
