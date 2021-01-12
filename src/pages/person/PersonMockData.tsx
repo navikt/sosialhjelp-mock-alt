@@ -14,6 +14,7 @@ export interface Personalia {
     navn: PersonaliaNavn,
     addressebeskyttelse: string,
     sivilstand: string,
+    ektefelle: string,
     starsborgerskap: string,
     bostedsadresse: Bostedsadresse
     locked: boolean,
@@ -45,6 +46,7 @@ export const PersonMockData = () => {
     const [etternavn, setEtternavn] = useState<string>("Mockperson");
     const [addressebeskyttelse, setAddressebeskyttelse] = useState<string>("UGRADERT");
     const [sivilstand, setSivilstand] = useState<string>("UOPPGITT");
+    const [ektefelle, setEktefelle] = useState<string>("INGEN");
     const [starsborgerskap, setStatsborgerskap] = useState<string>("NOR");
     const [adressenavn, setAdressenavn] = useState<string>("Mulholland Drive")
     const [husnummer, setHusnummer] = useState<number>(42)
@@ -93,6 +95,7 @@ export const PersonMockData = () => {
             },
             addressebeskyttelse: addressebeskyttelse,
             sivilstand: sivilstand,
+            ektefelle: ektefelle,
             starsborgerskap: starsborgerskap,
             bostedsadresse: {
                 adressenavn: adressenavn,
@@ -176,6 +179,16 @@ export const PersonMockData = () => {
                     <option value="SEPARERT_PARTNER">SEPARERT_PARTNER</option>
                     <option value="SKILT_PARTNER">SKILT_PARTNER</option>
                     <option value="GJENLEVENDE_PARTNER">GJENLEVENDE_PARTNER</option>
+                </Select>
+                <Select label="Ektefelle"
+                        disabled={lockedMode}
+                        onChange={(evt: any) => setEktefelle(evt.target.value)}
+                        value={ektefelle}
+                >
+                    <option value="INGEN">-</option>
+                    <option value="EKTEFELLE_SAMME_BOSTED">EKTEFELLE_SAMME_BOSTED</option>
+                    <option value="EKTEFELLE_ANNET_BOSTED">EKTEFELLE_ANNET_BOSTED</option>
+                    <option value="EKTEFELLE_MED_ADRESSEBESKYTTELSE">EKTEFELLE_MED_ADRESSEBESKYTTELSE</option>
                 </Select>
                 <Select label="Statsborgerskap"
                         disabled={lockedMode}
