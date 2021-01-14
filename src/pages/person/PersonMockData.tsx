@@ -122,6 +122,8 @@ export const PersonMockData = () => {
         })
         if(isLoginSession(params)) {
             window.location.href = `${getMockAltApiURL()}/login/cookie?subject=${fnr}${addParams(params, "&")}`;
+        } else {
+            history.push("/" + addParams(params))
         }
         event.preventDefault()
     }
