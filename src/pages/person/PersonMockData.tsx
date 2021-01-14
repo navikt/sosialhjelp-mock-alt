@@ -1,10 +1,11 @@
 import AlertStripe from 'nav-frontend-alertstriper';
-import {Hovedknapp} from 'nav-frontend-knapper';
+import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
 import {Input, Select, SkjemaGruppe} from 'nav-frontend-skjema';
 import {Sidetittel, Undertittel} from 'nav-frontend-typografi';
 import React, {useEffect, useState} from 'react';
-import {getMockAltApiURL} from "../../utils/restUtils";
+import {useHistory} from 'react-router-dom'
+import {addParams, getMockAltApiURL, getRedirectParams, isLoginSession} from "../../utils/restUtils";
 import {useLocation} from "react-router-dom";
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
@@ -54,6 +55,8 @@ export const PersonMockData = () => {
     const [kommunenummer, setKommunenummer] = useState<string>("0301")
 
     const queryFnr = useQuery().get("brukerID");
+    const params = getRedirectParams();
+    const history = useHistory()
 
     useEffect(() => {
         if (queryFnr !== null && queryFnr.length > 1) {
@@ -117,6 +120,16 @@ export const PersonMockData = () => {
         }).catch(error => {
             console.log(error)
         })
+        if(isLoginSession(params)) {
+            window.location.href = `${getMockAltApiURL()}/login/cookie?subject=${fnr}${addParams(params, "&")}`;
+        } else {
+            history.push("/" + addParams(params))
+        }
+        event.preventDefault()
+    }
+
+    const onGoBack = (event: ClickEvent): void => {
+        history.push("/" + addParams(params))
         event.preventDefault()
     }
 
@@ -227,12 +240,18 @@ export const PersonMockData = () => {
                 />
             </SkjemaGruppe>
 
-            <Hovedknapp
-                disabled={lockedMode}
-                onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCreateUser(event)}
+            {!lockedMode &&
+                <Hovedknapp
+                    onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCreateUser(event)}
+                >
+                    {editMode ? "Lagre endringer" : "Opprett bruker"} {isLoginSession(params) && " og logg inn"}
+                </Hovedknapp>
+            }
+            <Knapp
+                onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onGoBack(event)}
             >
-                Sett systemdata
-            </Hovedknapp>
+                {lockedMode ? "Tilbake" : "Cancel" }
+            </Knapp>
         </Panel>
     );
 };

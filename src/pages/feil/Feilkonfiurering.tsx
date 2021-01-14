@@ -2,9 +2,9 @@ import Panel from "nav-frontend-paneler";
 import {Sidetittel} from "nav-frontend-typografi";
 import React, {useEffect, useState} from "react";
 import {Input, Select, SkjemaGruppe} from "nav-frontend-skjema";
-import {Hovedknapp} from "nav-frontend-knapper";
-import {getMockAltApiURL} from "../../utils/restUtils";
-import {useLocation} from "react-router-dom";
+import {Hovedknapp, Knapp} from "nav-frontend-knapper";
+import {addParams, getMockAltApiURL, getRedirectParams} from "../../utils/restUtils";
+import {useHistory, useLocation} from "react-router-dom";
 import {Personalia} from "../person/PersonMockData";
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
@@ -38,6 +38,8 @@ export const Feilkonfiurering = () => {
     const [navn, setNavn] = useState<string>("")
 
     const queryFnr = useQuery().get("brukerID");
+    const params = getRedirectParams();
+    const history = useHistory()
 
     useEffect(() => {
         if (queryFnr !== null && queryFnr.length > 1) {
@@ -96,6 +98,11 @@ export const Feilkonfiurering = () => {
         }).catch(error => {
             console.log(error)
         })
+        event.preventDefault()
+    }
+
+    const onGoBack = (event: ClickEvent): void => {
+        history.push("/" + addParams(params))
         event.preventDefault()
     }
 
@@ -166,12 +173,19 @@ export const Feilkonfiurering = () => {
                     )}
                 </Select>
             </SkjemaGruppe>
-            <Hovedknapp
-                disabled={lockedMode}
-                onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCreateFeilkonfigurering(event)}
+            {!lockedMode &&
+                <Hovedknapp
+                    disabled={lockedMode}
+                    onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCreateFeilkonfigurering(event)}
+                >
+                    Sett feilkonfigurasjon
+                </Hovedknapp>
+            }
+            <Knapp
+                onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onGoBack(event)}
             >
-                Sett feilkonfigurasjon
-            </Hovedknapp>
+                {lockedMode ? "Tilbake" : "Cancel" }
+            </Knapp>
         </Panel>
     )
 }

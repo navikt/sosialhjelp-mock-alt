@@ -3,7 +3,7 @@ import Panel from 'nav-frontend-paneler';
 import {Input, Select, SkjemaGruppe} from 'nav-frontend-skjema';
 import {Sidetittel} from 'nav-frontend-typografi';
 import React, {useEffect, useState} from 'react';
-import {getMockAltApiURL} from '../../utils/restUtils';
+import {addParams, getMockAltApiURL, getRedirectParams} from '../../utils/restUtils';
 
 interface BrukerInfo {
     navn: string,
@@ -16,9 +16,7 @@ export const Login = () => {
     const [mockAltDefaultFnr, setMockAltDefaultFnr] = useState<string |undefined>(undefined);
     const [mockAltTilfeldigFnr, setMockAltTilfeldigFnr] = useState<string |undefined>(undefined);
 
-    const href = window.location.href;
-    const params = href.slice(href.indexOf('?') + 1, href.length);
-    console.log('params', params);
+    const params = getRedirectParams();
 
     useEffect(() => {
         fetch(`${getMockAltApiURL()}/fiks/fast/fnr`)
@@ -42,7 +40,7 @@ export const Login = () => {
     if(mockAltTilfeldigFnr) brukerListe.push({navn:"Nytt personnummer", fnr:mockAltTilfeldigFnr});
 
     const handleOnClick = () => {
-        window.location.href = `${getMockAltApiURL()}/login/cookie?subject=${fnr}&${params}`;
+        window.location.href = `${getMockAltApiURL()}/login/cookie?subject=${fnr}${addParams(params,"&")}`;
     };
     return (
         <Panel border>
