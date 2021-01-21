@@ -18,7 +18,7 @@ export const Oversikt = () => {
             .then((text) => {
                 setMockAltDefaultFnr(text);
             });
-        fetch(`${getMockAltApiURL()}/pdl/person_liste`)
+        fetch(`${getMockAltApiURL()}/mock-alt/personalia/liste`)
             .then((response) => response.json())
             .then((json) => setPersonListe(json));
     }, []);
