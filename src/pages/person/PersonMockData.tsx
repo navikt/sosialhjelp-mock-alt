@@ -101,8 +101,6 @@ export const PersonMockData = () => {
                 })
                 .then((jsonObject) => {
                     const nedlastet: Personalia = jsonObject;
-                    console.dir(nedlastet);
-                    console.dir(nedlastet.telefonnummer !== "");
                     setEditMode(true);
                     setLockedMode(nedlastet.locked);
                     setFnr(nedlastet.fnr);
@@ -125,8 +123,6 @@ export const PersonMockData = () => {
                     setSkattutbetalinger(nedlastet.skattetatenUtbetalinger);
                     setBostotteSaker(nedlastet.bostotteSaker);
                     setBostotteUtbetalinger(nedlastet.bostotteUtbetalinger);
-                    console.dir(brukTelefonnummer)
-                    console.dir(setBrukOrganisasjon)
                 });
         }
         if (fnr.length < 1) {
