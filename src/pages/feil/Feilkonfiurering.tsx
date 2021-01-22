@@ -47,7 +47,7 @@ export const Feilkonfiurering = () => {
             setEditMode(true);
         }
         if (fnr && fnr.length > 10) {
-            fetch(`${getMockAltApiURL()}/pdl/download_url?ident=` + fnr)
+            fetch(`${getMockAltApiURL()}/mock-alt/personalia?ident=` + fnr)
                 .then((response) => response.text())
                 .then((text) => {
                     if (text.length > 1) {

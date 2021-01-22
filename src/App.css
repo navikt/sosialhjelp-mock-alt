@@ -12,3 +12,11 @@ body {
     margin-top: 2rem;
     width: 48rem;
 }
+
+.leftPadding {
+    margin-left: 1em;
+}
+
+.rightPadding {
+    margin-left: 1em;
+}
