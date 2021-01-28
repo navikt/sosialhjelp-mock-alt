@@ -8,8 +8,8 @@ import Panel from "nav-frontend-paneler";
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
 export enum ArbeidsforholdType {
-    PERSON = "person",
-    ORGANISASJON = "organisasjon",
+    PERSON = "Person",
+    ORGANISASJON = "Organisasjon",
 }
 
 export interface ArbeidsforholdObject {
