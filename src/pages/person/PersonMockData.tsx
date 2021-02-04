@@ -12,6 +12,7 @@ import {BostotteSakObject, NyBostotteSak, VisBostotteSak} from "./husbanken/Bost
 import {BostotteUtbetalingObject, NyttBostotteUtbetaling, VisBostotteUtbetaling} from "./husbanken/BostotteUtbetaling";
 import {NyttSkatteutbetaling, SkatteutbetalingObject, VisSkatteutbetaling} from "./skattetaten/Skattetaten";
 import {Collapse} from "react-collapse";
+import {BarnObject, NyttBarn, VisBarn} from "./barn/Barn";
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -21,6 +22,7 @@ export interface Personalia {
     addressebeskyttelse: string,
     sivilstand: string,
     ektefelle: string,
+    barn: BarnObject[],
     starsborgerskap: string,
     bostedsadresse: Bostedsadresse,
     telefonnummer: string,
@@ -68,6 +70,9 @@ export const PersonMockData = () => {
     const [organisasjon, setOrganisasjon] = useState<string>("1234567890")
     const [organisasjonsNavn, setOrganisasjonsNavn] = useState<string>("Organisasjonsnavn")
 
+    const [leggTilBarn, setLeggTilBarn] = useState<boolean>(false)
+    const [barn, setBarn] = useState<BarnObject[]>([])
+
     const [leggTilArbeidsforhold, setLeggTilArbeidsforhold] = useState<boolean>(false)
     const [arbeidsforhold, setArbeidsforhold] = useState<ArbeidsforholdObject[]>([])
 
@@ -109,6 +114,7 @@ export const PersonMockData = () => {
                     setEtternavn(nedlastet.navn.etternavn);
                     setAddressebeskyttelse(nedlastet.addressebeskyttelse);
                     setSivilstand(nedlastet.sivilstand);
+                    setBarn(nedlastet.barn);
                     setStatsborgerskap(nedlastet.starsborgerskap);
                     setAdressenavn(nedlastet.bostedsadresse.adressenavn);
                     setHusnummer(nedlastet.bostedsadresse.husnummer);
@@ -133,6 +139,14 @@ export const PersonMockData = () => {
                 });
         }
     }, [fnr, queryFnr]);
+
+    const leggTilBarnCallback = (nyttTilBarn: BarnObject) => {
+        if (nyttTilBarn) {
+            barn.push(nyttTilBarn);
+            setBarn(barn);
+        }
+        setLeggTilBarn(false)
+    };
 
     const leggTilArbeidsforholdCallback = (nyttTilArbeidsforhold: ArbeidsforholdObject) => {
         if (nyttTilArbeidsforhold) {
@@ -180,6 +194,7 @@ export const PersonMockData = () => {
             addressebeskyttelse: addressebeskyttelse,
             sivilstand: sivilstand,
             ektefelle: ektefelle,
+            barn: barn,
             starsborgerskap: starsborgerskap,
             bostedsadresse: {
                 adressenavn: adressenavn,
@@ -235,7 +250,7 @@ export const PersonMockData = () => {
 
             <SkjemaGruppe legend="">
                 <Input value={fnr}
-                       label="BrukerID"
+                       label="Ident"
                        disabled={editMode || lockedMode}
                        onChange={(evt: any) => setFnr(evt.target.value)}
                 />
@@ -294,6 +309,15 @@ export const PersonMockData = () => {
                     <option value="EKTEFELLE_ANNET_BOSTED">EKTEFELLE_ANNET_BOSTED</option>
                     <option value="EKTEFELLE_MED_ADRESSEBESKYTTELSE">EKTEFELLE_MED_ADRESSEBESKYTTELSE</option>
                 </Select>
+                <SkjemaGruppe legend="Barn">
+                    <NyttBarn isOpen={leggTilBarn} callback={leggTilBarnCallback}/>
+                    {barn.map((barn: BarnObject, index: number) => {
+                        return <VisBarn barn={barn} key={"barn_" + index}/>
+                    })}
+                    {!leggTilBarn &&
+                    <Knapp onClick={() => (setLeggTilBarn(true))}>Legg til barn</Knapp>
+                    }
+                </SkjemaGruppe>
                 <Select label="Statsborgerskap"
                         disabled={lockedMode}
                         onChange={(evt: any) => setStatsborgerskap(evt.target.value)}
