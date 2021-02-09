@@ -96,6 +96,11 @@ export const Feilkonfiurering = () => {
         event.preventDefault();
     }
 
+    const resetFeil = (event: ClickEvent): void => {
+        setFeilsituasjoner([]);
+        event.preventDefault();
+    }
+
     const onSetFeilkonfigurering = (event: ClickEvent): void => {
         const feilsituasjonerFrontend: FeilsituasjonerFrontend = {
             fnr: fnr,
@@ -140,15 +145,25 @@ export const Feilkonfiurering = () => {
                 return <Panel border={true} key={"feil_" + index}>
                     <div>Klasse: {feil.className}</div>
                     <div>Funksjon: {feil.functionName}</div>
-                    <div>Feilkode: {feil.feilkode}</div>
-                    <div>Feilmelding: {feil.feilmelding}</div>
-                    <div>Sannsynlighet for feilkode: {feil.feilkodeSansynlighet}</div>
-                    <div>Timeout: {feil.timeout}</div>
-                    <div>Sannsynlighet for timeout: {feil.timeoutSansynlighet}</div>
+                    {feil.feilkode > 0 &&
+                        <div>
+                        <div>Feilkode: {feil.feilkode}</div>
+                        <div>Feilmelding: {feil.feilmelding}</div>
+                        <div>Sannsynlighet for feilkode: {feil.feilkodeSansynlighet}</div>
+                        </div>
+                    }
+                    {feil.timeout > 0 &&
+                        <div>
+                        <div>Timeout: {feil.timeout}</div>
+                        <div>Sannsynlighet for timeout: {feil.timeoutSansynlighet}</div>
+                        </div>
+                    }
                 </Panel>
             })}
             <Collapse isOpened={!leggTilFeil}>
                 <Knapp disabled={lockedMode} onClick={() => (setLeggTilFeil(true))}>Legg til feil</Knapp>
+                <Knapp disabled={lockedMode} onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+                    (resetFeil(event))}>Tøm feilliste</Knapp>
             </Collapse>
             <Collapse isOpened={leggTilFeil}>
                 <Panel border={true}>
@@ -187,6 +202,9 @@ export const Feilkonfiurering = () => {
                         >
                             <option value="*">* Alle *</option>
                             <option value="FixController">Fiks</option>
+                            <option value="PdlController">Pdl</option>
+                            <option value="HusbankenController">Husbanken</option>
+                            <option value="SkatteetatenController">Skatt</option>
                         </Select>
                         <Select label="Funksjon"
                                 disabled={lockedMode}
@@ -201,6 +219,16 @@ export const Feilkonfiurering = () => {
                                     <option value="lastOpp">Last opp dokument</option>
                                     <option value="hentDokument">Hent dokument</option>
                                     <option value="kommuneinfo">Hent kommuneinfo</option>
+                                </>
+                            )}
+                            {klasse === "PdlController" && (
+                                <>
+                                    <option value="getSoknad">Alle kall fra soknad-api</option>
+                                    <option value="getSoknadPerson">Hent person fra soknad-api</option>
+                                    <option value="getSoknadBarn">Hent barn fra soknad-api</option>
+                                    <option value="getSoknadEktefelle">Hent ektefelle fra soknad-api</option>
+                                    <option value="getInnsyn">Alle kall fra modia-api</option>
+                                    <option value="getModia">Alle kall fra innsyn-api</option>
                                 </>
                             )}
                         </Select>
