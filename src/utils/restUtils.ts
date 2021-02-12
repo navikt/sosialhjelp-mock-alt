@@ -2,17 +2,47 @@ const erDevGcp = () => {
     return window.location.origin === 'https://digisos-gcp.dev.nav.no';
 };
 
-const erLabsGcp = () => {
-    return window.location.origin === 'https://digisos.labs.nais.io';
+const erLocalhost = () => {
+    return window.location.origin.indexOf("localhost:") > -1;
 };
 
 export const getMockAltApiURL = () => {
-    if (erDevGcp()) {
-        return 'https://digisos-gcp.dev.nav.no/sosialhjelp/mock-alt-api';
-    } else if (erLabsGcp()) {
-        return 'https://digisos.labs.nais.io/sosialhjelp/mock-alt-api';
-    } else {
+    if (erLocalhost()) {
         return 'http://localhost:8989/sosialhjelp/mock-alt-api';
+    } else if (erDevGcp()) {
+        return 'https://digisos-gcp.dev.nav.no/sosialhjelp/mock-alt-api';
+    } else {
+        return 'https://digisos.labs.nais.io/sosialhjelp/mock-alt-api';
+    }
+};
+
+export const getSoknadURL = () => {
+    if (erLocalhost()) {
+        return 'http://localhost:3000/sosialhjelp/soknad/informasjon';
+    } else if (erDevGcp()) {
+        return 'https://digisos-gcp.dev.nav.no/sosialhjelp/soknad/informasjon';
+    } else {
+        return 'https://digisos.labs.nais.io/sosialhjelp/soknad/informasjon';
+    }
+};
+
+export const getInnsynURL = () => {
+    if (erLocalhost()) {
+        return 'http://localhost:3000/sosialhjelp/innsyn';
+    } else if (erDevGcp()) {
+        return 'https://digisos-gcp.dev.nav.no/sosialhjelp/innsyn';
+    } else {
+        return 'https://digisos.labs.nais.io/sosialhjelp/innsyn';
+    }
+};
+
+export const getModiaURL = () => {
+    if (erLocalhost()) {
+        return 'http://localhost:3003/sosialhjelp/modia';
+    } else if (erDevGcp()) {
+        return 'https://digisos-gcp.dev.nav.no/sosialhjelp/modia';
+    } else {
+        return 'https://digisos.labs.nais.io/sosialhjelp/modia';
     }
 };
 
