@@ -16,6 +16,36 @@ export const getMockAltApiURL = () => {
     }
 };
 
+export const getSoknadURL = () => {
+    if (erDevGcp()) {
+        return 'https://digisos-gcp.dev.nav.no/sosialhjelp/soknad/informasjon';
+    } else if (erLabsGcp()) {
+        return 'https://digisos.labs.nais.io/sosialhjelp/soknad/informasjon';
+    } else {
+        return 'http://localhost:3000/sosialhjelp/soknad/informasjon';
+    }
+};
+
+export const getInnsynURL = () => {
+    if (erDevGcp()) {
+        return 'https://digisos-gcp.dev.nav.no/sosialhjelp/innsyn';
+    } else if (erLabsGcp()) {
+        return 'https://digisos.labs.nais.io/sosialhjelp/innsyn';
+    } else {
+        return 'http://localhost:3000/sosialhjelp/innsyn';
+    }
+};
+
+export const getModiaURL = () => {
+    if (erDevGcp()) {
+        return 'https://digisos-gcp.dev.nav.no/sosialhjelp/modia';
+    } else if (erLabsGcp()) {
+        return 'https://digisos.labs.nais.io/sosialhjelp/modia';
+    } else {
+        return 'http://localhost:3003/sosialhjelp/modia';
+    }
+};
+
 export const getRedirectParams = (): string => {
     const query = new URLSearchParams(window.location.search);
     const cookiename = query.get("cookiename");

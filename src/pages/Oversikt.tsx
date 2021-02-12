@@ -42,6 +42,9 @@ export const Oversikt = () => {
                 <div>
                     <Link to={"/person" + addParams(params)}>Opprett ny bruker</Link>
                 </div>
+                <div>
+                    <Link to={"/login" + addParams(params)}>Logg inn og gå till tjenestene</Link>
+                </div>
             </SkjemaGruppe>
         </Panel>
     );
