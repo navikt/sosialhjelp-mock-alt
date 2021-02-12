@@ -43,7 +43,7 @@ export const Oversikt = () => {
                     <Link to={"/person" + addParams(params)}>Opprett ny bruker</Link>
                 </div>
                 <div>
-                    <Link to={"/login" + addParams(params)}>Logg inn og gå till tjenestene</Link>
+                    <Link to={"/login" + addParams(params)}>Logg inn og gå til tjenestene</Link>
                 </div>
             </SkjemaGruppe>
         </Panel>
