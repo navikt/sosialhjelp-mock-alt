@@ -4,9 +4,8 @@ import Panel from 'nav-frontend-paneler';
 import {Checkbox, Input, Select, SkjemaGruppe} from 'nav-frontend-skjema';
 import {Sidetittel, Undertittel} from 'nav-frontend-typografi';
 import React, {useEffect, useState} from 'react';
-import {useHistory} from 'react-router-dom'
+import {useHistory, useLocation} from 'react-router-dom'
 import {addParams, getMockAltApiURL, getRedirectParams, isLoginSession} from "../../utils/restUtils";
-import {useLocation} from "react-router-dom";
 import {ArbeidsforholdObject, NyttArbeidsforhold, VisArbeidsforhold} from "./arbeidsforhold/Arbeidsfohold";
 import {BostotteSakObject, NyBostotteSak, VisBostotteSak} from "./husbanken/BostotteSak";
 import {BostotteUtbetalingObject, NyttBostotteUtbetaling, VisBostotteUtbetaling} from "./husbanken/BostotteUtbetaling";
@@ -67,7 +66,7 @@ export const PersonMockData = () => {
     const [brukTelefonnummer, setBrukTelefonnummer] = useState<boolean>(false)
     const [telefonnummer, setTelefonnummer] = useState<string>("99999999")
     const [brukOrganisasjon, setBrukOrganisasjon] = useState<boolean>(false)
-    const [organisasjon, setOrganisasjon] = useState<string>("1234567890")
+    const [organisasjon, setOrganisasjon] = useState<string>("")
     const [organisasjonsNavn, setOrganisasjonsNavn] = useState<string>("Organisasjonsnavn")
 
     const [leggTilBarn, setLeggTilBarn] = useState<boolean>(false)
@@ -138,7 +137,14 @@ export const PersonMockData = () => {
                     setFnr(text);
                 });
         }
-    }, [fnr, queryFnr]);
+        if (organisasjon.length < 1) {
+            fetch(`${getMockAltApiURL()}/fiks/tilfeldig/orgnummer`)
+                .then((response) => response.text())
+                .then((text) => {
+                    setOrganisasjon(text);
+                });
+        }
+    }, [fnr, organisasjon, queryFnr]);
 
     const leggTilBarnCallback = (nyttTilBarn: BarnObject) => {
         if (nyttTilBarn) {
@@ -366,7 +372,11 @@ export const PersonMockData = () => {
                 </SkjemaGruppe>
             </SkjemaGruppe>
             <SkjemaGruppe legend="Arbeidsforhold">
-                <NyttArbeidsforhold isOpen={leggTilArbeidsforhold} callback={leggTilArbeidsforholdCallback}/>
+                <NyttArbeidsforhold
+                    isOpen={leggTilArbeidsforhold}
+                    callback={leggTilArbeidsforholdCallback}
+                    organisasjonsnummer={organisasjon}
+                />
                 {arbeidsforhold.map((forhold: ArbeidsforholdObject, index: number) => {
                     return <VisArbeidsforhold arbeidsforhold={forhold} key={"arbeid_" + index}/>
                 })}
