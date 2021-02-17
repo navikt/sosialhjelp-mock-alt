@@ -25,13 +25,14 @@ export interface ArbeidsforholdObject {
 interface Params {
     isOpen: boolean;
     callback: (data: any) => void;
+    organisasjonsnummer: string;
 }
 
 function getIsoDateString(date: Date) {
     return date.getFullYear() + "-" + (date.getMonth() < 9 ? "0" : "") + (date.getMonth() + 1) + "-" + (date.getDate() < 9 ? "0" : "") + (date.getDate() + 1);
 }
 
-export const NyttArbeidsforhold = ({isOpen, callback}: Params) => {
+export const NyttArbeidsforhold = ({isOpen, callback, organisasjonsnummer}: Params) => {
     let lengesiden = new Date();
     lengesiden.setFullYear(lengesiden.getFullYear() - 3);
     let forrigeMnd = new Date();
@@ -43,7 +44,7 @@ export const NyttArbeidsforhold = ({isOpen, callback}: Params) => {
     const [stillingsprosent, setStillingsprosent] = useState<number>(100);
     const [arbeidgivertype, setArbeidgivertype] = useState<string>(ArbeidsforholdType.PERSON);
     const [ident, setIdent] = useState<number>(123456789);
-    const [orgnummer, setOrgnummer] = useState<number>(123456785);
+    const [orgnummer, setOrgnummer] = useState<string>(organisasjonsnummer);
 
     useEffect(() => {
         fetch(`${getMockAltApiURL()}/fiks/tilfeldig/fnr`)
