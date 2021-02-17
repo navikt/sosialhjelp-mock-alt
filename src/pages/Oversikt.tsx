@@ -5,7 +5,6 @@ import { addParams, getMockAltApiURL, getRedirectParams } from '../utils/restUti
 import { Personalia } from './person/PersonMockData';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import 'nav-frontend-tabell-style/src/index.less';
 
 const StyledLink = styled(Link).attrs({ className: 'lenke' })`
     margin-right: 1rem;
