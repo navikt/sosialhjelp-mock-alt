@@ -1,54 +1,77 @@
-import Panel from "nav-frontend-paneler";
-import {Sidetittel} from "nav-frontend-typografi";
-import React, {useEffect, useState} from "react";
-import {Input, Select, SkjemaGruppe} from "nav-frontend-skjema";
-import {Hovedknapp, Knapp} from "nav-frontend-knapper";
-import {addParams, getMockAltApiURL, getRedirectParams} from "../../utils/restUtils";
-import {useHistory, useLocation} from "react-router-dom";
-import {Personalia} from "../person/PersonMockData";
-import {Collapse} from "react-collapse";
+import Panel from 'nav-frontend-paneler';
+import { Sidetittel } from 'nav-frontend-typografi';
+import React, { useEffect, useState } from 'react';
+import { Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Flatknapp, Hovedknapp, Knapp } from 'nav-frontend-knapper';
+import { addParams, getMockAltApiURL, getRedirectParams } from '../../utils/restUtils';
+import { useHistory, useLocation } from 'react-router-dom';
+import { Personalia } from '../person/PersonMockData';
+import { Collapse } from 'react-collapse';
+import styled from 'styled-components/macro';
+import { Bold } from '../../styling/Styles';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
 interface FeilsituasjonerFrontend {
-    fnr: string,
-    feilsituasjoner: Feilkonfiurerasjon[],
+    fnr: string;
+    feilsituasjoner: Feilkonfiurerasjon[];
 }
 
 interface Feilkonfiurerasjon {
-    fnr: string,
-    timeout: number,
-    timeoutSansynlighet: number,
-    feilkode: number,
-    feilmelding: string,
-    feilkodeSansynlighet: number,
-    className: string,
-    functionName: string,
+    fnr: string;
+    timeout: number;
+    timeoutSansynlighet: number;
+    feilkode: number;
+    feilmelding: string;
+    feilkodeSansynlighet: number;
+    className: string;
+    functionName: string;
 }
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
+const Wrapper = styled(Panel)`
+    h1 {
+        margin-bottom: 1rem;
+    }
+    
+    .feilsituasjon {
+      margin-bottom: 1rem;
+    }
+`;
+
+const FeilPanel = styled(Panel)`
+    margin-bottom: 1rem;
+`;
+
+const Knappegruppe = styled.div`
+    margin-bottom: 2rem;
+    button {
+        margin-right: 1rem;
+    }
+`;
+
 export const Feilkonfiurering = () => {
-    const [leggTilFeil, setLeggTilFeil] = useState<boolean>(false)
-    const [editMode, setEditMode] = useState<boolean>(false)
-    const [lockedMode, setLockedMode] = useState<boolean>(false)
-    const [klasse, setKlasse] = useState<string>("*")
-    const [feilkode, setFeilkode] = useState<number>(0)
-    const [feilkodeSansynlighet, setFeilkodeSansynlighet] = useState<number>(100)
-    const [feilmelding, setFeilmelding] = useState<string>("Manuelt konfigurert feil!")
-    const [timeout, setTimeout] = useState<number>(0)
-    const [timeoutSansynlighet, setTimeoutSansynlighet] = useState<number>(100)
-    const [funksjon, setFunksjon] = useState<string>("*")
-    const [navn, setNavn] = useState<string>("")
+    const [leggTilFeil, setLeggTilFeil] = useState<boolean>(false);
+    const [editMode, setEditMode] = useState<boolean>(false);
+    const [lockedMode, setLockedMode] = useState<boolean>(false);
+    const [klasse, setKlasse] = useState<string>('*');
+    const [feilkode, setFeilkode] = useState<number>(0);
+    const [feilkodeSansynlighet, setFeilkodeSansynlighet] = useState<number>(100);
+    const [feilmelding, setFeilmelding] = useState<string>('Manuelt konfigurert feil!');
+    const [timeout, setTimeout] = useState<number>(0);
+    const [timeoutSansynlighet, setTimeoutSansynlighet] = useState<number>(100);
+    const [funksjon, setFunksjon] = useState<string>('*');
+    const [navn, setNavn] = useState<string>('');
 
-    const [fnr, setFnr] = useState<string>("");
-    const [feilsituasjoner, setFeilsituasjoner] = useState<Feilkonfiurerasjon[]>([])
+    const [fnr, setFnr] = useState<string>('');
+    const [feilsituasjoner, setFeilsituasjoner] = useState<Feilkonfiurerasjon[]>([]);
 
-    const queryFnr = useQuery().get("brukerID");
+    const queryFnr = useQuery().get('brukerID');
     const params = getRedirectParams();
-    const history = useHistory()
+    const history = useHistory();
 
     useEffect(() => {
         if (queryFnr !== null && queryFnr.length > 1) {
@@ -62,7 +85,9 @@ export const Feilkonfiurering = () => {
                     if (text.length > 1) {
                         const nedlastet: Personalia = JSON.parse(text);
                         setLockedMode(nedlastet.locked);
-                        setNavn(nedlastet.navn.fornavn + " " + nedlastet.navn.mellomnavn + " " + nedlastet.navn.etternavn);
+                        setNavn(
+                            nedlastet.navn.fornavn + ' ' + nedlastet.navn.mellomnavn + ' ' + nedlastet.navn.etternavn
+                        );
                     }
                 })
                 .catch((error) => console.log(error));
@@ -71,7 +96,7 @@ export const Feilkonfiurering = () => {
                 .then((text) => {
                     if (text.length > 1) {
                         const nedlastet: FeilsituasjonerFrontend = JSON.parse(text);
-                        setFeilsituasjoner(nedlastet.feilsituasjoner)
+                        setFeilsituasjoner(nedlastet.feilsituasjoner);
                     }
                 })
                 .catch((error) => console.log(error));
@@ -94,18 +119,18 @@ export const Feilkonfiurering = () => {
         setFeilsituasjoner(nyeFeilsituasjoner);
         setLeggTilFeil(false);
         event.preventDefault();
-    }
+    };
 
     const resetFeil = (event: ClickEvent): void => {
         setFeilsituasjoner([]);
         event.preventDefault();
-    }
+    };
 
     const onSetFeilkonfigurering = (event: ClickEvent): void => {
         const feilsituasjonerFrontend: FeilsituasjonerFrontend = {
             fnr: fnr,
-            feilsituasjoner: feilsituasjoner
-        }
+            feilsituasjoner: feilsituasjoner,
+        };
         fetch(`${getMockAltApiURL()}/feil`, {
             method: 'POST',
             headers: {
@@ -113,92 +138,107 @@ export const Feilkonfiurering = () => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(feilsituasjonerFrontend),
-        }).then(response => {
-            console.log(response)
-            history.push("/" + addParams(params))
-        }).catch(error => {
-            console.log(error)
         })
-        event.preventDefault()
-    }
+            .then((response) => {
+                console.log(response);
+                history.push('/' + addParams(params));
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        event.preventDefault();
+    };
 
     const onGoBack = (event: ClickEvent): void => {
-        history.push("/" + addParams(params))
-        event.preventDefault()
-    }
+        history.push('/' + addParams(params));
+        event.preventDefault();
+    };
 
     return (
-        <Panel border>
+        <Wrapper border>
             <Sidetittel>Feilsituasjoner</Sidetittel>
-
-            <SkjemaGruppe legend="">
-                <Input value={fnr}
-                       label="BrukerID"
-                       disabled={lockedMode || editMode}
-                       onChange={(evt: any) => setFnr(evt.target.value)}
-                />
-            </SkjemaGruppe>
-            {navn != null && navn.length > 0 &&
-            <p>({navn})</p>
-            }
+            <Input
+                value={fnr}
+                label="Ident / Fødselsnummer"
+                disabled={lockedMode || editMode}
+                onChange={(evt: any) => setFnr(evt.target.value)}
+            />
+            {navn?.length > 0 && <p><Bold>Navn:</Bold> {navn}</p>}
             {feilsituasjoner.map((feil: Feilkonfiurerasjon, index: number) => {
-                return <Panel border={true} key={"feil_" + index}>
-                    <div>Klasse: {feil.className}</div>
-                    <div>Funksjon: {feil.functionName}</div>
-                    {feil.feilkode > 0 &&
-                        <div>
-                        <div>Feilkode: {feil.feilkode}</div>
-                        <div>Feilmelding: {feil.feilmelding}</div>
-                        <div>Sannsynlighet for feilkode: {feil.feilkodeSansynlighet}</div>
-                        </div>
-                    }
-                    {feil.timeout > 0 &&
-                        <div>
-                        <div>Timeout: {feil.timeout}</div>
-                        <div>Sannsynlighet for timeout: {feil.timeoutSansynlighet}</div>
-                        </div>
-                    }
-                </Panel>
+                return (
+                    <FeilPanel border={true} key={'feil_' + index}>
+                        <div>Klasse: {feil.className}</div>
+                        <div>Funksjon: {feil.functionName}</div>
+                        {feil.feilkode > 0 && (
+                            <div>
+                                <div>Feilkode: {feil.feilkode}</div>
+                                <div>Feilmelding: {feil.feilmelding}</div>
+                                <div>Sannsynlighet for feilkode: {feil.feilkodeSansynlighet}</div>
+                            </div>
+                        )}
+                        {feil.timeout > 0 && (
+                            <div>
+                                <div>Timeout: {feil.timeout}</div>
+                                <div>Sannsynlighet for timeout: {feil.timeoutSansynlighet}</div>
+                            </div>
+                        )}
+                    </FeilPanel>
+                );
             })}
             <Collapse isOpened={!leggTilFeil}>
-                <Knapp disabled={lockedMode} onClick={() => (setLeggTilFeil(true))}>Legg til feil</Knapp>
-                <Knapp disabled={lockedMode} onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
-                    (resetFeil(event))}>Tøm feilliste</Knapp>
+                <Knappegruppe>
+                    <Knapp disabled={lockedMode} onClick={() => setLeggTilFeil(true)}>
+                        Legg til feil
+                    </Knapp>
+                    <Flatknapp
+                        mini
+                        disabled={lockedMode}
+                        onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => resetFeil(event)}
+                    >
+                        Tøm feilliste
+                    </Flatknapp>
+                </Knappegruppe>
             </Collapse>
             <Collapse isOpened={leggTilFeil}>
-                <Panel border={true}>
-                    <SkjemaGruppe legend="Feilsituasjon">
-                        <Input value={feilkode}
-                               label="Feilkode"
-                               disabled={lockedMode}
-                               onChange={(evt: any) => setFeilkode(evt.target.value)}
+                <FeilPanel border={true}>
+                    <SkjemaGruppe legend="Feilsituasjon" className="feilsituasjon">
+                        <Input
+                            value={feilkode}
+                            label="Feilkode"
+                            disabled={lockedMode}
+                            onChange={(evt: any) => setFeilkode(evt.target.value)}
                         />
-                        <Input value={feilkodeSansynlighet}
-                               label="Sansynlighet for å få feilkode"
-                               disabled={lockedMode}
-                               onChange={(evt: any) => setFeilkodeSansynlighet(evt.target.value)}
+                        <Input
+                            value={feilkodeSansynlighet}
+                            label="Sansynlighet for å få feilkode"
+                            disabled={lockedMode}
+                            onChange={(evt: any) => setFeilkodeSansynlighet(evt.target.value)}
                         />
-                        <Input value={feilmelding}
-                               label="Feilmelding"
-                               disabled={lockedMode}
-                               onChange={(evt: any) => setFeilmelding(evt.target.value)}
+                        <Input
+                            value={feilmelding}
+                            label="Feilmelding"
+                            disabled={lockedMode}
+                            onChange={(evt: any) => setFeilmelding(evt.target.value)}
                         />
-                        <Input value={timeout}
-                               label="Timeout"
-                               disabled={lockedMode}
-                               onChange={(evt: any) => setTimeout(evt.target.value)}
+                        <Input
+                            value={timeout}
+                            label="Timeout"
+                            disabled={lockedMode}
+                            onChange={(evt: any) => setTimeout(evt.target.value)}
                         />
-                        <Input value={timeoutSansynlighet}
-                               label="Sansynlighet for å få timeout"
-                               disabled={lockedMode}
-                               onChange={(evt: any) => setTimeoutSansynlighet(evt.target.value)}
+                        <Input
+                            value={timeoutSansynlighet}
+                            label="Sansynlighet for å få timeout"
+                            disabled={lockedMode}
+                            onChange={(evt: any) => setTimeoutSansynlighet(evt.target.value)}
                         />
                     </SkjemaGruppe>
                     <SkjemaGruppe legend="Gjelder for">
-                        <Select label="Klasse"
-                                disabled={lockedMode}
-                                onChange={(evt: any) => setKlasse(evt.target.value)}
-                                value={klasse}
+                        <Select
+                            label="Klasse"
+                            disabled={lockedMode}
+                            onChange={(evt: any) => setKlasse(evt.target.value)}
+                            value={klasse}
                         >
                             <option value="*">* Alle *</option>
                             <option value="FixController">Fiks</option>
@@ -235,23 +275,25 @@ export const Feilkonfiurering = () => {
                     </SkjemaGruppe>
                     <Knapp
                         disabled={lockedMode}
-                        onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLeggTilFeilkonfigurering(event)}
+                        onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+                            onLeggTilFeilkonfigurering(event)
+                        }
                     >
-                        Legg til feil
+                        Lagre
                     </Knapp>
-                </Panel>
+                </FeilPanel>
             </Collapse>
-            <Hovedknapp
-                disabled={lockedMode}
-                onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onSetFeilkonfigurering(event)}
-            >
-                Sett feilkonfigurasjon
-            </Hovedknapp>
-            <Knapp
-                onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onGoBack(event)}
-            >
-                {lockedMode ? "Tilbake" : "Cancel"}
-            </Knapp>
-        </Panel>
-    )
-}
+            <Knappegruppe>
+                <Hovedknapp
+                    disabled={lockedMode}
+                    onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onSetFeilkonfigurering(event)}
+                >
+                    Sett feilkonfigurasjon
+                </Hovedknapp>
+                <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onGoBack(event)}>
+                    {lockedMode ? 'Tilbake' : 'Avbryt'}
+                </Knapp>
+            </Knappegruppe>
+        </Wrapper>
+    );
+};

@@ -10,7 +10,7 @@ body {
 
 .container {
     margin-top: 2rem;
-    width: 48rem;
+    max-width: 48rem;
 }
 
 .leftPadding {

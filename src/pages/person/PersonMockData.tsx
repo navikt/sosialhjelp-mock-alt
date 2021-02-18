@@ -12,6 +12,7 @@ import {BostotteUtbetalingObject, NyttBostotteUtbetaling, VisBostotteUtbetaling}
 import {NyttSkatteutbetaling, SkatteutbetalingObject, VisSkatteutbetaling} from "./skattetaten/Skattetaten";
 import {Collapse} from "react-collapse";
 import {BarnObject, NyttBarn, VisBarn} from "./barn/Barn";
+import styled from 'styled-components/macro';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -47,10 +48,19 @@ export interface Bostedsadresse {
     kommunenummer: string
 }
 
-function useQuery() {
+export function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
+const StyledPanel = styled(Panel)`
+    h1, h2 {
+        margin-bottom: 1rem;
+    }
+    
+    .alertstripe {
+        margin-bottom: .5rem;
+    }
+`;
 export const PersonMockData = () => {
     const [editMode, setEditMode] = useState<boolean>(false)
     const [lockedMode, setLockedMode] = useState<boolean>(false)
@@ -246,23 +256,19 @@ export const PersonMockData = () => {
     }
 
     return (
-        <Panel border>
-            <Sidetittel>Mock systemdata med mock-alt</Sidetittel>
+        <StyledPanel border>
+            <Sidetittel>Mock systemdata for testbruker</Sidetittel>
             <AlertStripe type="advarsel">
                 DETTE ER KUN FOR TESTING! Data du legger inn her er tilgjengelig for alle. Ikke legg inn noe sensitiv
                 informasjon!
             </AlertStripe>
-            <Undertittel>{lockedMode ? "Se på " : editMode ? "Editer " : "Opprett "}bruker</Undertittel>
-
-            <SkjemaGruppe legend="">
-                <Input value={fnr}
-                       label="Ident"
-                       disabled={editMode || lockedMode}
-                       onChange={(evt: any) => setFnr(evt.target.value)}
-                />
-            </SkjemaGruppe>
+            <Undertittel>{lockedMode ? "Se på " : editMode ? "Rediger " : "Opprett ny "}bruker</Undertittel>
+            <Input value={fnr}
+                   label="Ident / Fødselsnummer"
+                   disabled={editMode || lockedMode}
+                   onChange={(evt: any) => setFnr(evt.target.value)}
+            />
             {lockedMode && <AlertStripe type="info">Du kan ikke editere standardbrukerene.</AlertStripe>}
-
             <SkjemaGruppe legend="Personalia">
                 <Input label="Fornavn"
                        disabled={lockedMode}
@@ -450,6 +456,6 @@ export const PersonMockData = () => {
             >
                 {lockedMode ? "Tilbake" : "Cancel"}
             </Knapp>
-        </Panel>
+        </StyledPanel>
     );
 };

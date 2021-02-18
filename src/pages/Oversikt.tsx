@@ -5,6 +5,7 @@ import { addParams, getMockAltApiURL, getRedirectParams } from '../utils/restUti
 import { Personalia } from './person/PersonMockData';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
+import { Bold } from '../styling/Styles';
 
 const StyledLink = styled(Link).attrs({ className: 'lenke' })`
     margin-right: 1rem;
@@ -18,10 +19,6 @@ const StyledPanel = styled(Panel)`
     h1 {
         margin-bottom: 1rem;
     }
-`;
-
-const Bold = styled.span`
-    font-weight: bold;
 `;
 
 const Tabell = styled.table`
@@ -79,12 +76,11 @@ export const Oversikt = () => {
                         {personliste.map((bruker: Personalia) => {
                             return (
                                 <tr key={bruker.fnr}>
-                                    <td>{`${bruker.navn.fornavn} ${bruker.navn.mellomnavn} ${bruker.navn.etternavn}
-                                 `}</td>
+                                    <td>{`${bruker.navn.fornavn} ${bruker.navn.mellomnavn} ${bruker.navn.etternavn}`}</td>
                                     <td>{bruker.fnr}</td>
                                     <td>
                                         <StyledLink to={'/person?brukerID=' + bruker.fnr + addParams(params, '&')}>
-                                            {bruker.locked ? 'Se på' : 'Edit'}
+                                            {bruker.locked ? 'Se på' : 'Rediger'}
                                         </StyledLink>
                                         <StyledLink to={'/feil?brukerID=' + bruker.fnr + addParams(params, '&')}>
                                             Feil?
