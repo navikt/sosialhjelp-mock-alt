@@ -23,10 +23,11 @@ const StyledPanel = styled(Panel)`
 
 const Tabell = styled.table`
     border-collapse: collapse;
-    display: table;
-    overflow-x: scroll;
+    display: block;
+    overflow-x: auto;
     text-align: left;
     margin-bottom: 2rem;
+    max-width: 90vw;
 
     tr:nth-child(odd) td {
         background: rgba(0, 0, 0, 0.03);
@@ -80,10 +81,7 @@ export const Oversikt = () => {
                                     <td>{bruker.fnr}</td>
                                     <td>
                                         <StyledLink to={'/person?brukerID=' + bruker.fnr + addParams(params, '&')}>
-                                            {bruker.locked ? 'Se på' : 'Rediger'}
-                                        </StyledLink>
-                                        <StyledLink to={'/feil?brukerID=' + bruker.fnr + addParams(params, '&')}>
-                                            Feil?
+                                            {bruker.locked ? 'Vis' : 'Rediger'}
                                         </StyledLink>
                                         {mockAltDefaultFnr === bruker.fnr && <Bold>Default</Bold>}
                                     </td>
@@ -95,8 +93,8 @@ export const Oversikt = () => {
             ) : (
                 <Normaltekst>Fant ingen eksisterende testbrukere</Normaltekst>
             )}
-            <LinkWithButtonStyle to={'/person' + addParams(params)}>Opprett ny bruker</LinkWithButtonStyle>
-            <LinkWithButtonStyle to={'/login' + addParams(params)}>Logg inn og gå til tjenestene</LinkWithButtonStyle>
+            <LinkWithButtonStyle to={'/person' + addParams(params)}>Opprett bruker</LinkWithButtonStyle>
+            <LinkWithButtonStyle to={'/login' + addParams(params)}>Logg inn</LinkWithButtonStyle>
         </StyledPanel>
     );
 };

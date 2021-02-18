@@ -4,11 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Flatknapp, Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import { addParams, getMockAltApiURL, getRedirectParams } from '../../utils/restUtils';
-import { useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { Personalia } from '../person/PersonMockData';
 import { Collapse } from 'react-collapse';
 import styled from 'styled-components/macro';
-import { Bold } from '../../styling/Styles';
+import { Bold, theme } from '../../styling/Styles';
+import AlertStripe from 'nav-frontend-alertstriper';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -36,20 +37,32 @@ const Wrapper = styled(Panel)`
     h1 {
         margin-bottom: 1rem;
     }
-    
+    .alertstripe {
+        margin-bottom: 1rem;
+    }
     .feilsituasjon {
-      margin-bottom: 1rem;
+        margin-bottom: 1rem;
     }
 `;
 
-const FeilPanel = styled(Panel)`
+const ConfigPanel = styled(Panel)`
     margin-bottom: 1rem;
 `;
 
 const Knappegruppe = styled.div`
     margin-bottom: 2rem;
-    button {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    button,
+    a {
         margin-right: 1rem;
+        white-space: normal;
+
+        @media ${theme.mobile} {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
     }
 `;
 
@@ -78,6 +91,9 @@ export const Feilkonfiurering = () => {
             setFnr(queryFnr);
             setEditMode(true);
         }
+    }, [queryFnr]);
+
+    useEffect(() => {
         if (fnr && fnr.length > 10) {
             fetch(`${getMockAltApiURL()}/mock-alt/personalia?ident=` + fnr)
                 .then((response) => response.text())
@@ -101,7 +117,7 @@ export const Feilkonfiurering = () => {
                 })
                 .catch((error) => console.log(error));
         }
-    }, [fnr, queryFnr]);
+    }, [fnr]);
 
     const onLeggTilFeilkonfigurering = (event: ClickEvent): void => {
         const feilkonfiurerasjon: Feilkonfiurerasjon = {
@@ -163,10 +179,14 @@ export const Feilkonfiurering = () => {
                 disabled={lockedMode || editMode}
                 onChange={(evt: any) => setFnr(evt.target.value)}
             />
-            {navn?.length > 0 && <p><Bold>Navn:</Bold> {navn}</p>}
+            {navn?.length > 0 && (
+                <p>
+                    <Bold>Navn:</Bold> {navn}
+                </p>
+            )}
             {feilsituasjoner.map((feil: Feilkonfiurerasjon, index: number) => {
                 return (
-                    <FeilPanel border={true} key={'feil_' + index}>
+                    <ConfigPanel border={true} key={'feil_' + index}>
                         <div>Klasse: {feil.className}</div>
                         <div>Funksjon: {feil.functionName}</div>
                         {feil.feilkode > 0 && (
@@ -182,117 +202,128 @@ export const Feilkonfiurering = () => {
                                 <div>Sannsynlighet for timeout: {feil.timeoutSansynlighet}</div>
                             </div>
                         )}
-                    </FeilPanel>
+                    </ConfigPanel>
                 );
             })}
-            <Collapse isOpened={!leggTilFeil}>
-                <Knappegruppe>
-                    <Knapp disabled={lockedMode} onClick={() => setLeggTilFeil(true)}>
-                        Legg til feil
-                    </Knapp>
-                    <Flatknapp
-                        mini
-                        disabled={lockedMode}
-                        onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => resetFeil(event)}
-                    >
-                        Tøm feilliste
-                    </Flatknapp>
-                </Knappegruppe>
-            </Collapse>
-            <Collapse isOpened={leggTilFeil}>
-                <FeilPanel border={true}>
-                    <SkjemaGruppe legend="Feilsituasjon" className="feilsituasjon">
-                        <Input
-                            value={feilkode}
-                            label="Feilkode"
-                            disabled={lockedMode}
-                            onChange={(evt: any) => setFeilkode(evt.target.value)}
-                        />
-                        <Input
-                            value={feilkodeSansynlighet}
-                            label="Sansynlighet for å få feilkode"
-                            disabled={lockedMode}
-                            onChange={(evt: any) => setFeilkodeSansynlighet(evt.target.value)}
-                        />
-                        <Input
-                            value={feilmelding}
-                            label="Feilmelding"
-                            disabled={lockedMode}
-                            onChange={(evt: any) => setFeilmelding(evt.target.value)}
-                        />
-                        <Input
-                            value={timeout}
-                            label="Timeout"
-                            disabled={lockedMode}
-                            onChange={(evt: any) => setTimeout(evt.target.value)}
-                        />
-                        <Input
-                            value={timeoutSansynlighet}
-                            label="Sansynlighet for å få timeout"
-                            disabled={lockedMode}
-                            onChange={(evt: any) => setTimeoutSansynlighet(evt.target.value)}
-                        />
-                    </SkjemaGruppe>
-                    <SkjemaGruppe legend="Gjelder for">
-                        <Select
-                            label="Klasse"
-                            disabled={lockedMode}
-                            onChange={(evt: any) => setKlasse(evt.target.value)}
-                            value={klasse}
-                        >
-                            <option value="*">* Alle *</option>
-                            <option value="FixController">Fiks</option>
-                            <option value="PdlController">Pdl</option>
-                            <option value="HusbankenController">Husbanken</option>
-                            <option value="SkatteetatenController">Skatt</option>
-                        </Select>
-                        <Select label="Funksjon"
+            {lockedMode ? (
+                <AlertStripe type="info">Du kan ikke konfigurere feil på standardbrukere.</AlertStripe>
+            ) : (
+                <>
+                    <Collapse isOpened={!leggTilFeil}>
+                        <Knappegruppe>
+                            <Knapp onClick={() => setLeggTilFeil(true)}>+ Legg til feil</Knapp>
+                            {feilsituasjoner.length > 0 && (
+                                <Flatknapp
+                                    onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+                                        resetFeil(event)
+                                    }
+                                >
+                                    Tøm liste
+                                </Flatknapp>
+                            )}
+                        </Knappegruppe>
+                    </Collapse>
+                    <Collapse isOpened={leggTilFeil}>
+                        <ConfigPanel border={true}>
+                            <SkjemaGruppe legend="Feilsituasjon" className="feilsituasjon">
+                                <Input
+                                    value={feilkode}
+                                    label="Feilkode"
+                                    disabled={lockedMode}
+                                    onChange={(evt: any) => setFeilkode(evt.target.value)}
+                                />
+                                <Input
+                                    value={feilkodeSansynlighet}
+                                    label="Sansynlighet for å få feilkode"
+                                    disabled={lockedMode}
+                                    onChange={(evt: any) => setFeilkodeSansynlighet(evt.target.value)}
+                                />
+                                <Input
+                                    value={feilmelding}
+                                    label="Feilmelding"
+                                    disabled={lockedMode}
+                                    onChange={(evt: any) => setFeilmelding(evt.target.value)}
+                                />
+                                <Input
+                                    value={timeout}
+                                    label="Timeout"
+                                    disabled={lockedMode}
+                                    onChange={(evt: any) => setTimeout(evt.target.value)}
+                                />
+                                <Input
+                                    value={timeoutSansynlighet}
+                                    label="Sansynlighet for å få timeout"
+                                    disabled={lockedMode}
+                                    onChange={(evt: any) => setTimeoutSansynlighet(evt.target.value)}
+                                />
+                            </SkjemaGruppe>
+                            <SkjemaGruppe legend="Gjelder for">
+                                <Select
+                                    label="Klasse"
+                                    disabled={lockedMode}
+                                    onChange={(evt: any) => setKlasse(evt.target.value)}
+                                    value={klasse}
+                                >
+                                    <option value="*">* Alle *</option>
+                                    <option value="FixController">Fiks</option>
+                                    <option value="PdlController">Pdl</option>
+                                    <option value="HusbankenController">Husbanken</option>
+                                    <option value="SkatteetatenController">Skatt</option>
+                                </Select>
+                                <Select
+                                    label="Funksjon"
+                                    disabled={lockedMode}
+                                    onChange={(evt: any) => setFunksjon(evt.target.value)}
+                                    value={funksjon}
+                                >
+                                    <option value="*">* Alle *</option>
+                                    {klasse === 'FixController' && (
+                                        <>
+                                            <option value="lastOppSoknad">Last opp søknad</option>
+                                            <option value="hentSoknad">Hent søknad</option>
+                                            <option value="lastOpp">Last opp dokument</option>
+                                            <option value="hentDokument">Hent dokument</option>
+                                            <option value="kommuneinfo">Hent kommuneinfo</option>
+                                        </>
+                                    )}
+                                    {klasse === 'PdlController' && (
+                                        <>
+                                            <option value="getSoknad">Alle kall fra soknad-api</option>
+                                            <option value="getSoknadPerson">Hent person fra soknad-api</option>
+                                            <option value="getSoknadBarn">Hent barn fra soknad-api</option>
+                                            <option value="getSoknadEktefelle">Hent ektefelle fra soknad-api</option>
+                                            <option value="getInnsyn">Alle kall fra modia-api</option>
+                                            <option value="getModia">Alle kall fra innsyn-api</option>
+                                        </>
+                                    )}
+                                </Select>
+                            </SkjemaGruppe>
+                            <Knapp
                                 disabled={lockedMode}
-                                onChange={(evt: any) => setFunksjon(evt.target.value)}
-                                value={funksjon}
-                        >
-                            <option value="*">* Alle *</option>
-                            {klasse === "FixController" && (
-                                <>
-                                    <option value="lastOppSoknad">Last opp søknad</option>
-                                    <option value="hentSoknad">Hent søknad</option>
-                                    <option value="lastOpp">Last opp dokument</option>
-                                    <option value="hentDokument">Hent dokument</option>
-                                    <option value="kommuneinfo">Hent kommuneinfo</option>
-                                </>
-                            )}
-                            {klasse === "PdlController" && (
-                                <>
-                                    <option value="getSoknad">Alle kall fra soknad-api</option>
-                                    <option value="getSoknadPerson">Hent person fra soknad-api</option>
-                                    <option value="getSoknadBarn">Hent barn fra soknad-api</option>
-                                    <option value="getSoknadEktefelle">Hent ektefelle fra soknad-api</option>
-                                    <option value="getInnsyn">Alle kall fra modia-api</option>
-                                    <option value="getModia">Alle kall fra innsyn-api</option>
-                                </>
-                            )}
-                        </Select>
-                    </SkjemaGruppe>
-                    <Knapp
-                        disabled={lockedMode}
+                                onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+                                    onLeggTilFeilkonfigurering(event)
+                                }
+                            >
+                                Lagre
+                            </Knapp>
+                        </ConfigPanel>
+                    </Collapse>
+                </>
+            )}
+
+            <Knappegruppe>
+                {!lockedMode && (
+                    <Hovedknapp
                         onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
-                            onLeggTilFeilkonfigurering(event)
+                            onSetFeilkonfigurering(event)
                         }
                     >
-                        Lagre
-                    </Knapp>
-                </FeilPanel>
-            </Collapse>
-            <Knappegruppe>
-                <Hovedknapp
-                    disabled={lockedMode}
-                    onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onSetFeilkonfigurering(event)}
-                >
-                    Sett feilkonfigurasjon
-                </Hovedknapp>
-                <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onGoBack(event)}>
+                        Lagreq
+                    </Hovedknapp>
+                )}
+                <Link to={'/person?brukerID=' + fnr + addParams(params, '&')} className={'knapp knapp--standard'}>
                     {lockedMode ? 'Tilbake' : 'Avbryt'}
-                </Knapp>
+                </Link>
             </Knappegruppe>
         </Wrapper>
     );
