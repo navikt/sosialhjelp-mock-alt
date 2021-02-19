@@ -18,6 +18,7 @@ import { Collapse } from 'react-collapse';
 import { BarnObject, NyttBarn, VisBarn } from './barn/Barn';
 import styled from 'styled-components/macro';
 import NavFrontendSpinner from 'nav-frontend-spinner';
+import {UtbetalingFraNavObject} from "./utbetalinger/UtbetalingerFraNav";
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -37,6 +38,7 @@ export interface Personalia {
     bostotteSaker: BostotteSakObject[];
     bostotteUtbetalinger: BostotteUtbetalingObject[];
     skattetatenUtbetalinger: SkatteutbetalingObject[];
+    utbetalingerFraNav: UtbetalingFraNavObject[],
     locked: boolean;
 }
 
@@ -241,6 +243,7 @@ export const PersonMockData = () => {
             bostotteSaker: bostotteSaker,
             bostotteUtbetalinger: bostotteUtbetalinger,
             skattetatenUtbetalinger: skattutbetalinger,
+            utbetalingerFraNav: [],
             locked: false,
         };
     };
