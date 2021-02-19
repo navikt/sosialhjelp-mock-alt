@@ -4,7 +4,7 @@ import Panel from 'nav-frontend-paneler';
 import { Checkbox, Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import { Sidetittel } from 'nav-frontend-typografi';
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { addParams, getMockAltApiURL, getRedirectParams, isLoginSession } from '../../utils/restUtils';
 import { ArbeidsforholdObject, NyttArbeidsforhold, VisArbeidsforhold } from './arbeidsforhold/Arbeidsfohold';
 import { BostotteSakObject, NyBostotteSak, VisBostotteSak } from './husbanken/BostotteSak';
@@ -66,13 +66,6 @@ const StyledPanel = styled(Panel)`
     .alertstripe {
         margin-bottom: 0.5rem;
     }
-`;
-
-const FeilKonfigLink = styled.div`
-    a {
-        margin-right: 0.5rem;
-    }
-    margin-bottom: 1rem;
 `;
 
 export const PersonMockData = () => {
