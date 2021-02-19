@@ -321,9 +321,9 @@ export const Feilkonfiurering = () => {
                         Lagre
                     </Hovedknapp>
                 )}
-                <Link to={'/person?brukerID=' + fnr + addParams(params, '&')} className={'knapp knapp--standard'}>
+                <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onGoBack(event)}>
                     {lockedMode ? 'Tilbake' : 'Avbryt'}
-                </Link>
+                </Knapp>
             </Knappegruppe>
         </Wrapper>
     );

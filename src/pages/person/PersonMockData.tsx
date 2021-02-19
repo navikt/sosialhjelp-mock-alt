@@ -2,7 +2,7 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
 import { Checkbox, Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Sidetittel, Undertittel } from 'nav-frontend-typografi';
+import { Sidetittel } from 'nav-frontend-typografi';
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { addParams, getMockAltApiURL, getRedirectParams, isLoginSession } from '../../utils/restUtils';
@@ -299,12 +299,6 @@ export const PersonMockData = () => {
     return (
         <StyledPanel border>
             <Sidetittel>{overskrift()}</Sidetittel>
-            <FeilKonfigLink>
-                <Link to={'/feil?brukerID=' + fnr + addParams(params, '&')} className="lenke">
-                    {`${lockedMode ? 'Vis' : editMode ? 'Rediger ' : 'Sett '} feilsituasjoner`}
-                </Link>
-                (avansert)
-            </FeilKonfigLink>
             <AlertStripe type="advarsel">
                 DETTE ER KUN FOR TESTING! Data du legger inn her er tilgjengelig for alle. Ikke legg inn noe sensitiv
                 informasjon!

@@ -44,10 +44,18 @@ const Tabell = styled.table`
     }
 `;
 
+const MerInfo = styled.td`
+    display: flex;
+    flex-direction: column;
+    > *:not(:last-child) {
+        margin-bottom: 0.5rem;
+    }
+`;
+
 export const Oversikt = () => {
     const [personliste, setPersonListe] = useState([]);
     const [mockAltDefaultFnr, setMockAltDefaultFnr] = useState<string | undefined>(undefined);
-
+    const checkmark = '✔';
     const params = getRedirectParams();
 
     useEffect(() => {
@@ -79,12 +87,15 @@ export const Oversikt = () => {
                                 <tr key={bruker.fnr}>
                                     <td>{`${bruker.navn.fornavn} ${bruker.navn.mellomnavn} ${bruker.navn.etternavn}`}</td>
                                     <td>{bruker.fnr}</td>
-                                    <td>
+                                    <MerInfo>
                                         <StyledLink to={'/person?brukerID=' + bruker.fnr + addParams(params, '&')}>
-                                            {bruker.locked ? 'Vis' : 'Rediger'}
+                                            {bruker.locked ? 'Detaljer' : 'Rediger'}
                                         </StyledLink>
-                                        {mockAltDefaultFnr === bruker.fnr && <Bold>Default</Bold>}
-                                    </td>
+                                        <StyledLink to={'/feil?brukerID=' + bruker.fnr + addParams(params, '&')}>
+                                            Feilsitasjoner
+                                        </StyledLink>
+                                        {mockAltDefaultFnr === bruker.fnr && <Bold>{checkmark} Default</Bold>}
+                                    </MerInfo>
                                 </tr>
                             );
                         })}
