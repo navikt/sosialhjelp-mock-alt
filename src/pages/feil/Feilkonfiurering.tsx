@@ -304,7 +304,7 @@ export const Feilkonfiurering = () => {
                                     onLeggTilFeilkonfigurering(event)
                                 }
                             >
-                                Lagre
+                                Legg til
                             </Knapp>
                         </ConfigPanel>
                     </Collapse>
@@ -318,7 +318,7 @@ export const Feilkonfiurering = () => {
                             onSetFeilkonfigurering(event)
                         }
                     >
-                        Lagreq
+                        Lagre
                     </Hovedknapp>
                 )}
                 <Link to={'/person?brukerID=' + fnr + addParams(params, '&')} className={'knapp knapp--standard'}>
