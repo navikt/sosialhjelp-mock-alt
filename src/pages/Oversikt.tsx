@@ -5,6 +5,7 @@ import { addParams, getMockAltApiURL, getRedirectParams } from '../utils/restUti
 import { Personalia } from './person/PersonMockData';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
+import { Bold } from '../styling/Styles';
 
 const StyledLink = styled(Link).attrs({ className: 'lenke' })`
     margin-right: 1rem;
@@ -20,16 +21,17 @@ const StyledPanel = styled(Panel)`
     }
 `;
 
-const Bold = styled.span`
-    font-weight: bold;
+const TabellWrapper = styled.div`
+    overflow: auto;
 `;
 
 const Tabell = styled.table`
     border-collapse: collapse;
-    display: table;
-    overflow-x: scroll;
+    display: block;
+    overflow-x: auto;
     text-align: left;
     margin-bottom: 2rem;
+    max-width: 90vw;
 
     tr:nth-child(odd) td {
         background: rgba(0, 0, 0, 0.03);
@@ -46,10 +48,18 @@ const Tabell = styled.table`
     }
 `;
 
+const MerInfo = styled.td`
+    display: flex;
+    flex-direction: column;
+    > *:not(:last-child) {
+        margin-bottom: 0.5rem;
+    }
+`;
+
 export const Oversikt = () => {
     const [personliste, setPersonListe] = useState([]);
     const [mockAltDefaultFnr, setMockAltDefaultFnr] = useState<string | undefined>(undefined);
-
+    const checkmark = '✔';
     const params = getRedirectParams();
 
     useEffect(() => {
@@ -67,40 +77,41 @@ export const Oversikt = () => {
         <StyledPanel border>
             <Sidetittel>Testbrukere - oversikt</Sidetittel>
             {personliste?.length > 0 ? (
-                <Tabell>
-                    <thead>
-                        <tr>
-                            <th>Navn</th>
-                            <th>Fnr</th>
-                            <th>Mer info</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {personliste.map((bruker: Personalia) => {
-                            return (
-                                <tr key={bruker.fnr}>
-                                    <td>{`${bruker.navn.fornavn} ${bruker.navn.mellomnavn} ${bruker.navn.etternavn}
-                                 `}</td>
-                                    <td>{bruker.fnr}</td>
-                                    <td>
-                                        <StyledLink to={'/person?brukerID=' + bruker.fnr + addParams(params, '&')}>
-                                            {bruker.locked ? 'Se på' : 'Edit'}
-                                        </StyledLink>
-                                        <StyledLink to={'/feil?brukerID=' + bruker.fnr + addParams(params, '&')}>
-                                            Feil?
-                                        </StyledLink>
-                                        {mockAltDefaultFnr === bruker.fnr && <Bold>Default</Bold>}
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </Tabell>
+                <TabellWrapper>
+                    <Tabell>
+                        <thead>
+                            <tr>
+                                <th>Navn</th>
+                                <th>Fnr</th>
+                                <th>Mer info</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {personliste.map((bruker: Personalia) => {
+                                return (
+                                    <tr key={bruker.fnr}>
+                                        <td>{`${bruker.navn.fornavn} ${bruker.navn.mellomnavn} ${bruker.navn.etternavn}`}</td>
+                                        <td>{bruker.fnr}</td>
+                                        <MerInfo>
+                                            <StyledLink to={'/person?brukerID=' + bruker.fnr + addParams(params, '&')}>
+                                                {bruker.locked ? 'Detaljer' : 'Rediger'}
+                                            </StyledLink>
+                                            <StyledLink to={'/feil?brukerID=' + bruker.fnr + addParams(params, '&')}>
+                                                Feilsitasjoner
+                                            </StyledLink>
+                                            {mockAltDefaultFnr === bruker.fnr && <Bold>{checkmark} Default</Bold>}
+                                        </MerInfo>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </Tabell>
+                </TabellWrapper>
             ) : (
                 <Normaltekst>Fant ingen eksisterende testbrukere</Normaltekst>
             )}
-            <LinkWithButtonStyle to={'/person' + addParams(params)}>Opprett ny bruker</LinkWithButtonStyle>
-            <LinkWithButtonStyle to={'/login' + addParams(params)}>Logg inn og gå til tjenestene</LinkWithButtonStyle>
+            <LinkWithButtonStyle to={'/person' + addParams(params)}>Opprett bruker</LinkWithButtonStyle>
+            <LinkWithButtonStyle to={'/login' + addParams(params)}>Logg inn</LinkWithButtonStyle>
         </StyledPanel>
     );
 };
