@@ -21,6 +21,10 @@ const StyledPanel = styled(Panel)`
     }
 `;
 
+const TabellWrapper = styled.div`
+    overflow: auto;
+`;
+
 const Tabell = styled.table`
     border-collapse: collapse;
     display: block;
@@ -73,34 +77,36 @@ export const Oversikt = () => {
         <StyledPanel border>
             <Sidetittel>Testbrukere - oversikt</Sidetittel>
             {personliste?.length > 0 ? (
-                <Tabell>
-                    <thead>
-                        <tr>
-                            <th>Navn</th>
-                            <th>Fnr</th>
-                            <th>Mer info</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {personliste.map((bruker: Personalia) => {
-                            return (
-                                <tr key={bruker.fnr}>
-                                    <td>{`${bruker.navn.fornavn} ${bruker.navn.mellomnavn} ${bruker.navn.etternavn}`}</td>
-                                    <td>{bruker.fnr}</td>
-                                    <MerInfo>
-                                        <StyledLink to={'/person?brukerID=' + bruker.fnr + addParams(params, '&')}>
-                                            {bruker.locked ? 'Detaljer' : 'Rediger'}
-                                        </StyledLink>
-                                        <StyledLink to={'/feil?brukerID=' + bruker.fnr + addParams(params, '&')}>
-                                            Feilsitasjoner
-                                        </StyledLink>
-                                        {mockAltDefaultFnr === bruker.fnr && <Bold>{checkmark} Default</Bold>}
-                                    </MerInfo>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </Tabell>
+                <TabellWrapper>
+                    <Tabell>
+                        <thead>
+                            <tr>
+                                <th>Navn</th>
+                                <th>Fnr</th>
+                                <th>Mer info</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {personliste.map((bruker: Personalia) => {
+                                return (
+                                    <tr key={bruker.fnr}>
+                                        <td>{`${bruker.navn.fornavn} ${bruker.navn.mellomnavn} ${bruker.navn.etternavn}`}</td>
+                                        <td>{bruker.fnr}</td>
+                                        <MerInfo>
+                                            <StyledLink to={'/person?brukerID=' + bruker.fnr + addParams(params, '&')}>
+                                                {bruker.locked ? 'Detaljer' : 'Rediger'}
+                                            </StyledLink>
+                                            <StyledLink to={'/feil?brukerID=' + bruker.fnr + addParams(params, '&')}>
+                                                Feilsitasjoner
+                                            </StyledLink>
+                                            {mockAltDefaultFnr === bruker.fnr && <Bold>{checkmark} Default</Bold>}
+                                        </MerInfo>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </Tabell>
+                </TabellWrapper>
             ) : (
                 <Normaltekst>Fant ingen eksisterende testbrukere</Normaltekst>
             )}
