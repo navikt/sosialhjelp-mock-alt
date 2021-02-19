@@ -1,6 +1,6 @@
 
 export interface UtbetalingFraNavObject {
-    beloep: string;
+    belop: string;
     dato: string;
     ytelsestype: string;
 }
