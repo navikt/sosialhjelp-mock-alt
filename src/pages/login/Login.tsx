@@ -80,14 +80,7 @@ export const Login = () => {
                 {personliste.map((bruker) => {
                     return (
                         <option key={bruker.fnr} value={bruker.fnr}>
-                            {bruker.navn.fornavn +
-                                ' ' +
-                                bruker.navn.mellomnavn +
-                                ' ' +
-                                bruker.navn.etternavn +
-                                ' (' +
-                                bruker.fnr +
-                                ')'}
+                            {`${bruker.navn.fornavn} ${bruker.navn.mellomnavn} ${bruker.navn.etternavn} (${bruker.fnr})`}
                         </option>
                     );
                 })}
