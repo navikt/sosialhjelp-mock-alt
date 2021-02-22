@@ -59,7 +59,7 @@ const Knappegruppe = styled.div`
         margin-right: 1rem;
         white-space: normal;
 
-        @media ${theme.mobile} {
+        @media ${theme.mobileMaxWidth} {
             padding-left: 1rem;
             padding-right: 1rem;
         }
