@@ -1,8 +1,8 @@
-import {Hovedknapp} from 'nav-frontend-knapper';
+import { Hovedknapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
-import {Select, SkjemaGruppe} from 'nav-frontend-skjema';
-import {Sidetittel} from 'nav-frontend-typografi';
-import React, {useEffect, useState} from 'react';
+import { Select } from 'nav-frontend-skjema';
+import { Sidetittel } from 'nav-frontend-typografi';
+import React, { useEffect, useState } from 'react';
 import {
     addParams,
     getInnsynURL,
@@ -10,10 +10,42 @@ import {
     getModiaURL,
     getRedirectParams,
     getSoknadURL,
-    isLoginSession
+    isLoginSession,
 } from '../../utils/restUtils';
-import {Personalia} from "../person/PersonMockData";
-import {Link} from "react-router-dom";
+import { Personalia } from '../person/PersonMockData';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components/macro';
+import { theme } from '../../styling/Styles';
+
+const StyledPanel = styled(Panel)`
+    h1 {
+        margin-bottom: 1rem;
+    }
+`;
+const StyledSelect = styled(Select)`
+    margin-bottom: 1rem;
+    width: fit-content;
+
+    .selectContainer {
+        margin-right: 1rem;
+    }
+`;
+
+const Knappegruppe = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+
+    > *:not(:last-child) {
+        margin-right: 0.5rem;
+    }
+
+    @media ${theme.mobileMaxWidth} {
+        > *:not(:last-child) {
+            margin: 0 0 0.5rem;
+        }
+    }
+`;
 
 export const Login = () => {
     const [fnr, setFnr] = useState('');
@@ -34,34 +66,27 @@ export const Login = () => {
     }, []);
 
     const handleOnClick = () => {
-        var queryString = addParams(params, "&")
-        if(!isLoginSession(params)) {
-            queryString = "&redirect=" + redirect;
+        var queryString = addParams(params, '&');
+        if (!isLoginSession(params)) {
+            queryString = '&redirect=' + redirect;
         }
         window.location.href = `${getMockAltApiURL()}/login/cookie?subject=${fnr}${queryString}`;
-
     };
 
     return (
-        <Panel border>
+        <StyledPanel border>
             <Sidetittel>Mock login</Sidetittel>
-            <SkjemaGruppe legend="">
-                    <Select
-                        onChange={(event) => setFnr(event.target.value)}
-                        label="Velg bruker"
-                        value={fnr}
-                    >
-                        {personliste.map((bruker) => {
-                            return (
-                                <option key={bruker.fnr} value={bruker.fnr}>
-                                    {bruker.navn.fornavn + " " + bruker.navn.mellomnavn + " " + bruker.navn.etternavn + " (" + bruker.fnr + ")"}
-                                </option>
-                            );
-                        })}
-                    </Select>
-            </SkjemaGruppe>
-            {!isLoginSession(params) &&
-                <Select
+            <StyledSelect onChange={(event) => setFnr(event.target.value)} label="Velg bruker" value={fnr}>
+                {personliste.map((bruker) => {
+                    return (
+                        <option key={bruker.fnr} value={bruker.fnr}>
+                            {`${bruker.navn.fornavn} ${bruker.navn.mellomnavn} ${bruker.navn.etternavn} (${bruker.fnr})`}
+                        </option>
+                    );
+                })}
+            </StyledSelect>
+            {!isLoginSession(params) && (
+                <StyledSelect
                     onChange={(event) => setRedirect(event.target.value)}
                     label="Velg tjeneste"
                     value={redirect}
@@ -75,13 +100,17 @@ export const Login = () => {
                     <option key="modia" value={getModiaURL()}>
                         Modia
                     </option>
-                </Select>
-            }
-            <Hovedknapp onClick={() => handleOnClick()}>
-                Login
-            </Hovedknapp>
-            <Link className="knapp leftPadding" to={"/person" + addParams(params)} type="knapp">Lag ny bruker</Link>
-            <Link className="knapp leftPadding" to={"/" + addParams(params)}>Gå til oversikten</Link>
-        </Panel>
+                </StyledSelect>
+            )}
+            <Knappegruppe>
+                <Hovedknapp onClick={() => handleOnClick()}>Login</Hovedknapp>
+                <Link className="knapp" to={'/person' + addParams(params)} type="knapp">
+                    Lag ny bruker
+                </Link>
+                <Link className="knapp" to={'/' + addParams(params)}>
+                    Gå til oversikten
+                </Link>
+            </Knappegruppe>
+        </StyledPanel>
     );
 };
