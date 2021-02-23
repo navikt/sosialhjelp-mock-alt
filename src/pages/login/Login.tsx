@@ -1,6 +1,6 @@
 import { Hovedknapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
-import { Select, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Select } from 'nav-frontend-skjema';
 import { Sidetittel } from 'nav-frontend-typografi';
 import React, { useEffect, useState } from 'react';
 import {
