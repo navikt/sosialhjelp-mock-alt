@@ -21,7 +21,7 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import { UtbetalingFraNavObject } from './utbetalinger/UtbetalingerFraNav';
 import { Adressebeskyttelse } from '../personalia/adressebeskyttelse';
 import { Sivilstand } from './familie/familie';
-import { StyledSelect, theme } from '../../styling/Styles';
+import { FlexWrapper, StyledSelect } from '../../styling/Styles';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -74,29 +74,17 @@ const StyledPanel = styled(Panel)`
     }
 `;
 
-const FlexWrapper = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-`;
-
 const Knappegruppe = styled(FlexWrapper)`
-    button {
-        margin-right: 1rem;
-
-        @media ${theme.mobileMaxWidth} {
-            padding-left: 1rem;
-            padding-right: 1rem;
-        }
+    margin-bottom: 2rem;
+    align-items: center;
+    .knapp--hoved {
+        transform: none; // navfrontend-styling flytter den litt ned
     }
 `;
 
 const NameWrapper = styled(FlexWrapper)`
     .etternavn {
         flex-grow: 1;
-    }
-
-    .skjemaelement {
-        margin-right: 0.5rem;
     }
 `;
 
@@ -110,10 +98,6 @@ const AdresseWrapper = styled(FlexWrapper)`
         input {
             width: 100%;
         }
-    }
-
-    .skjemaelement {
-        margin-right: 0.5rem;
     }
 `;
 
@@ -363,6 +347,7 @@ export const PersonMockData = () => {
                 DETTE ER KUN FOR TESTING! Data du legger inn her er tilgjengelig for alle. Ikke legg inn noe sensitiv
                 informasjon!
             </AlertStripe>
+            {lockedMode && <AlertStripe type="info">Du kan ikke redigere standardbrukerene.</AlertStripe>}
             <Sidetittel>{overskrift()}</Sidetittel>
             <Input
                 value={fnr}
@@ -372,7 +357,6 @@ export const PersonMockData = () => {
                 className="brukerIdent"
                 bredde="M"
             />
-            {lockedMode && <AlertStripe type="info">Du kan ikke redigere standardbrukerene.</AlertStripe>}
             <GruppeStyle>
                 <SkjemaGruppe legend={<Undertittel>Personopplysninger</Undertittel>}>
                     <NameWrapper>
@@ -475,10 +459,7 @@ export const PersonMockData = () => {
             </GruppeStyle>
             <GruppeStyle>
                 <SkjemaGruppe legend={<Undertittel>Arbeidsforhold</Undertittel>}>
-                    <NyttArbeidsforhold
-                        isOpen={leggTilArbeidsforhold}
-                        callback={leggTilArbeidsforholdCallback}
-                    />
+                    <NyttArbeidsforhold isOpen={leggTilArbeidsforhold} callback={leggTilArbeidsforholdCallback} />
                     {arbeidsforhold.map((forhold: ArbeidsforholdObject, index: number) => {
                         return <VisArbeidsforhold arbeidsforhold={forhold} key={'arbeid_' + index} />;
                     })}
