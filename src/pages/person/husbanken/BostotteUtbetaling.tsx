@@ -4,6 +4,7 @@ import { Input, Select } from 'nav-frontend-skjema';
 import { Knapp } from 'nav-frontend-knapper';
 import { BostotteRolle } from './BostotteSak';
 import { StyledPanel } from '../../../styling/Styles';
+import {getIsoDateString} from "../../../utils/dateUtils";
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -22,18 +23,6 @@ export interface BostotteUtbetalingObject {
 interface Params {
     isOpen: boolean;
     callback: (data: any) => void;
-}
-
-function getIsoDateString(date: Date) {
-    return (
-        date.getFullYear() +
-        '-' +
-        (date.getMonth() < 9 ? '0' : '') +
-        (date.getMonth() + 1) +
-        '-' +
-        (date.getDate() < 9 ? '0' : '') +
-        (date.getDate() + 1)
-    );
 }
 
 export const NyttBostotteUtbetaling = ({ isOpen, callback }: Params) => {

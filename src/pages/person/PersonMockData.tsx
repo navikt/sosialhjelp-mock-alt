@@ -35,8 +35,6 @@ export interface Personalia {
     starsborgerskap: string;
     bostedsadresse: Bostedsadresse;
     telefonnummer: string;
-    organisasjon: string;
-    organisasjonsNavn: string;
     arbeidsforhold: ArbeidsforholdObject[];
     bostotteSaker: BostotteSakObject[];
     bostotteUtbetalinger: BostotteUtbetalingObject[];
@@ -168,9 +166,6 @@ export const PersonMockData = () => {
 
     const [brukTelefonnummer, setBrukTelefonnummer] = useState<boolean>(false);
     const [telefonnummer, setTelefonnummer] = useState<string>('99999999');
-    const [brukOrganisasjon, setBrukOrganisasjon] = useState<boolean>(false);
-    const [organisasjon, setOrganisasjon] = useState<string>('');
-    const [organisasjonsNavn, setOrganisasjonsNavn] = useState<string>('Organisasjonsnavn');
 
     const [leggTilBarn, setLeggTilBarn] = useState<boolean>(false);
     const [barn, setBarn] = useState<BarnObject[]>([]);
@@ -217,6 +212,7 @@ export const PersonMockData = () => {
                     setMellomnavn(nedlastet.navn.mellomnavn);
                     setEtternavn(nedlastet.navn.etternavn);
                     setAddressebeskyttelse(nedlastet.addressebeskyttelse);
+                    setEktefelle(nedlastet.ektefelle);
                     setSivilstand(nedlastet.sivilstand);
                     setBarn(nedlastet.barn);
                     setStatsborgerskap(nedlastet.starsborgerskap);
@@ -226,9 +222,6 @@ export const PersonMockData = () => {
                     setKommunenummer(nedlastet.bostedsadresse.kommunenummer);
                     setBrukTelefonnummer(nedlastet.telefonnummer !== '');
                     setTelefonnummer(nedlastet.telefonnummer);
-                    setBrukOrganisasjon(nedlastet.organisasjon !== '' || nedlastet.organisasjonsNavn !== '');
-                    setOrganisasjon(nedlastet.organisasjon);
-                    setOrganisasjonsNavn(nedlastet.organisasjonsNavn);
                     setArbeidsforhold(nedlastet.arbeidsforhold);
                     setSkattutbetalinger(nedlastet.skattetatenUtbetalinger);
                     setBostotteSaker(nedlastet.bostotteSaker);
@@ -243,13 +236,6 @@ export const PersonMockData = () => {
                     setFnr(text);
                 });
             promises.push(promiseFnr);
-
-            const promiseOrg = fetch(`${getMockAltApiURL()}/fiks/tilfeldig/orgnummer`)
-                .then((response) => response.text())
-                .then((text) => {
-                    setOrganisasjon(text);
-                });
-            promises.push(promiseOrg);
         }
 
         Promise.all(promises)
@@ -299,8 +285,6 @@ export const PersonMockData = () => {
 
     const createPersonaliaObject = (): Personalia => {
         const tlf = brukTelefonnummer ? telefonnummer : '';
-        const org = brukOrganisasjon ? organisasjon : '';
-        const orgnavn = brukOrganisasjon ? organisasjonsNavn : '';
         return {
             fnr: fnr,
             navn: {
@@ -320,8 +304,6 @@ export const PersonMockData = () => {
                 kommunenummer: kommunenummer,
             },
             telefonnummer: tlf,
-            organisasjon: org,
-            organisasjonsNavn: orgnavn,
             arbeidsforhold: arbeidsforhold,
             bostotteSaker: bostotteSaker,
             bostotteUtbetalinger: bostotteUtbetalinger,
@@ -496,7 +478,6 @@ export const PersonMockData = () => {
                     <NyttArbeidsforhold
                         isOpen={leggTilArbeidsforhold}
                         callback={leggTilArbeidsforholdCallback}
-                        organisasjonsnummer={organisasjon}
                     />
                     {arbeidsforhold.map((forhold: ArbeidsforholdObject, index: number) => {
                         return <VisArbeidsforhold arbeidsforhold={forhold} key={'arbeid_' + index} />;
