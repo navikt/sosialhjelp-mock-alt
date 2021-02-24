@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import Panel from 'nav-frontend-paneler';
 import { Select } from 'nav-frontend-skjema';
 
@@ -19,5 +19,19 @@ export const StyledSelect = styled(Select)`
     width: fit-content;
     .selectContainer {
         margin-right: 1rem;
+    }
+`;
+
+export const FlexWrapper = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+
+    // default margin på alle children
+    > * {
+        margin: 0 0.5rem 0.5rem 0;
+    }
+
+    > *:last-child {
+        margin-right: 0;
     }
 `;
