@@ -5,7 +5,6 @@ import { getMockAltApiURL } from '../../../utils/restUtils';
 import { Knapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
 import { Bostedsadresse, PersonaliaNavn } from '../PersonMockData';
-import styled from 'styled-components/macro';
 import { StyledPanel } from '../../../styling/Styles';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;

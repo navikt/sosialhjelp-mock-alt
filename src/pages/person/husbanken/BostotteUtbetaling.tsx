@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
 import { Input, Select } from 'nav-frontend-skjema';
 import { Knapp } from 'nav-frontend-knapper';
-import Panel from 'nav-frontend-paneler';
 import { BostotteRolle } from './BostotteSak';
 import { StyledPanel } from '../../../styling/Styles';
 
