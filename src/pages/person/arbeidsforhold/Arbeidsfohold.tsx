@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Collapse } from 'react-collapse';
-import { Input, Select } from 'nav-frontend-skjema';
-import { getMockAltApiURL } from '../../../utils/restUtils';
-import { Knapp } from 'nav-frontend-knapper';
+import React, {useEffect, useState} from 'react';
+import {Collapse} from 'react-collapse';
+import {Input, Select} from 'nav-frontend-skjema';
+import {getMockAltApiURL} from '../../../utils/restUtils';
+import {Knapp} from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
-import { StyledPanel } from '../../../styling/Styles';
+import {StyledPanel} from '../../../styling/Styles';
+import {getIsoDateString} from "../../../utils/dateUtils";
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -21,27 +22,15 @@ export interface ArbeidsforholdObject {
     stillingsProsent: string;
     ident: string;
     orgnummer: string;
+    orgnavn: string;
 }
 
 interface Params {
     isOpen: boolean;
     callback: (data: any) => void;
-    organisasjonsnummer: string;
 }
 
-function getIsoDateString(date: Date) {
-    return (
-        date.getFullYear() +
-        '-' +
-        (date.getMonth() < 9 ? '0' : '') +
-        (date.getMonth() + 1) +
-        '-' +
-        (date.getDate() < 9 ? '0' : '') +
-        (date.getDate() + 1)
-    );
-}
-
-export const NyttArbeidsforhold = ({ isOpen, callback, organisasjonsnummer }: Params) => {
+export const NyttArbeidsforhold = ({isOpen, callback}: Params) => {
     let lengesiden = new Date();
     lengesiden.setFullYear(lengesiden.getFullYear() - 3);
     let forrigeMnd = new Date();
@@ -53,13 +42,18 @@ export const NyttArbeidsforhold = ({ isOpen, callback, organisasjonsnummer }: Pa
     const [stillingsprosent, setStillingsprosent] = useState<number>(100);
     const [arbeidgivertype, setArbeidgivertype] = useState<string>(ArbeidsforholdType.ORGANISASJON);
     const [ident, setIdent] = useState<number>(123456789);
-    const [orgnummer, setOrgnummer] = useState<string>(organisasjonsnummer);
-    const [organisasjonsNavn, setOrganisasjonsNavn] = useState<string>('Organisasjonsnavn');
+    const [orgnummer, setOrgnummer] = useState<string>("");
+    const [organisasjonsNavn, setOrganisasjonsNavn] = useState<string>('Arbeidsgivernavn');
 
     useEffect(() => {
         fetch(`${getMockAltApiURL()}/fiks/tilfeldig/fnr`)
             .then((response) => response.text())
             .then((text) => setIdent(parseInt(text)));
+        fetch(`${getMockAltApiURL()}/fiks/tilfeldig/orgnummer`)
+            .then((response) => response.text())
+            .then((text) => {
+                setOrgnummer(text);
+            });
     }, []);
 
     const onLagre = (event: ClickEvent) => {
@@ -71,6 +65,7 @@ export const NyttArbeidsforhold = ({ isOpen, callback, organisasjonsnummer }: Pa
             stillingsProsent: stillingsprosent.toString(),
             ident: ident.toString(),
             orgnummer: orgnummer.toString(),
+            orgnavn: organisasjonsNavn,
         };
 
         callback(nyttArbeidsforholdObject);
@@ -89,8 +84,8 @@ export const NyttArbeidsforhold = ({ isOpen, callback, organisasjonsnummer }: Pa
                     value={arbeidsforholdId}
                     onChange={(evt: any) => setArbeidsforholdId(evt.target.value)}
                 />
-                <Input label="Startdato" value={startdato} onChange={(evt: any) => setStartdato(evt.target.value)} />
-                <Input label="Sluttdato" value={sluttdato} onChange={(evt: any) => setSluttdato(evt.target.value)} />
+                <Input label="Startdato" value={startdato} onChange={(evt: any) => setStartdato(evt.target.value)}/>
+                <Input label="Sluttdato" value={sluttdato} onChange={(evt: any) => setSluttdato(evt.target.value)}/>
                 <Input
                     label="Stillingsprosent"
                     value={stillingsprosent}
@@ -105,7 +100,7 @@ export const NyttArbeidsforhold = ({ isOpen, callback, organisasjonsnummer }: Pa
                     <option value={ArbeidsforholdType.PERSON}>Person med ident</option>
                 </Select>
                 <Collapse isOpened={arbeidgivertype === ArbeidsforholdType.PERSON}>
-                    <Input label="Ident" value={ident} onChange={(evt: any) => setIdent(evt.target.value)} />
+                    <Input label="Ident" value={ident} onChange={(evt: any) => setIdent(evt.target.value)}/>
                 </Collapse>
                 <Collapse isOpened={arbeidgivertype === ArbeidsforholdType.ORGANISASJON}>
                     <Input
@@ -137,7 +132,7 @@ interface ViseParams {
     arbeidsforhold: ArbeidsforholdObject;
 }
 
-export const VisArbeidsforhold = ({ arbeidsforhold }: ViseParams) => {
+export const VisArbeidsforhold = ({arbeidsforhold}: ViseParams) => {
     return (
         <StyledPanel>
             <div>Arbeidsforholdsid: {arbeidsforhold.id}</div>
@@ -154,6 +149,7 @@ export const VisArbeidsforhold = ({ arbeidsforhold }: ViseParams) => {
                 <div>
                     <div>Arbeidsgivertype: Arbeidsgiver med orgnummer</div>
                     <div>Orgnummer: {arbeidsforhold.orgnummer}</div>
+                    <div>Arbeidsgivernavn: {arbeidsforhold.orgnavn}</div>
                 </div>
             )}
         </StyledPanel>

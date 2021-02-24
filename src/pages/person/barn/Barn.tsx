@@ -6,6 +6,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
 import { Bostedsadresse, PersonaliaNavn } from '../PersonMockData';
 import { StyledPanel } from '../../../styling/Styles';
+import {getIsoDateString} from "../../../utils/dateUtils";
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -21,18 +22,6 @@ export interface BarnObject {
 interface Params {
     isOpen: boolean;
     callback: (data: any) => void;
-}
-
-function getIsoDateString(date: Date) {
-    return (
-        date.getFullYear() +
-        '-' +
-        (date.getMonth() < 9 ? '0' : '') +
-        (date.getMonth() + 1) +
-        '-' +
-        (date.getDate() < 9 ? '0' : '') +
-        (date.getDate() + 1)
-    );
 }
 
 export const NyttBarn = ({ isOpen, callback }: Params) => {
