@@ -1,6 +1,5 @@
 import { Hovedknapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
-import { Select } from 'nav-frontend-skjema';
 import { Sidetittel } from 'nav-frontend-typografi';
 import React, { useEffect, useState } from 'react';
 import {
@@ -15,19 +14,11 @@ import {
 import { Personalia } from '../person/PersonMockData';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { theme } from '../../styling/Styles';
+import { StyledSelect, theme } from '../../styling/Styles';
 
 const StyledPanel = styled(Panel)`
     h1 {
         margin-bottom: 1rem;
-    }
-`;
-const StyledSelect = styled(Select)`
-    margin-bottom: 1rem;
-    width: fit-content;
-
-    .selectContainer {
-        margin-right: 1rem;
     }
 `;
 
@@ -74,7 +65,7 @@ export const Login = () => {
     };
 
     return (
-        <StyledPanel border>
+        <StyledPanel>
             <Sidetittel>Mock login</Sidetittel>
             <StyledSelect onChange={(event) => setFnr(event.target.value)} label="Velg bruker" value={fnr}>
                 {personliste.map((bruker) => {

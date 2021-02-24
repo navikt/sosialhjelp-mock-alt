@@ -2,7 +2,7 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
 import { Checkbox, Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Sidetittel } from 'nav-frontend-typografi';
+import { Sidetittel, Undertittel, Element } from 'nav-frontend-typografi';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { addParams, getMockAltApiURL, getRedirectParams, isLoginSession } from '../../utils/restUtils';
@@ -18,7 +18,10 @@ import { Collapse } from 'react-collapse';
 import { BarnObject, NyttBarn, VisBarn } from './barn/Barn';
 import styled from 'styled-components/macro';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import {UtbetalingFraNavObject} from "./utbetalinger/UtbetalingerFraNav";
+import { UtbetalingFraNavObject } from './utbetalinger/UtbetalingerFraNav';
+import { Adressebeskyttelse } from '../personalia/adressebeskyttelse';
+import { Sivilstand } from './familie/familie';
+import { StyledSelect, theme } from '../../styling/Styles';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -38,7 +41,7 @@ export interface Personalia {
     bostotteSaker: BostotteSakObject[];
     bostotteUtbetalinger: BostotteUtbetalingObject[];
     skattetatenUtbetalinger: SkatteutbetalingObject[];
-    utbetalingerFraNav: UtbetalingFraNavObject[],
+    utbetalingerFraNav: UtbetalingFraNavObject[];
     locked: boolean;
 }
 
@@ -60,13 +63,93 @@ export function useQuery() {
 }
 
 const StyledPanel = styled(Panel)`
-    h1,
-    h2 {
+    h1 {
         margin-bottom: 1rem;
     }
 
     .alertstripe {
+        margin-bottom: 1rem;
+    }
+
+    .brukerIdent {
+        margin-bottom: 2rem;
+    }
+`;
+
+const FlexWrapper = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+`;
+
+const Knappegruppe = styled(FlexWrapper)`
+    button {
+        margin-right: 1rem;
+
+        @media ${theme.mobileMaxWidth} {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+    }
+`;
+
+const NameWrapper = styled(FlexWrapper)`
+    .etternavn {
+        flex-grow: 1;
+    }
+
+    .skjemaelement {
+        margin-right: 0.5rem;
+    }
+`;
+
+const AdresseWrapper = styled(FlexWrapper)`
+    input {
+        width: 5rem;
+    }
+
+    .adresse {
+        flex: 1 1 30rem;
+        input {
+            width: 100%;
+        }
+    }
+
+    .skjemaelement {
+        margin-right: 0.5rem;
+    }
+`;
+
+const BarnWrapper = styled.div`
+    margin-bottom: 1rem;
+
+    h3 {
         margin-bottom: 0.5rem;
+    }
+`;
+
+const GruppeStyle = styled.div`
+    padding: 1rem;
+    background-color: #f3f3f3;
+    margin-bottom: 2rem;
+`;
+
+const InntektGruppeStyle = styled(GruppeStyle)`
+    h2 {
+        margin-bottom: 1rem;
+    }
+
+    .skjemagruppe {
+        margin-bottom: 1rem;
+    }
+
+    .leggTilBostotte {
+        margin-bottom: 0.5rem;
+    }
+`;
+
+const AdresseGruppe = styled(SkjemaGruppe)`
+    .kommunenr {
+        max-width: 5rem;
     }
 `;
 
@@ -293,214 +376,222 @@ export const PersonMockData = () => {
     }
 
     return (
-        <StyledPanel border>
-            <Sidetittel>{overskrift()}</Sidetittel>
+        <StyledPanel>
             <AlertStripe type="advarsel">
                 DETTE ER KUN FOR TESTING! Data du legger inn her er tilgjengelig for alle. Ikke legg inn noe sensitiv
                 informasjon!
             </AlertStripe>
+            <Sidetittel>{overskrift()}</Sidetittel>
             <Input
                 value={fnr}
-                label="Ident / Fødselsnummer"
+                label="Ident / fødselsnummer"
                 disabled={editMode || lockedMode}
                 onChange={(evt: any) => setFnr(evt.target.value)}
+                className="brukerIdent"
+                bredde="M"
             />
             {lockedMode && <AlertStripe type="info">Du kan ikke redigere standardbrukerene.</AlertStripe>}
-            <SkjemaGruppe legend="Personalia">
-                <Input
-                    label="Fornavn"
-                    disabled={lockedMode}
-                    value={fornavn}
-                    onChange={(evt: any) => setFornavn(evt.target.value)}
-                />
-                <Input
-                    label="Mellomnavn"
-                    disabled={lockedMode}
-                    value={mellomnavn}
-                    onChange={(evt: any) => setMellomnavn(evt.target.value)}
-                />
-                <Input
-                    label="Etternavn"
-                    disabled={lockedMode}
-                    value={etternavn}
-                    onChange={(evt: any) => setEtternavn(evt.target.value)}
-                />
-                <Select
-                    label="Addressebeskyttelse"
-                    disabled={lockedMode}
-                    onChange={(evt: any) => setAddressebeskyttelse(evt.target.value)}
-                    value={addressebeskyttelse}
-                >
-                    <option value="UGRADERT">Ugradert</option>
-                    <option value="STRENGT_FORTROLIG">Strengt fortrolig (kode 6)</option>
-                    <option value="STRENGT_FORTROLIG_UTLAND">Strengt fortrolig utland (kode 6)</option>
-                    <option value="FORTROLIG">Fortrolig (kode 7)</option>
-                </Select>
-                <Select
-                    label="Sivilstand"
-                    disabled={lockedMode}
-                    onChange={(evt: any) => setSivilstand(evt.target.value)}
-                    value={sivilstand}
-                >
-                    <option value="UOPPGITT">UOPPGITT</option>
-                    <option value="UGIFT">UGIFT</option>
-                    <option value="GIFT">GIFT</option>
-                    <option value="ENKE_ELLER_ENKEMANN">ENKE_ELLER_ENKEMANN</option>
-                    <option value="SKILT">SKILT</option>
-                    <option value="SEPARERT">SEPARERT</option>
-                    <option value="PARTNER">PARTNER</option>
-                    <option value="SEPARERT_PARTNER">SEPARERT_PARTNER</option>
-                    <option value="SKILT_PARTNER">SKILT_PARTNER</option>
-                    <option value="GJENLEVENDE_PARTNER">GJENLEVENDE_PARTNER</option>
-                </Select>
-                <Select
-                    label="Ektefelle"
-                    disabled={lockedMode}
-                    onChange={(evt: any) => setEktefelle(evt.target.value)}
-                    value={ektefelle}
-                >
-                    <option value="INGEN">-</option>
-                    <option value="EKTEFELLE_SAMME_BOSTED">EKTEFELLE_SAMME_BOSTED</option>
-                    <option value="EKTEFELLE_ANNET_BOSTED">EKTEFELLE_ANNET_BOSTED</option>
-                    <option value="EKTEFELLE_MED_ADRESSEBESKYTTELSE">EKTEFELLE_MED_ADRESSEBESKYTTELSE</option>
-                </Select>
-                <SkjemaGruppe legend="Barn">
-                    <NyttBarn isOpen={leggTilBarn} callback={leggTilBarnCallback} />
-                    {barn.map((barn: BarnObject, index: number) => {
-                        return <VisBarn barn={barn} key={'barn_' + index} />;
+            <GruppeStyle>
+                <SkjemaGruppe legend={<Undertittel>Personopplysninger</Undertittel>}>
+                    <NameWrapper>
+                        <Input
+                            label="Fornavn"
+                            disabled={lockedMode}
+                            value={fornavn}
+                            onChange={(evt: any) => setFornavn(evt.target.value)}
+                        />
+                        <Input
+                            label="Mellomnavn"
+                            disabled={lockedMode}
+                            value={mellomnavn}
+                            onChange={(evt: any) => setMellomnavn(evt.target.value)}
+                        />
+                        <Input
+                            inputClassName="etternavn-input"
+                            className="etternavn"
+                            label="Etternavn"
+                            disabled={lockedMode}
+                            value={etternavn}
+                            onChange={(evt: any) => setEtternavn(evt.target.value)}
+                        />
+                    </NameWrapper>
+                    <StyledSelect
+                        label="Addressebeskyttelse"
+                        disabled={lockedMode}
+                        onChange={(evt: any) => setAddressebeskyttelse(evt.target.value)}
+                        value={addressebeskyttelse}
+                    >
+                        {Object.entries(Adressebeskyttelse).map(
+                            ([key, value]: any): JSX.Element => {
+                                return <option value={key}>{value}</option>;
+                            }
+                        )}
+                    </StyledSelect>
+                    <Select
+                        label="Statsborgerskap"
+                        disabled={lockedMode}
+                        onChange={(evt: any) => setStatsborgerskap(evt.target.value)}
+                        value={starsborgerskap}
+                    >
+                        <option value="NOR">Norsk</option>
+                        <option value="SWE">Svensk</option>
+                        <option value="DEN">Dansk</option>
+                        <option value="GER">Tysk</option>
+                        <option value="USA">Amerikansk</option>
+                        <option value="XXX">Statsløs</option>
+                        <option value="XUK">Ukjent/Mangler opplysninger</option>
+                    </Select>
+                    <SkjemaGruppe legend="Telefonnummer">
+                        <Checkbox
+                            label="Sett telefonnummer"
+                            disabled={lockedMode}
+                            onChange={(evt: any) => setBrukTelefonnummer(evt.target.checked)}
+                            value={brukTelefonnummer ? 'true' : 'false'}
+                        />
+                        <Collapse isOpened={brukTelefonnummer}>
+                            <Input
+                                label="Telefonnummer"
+                                disabled={lockedMode || !brukTelefonnummer}
+                                value={telefonnummer}
+                                onChange={(evt: any) => setTelefonnummer(evt.target.value)}
+                            />
+                        </Collapse>
+                    </SkjemaGruppe>
+                </SkjemaGruppe>
+            </GruppeStyle>
+            <GruppeStyle>
+                <AdresseGruppe legend={<Undertittel>Bostedsadresse</Undertittel>}>
+                    <AdresseWrapper>
+                        <Input
+                            label="Gateadresse"
+                            className="adresse"
+                            disabled={lockedMode}
+                            value={adressenavn}
+                            onChange={(evt: any) => setAdressenavn(evt.target.value)}
+                        />
+                        <Input
+                            label="Husnummer"
+                            disabled={lockedMode}
+                            value={husnummer}
+                            onChange={(evt: any) => setHusnummer(evt.target.value)}
+                        />
+                        <Input
+                            label="Postnummer"
+                            disabled={lockedMode}
+                            value={postnummer}
+                            onChange={(evt: any) => setPostnummer(evt.target.value)}
+                        />
+                    </AdresseWrapper>
+                    <Input
+                        label="Kommunenummer"
+                        disabled={lockedMode}
+                        value={kommunenummer}
+                        onChange={(evt: any) => setKommunenummer(evt.target.value)}
+                        className="kommunenr"
+                    />
+                </AdresseGruppe>
+            </GruppeStyle>
+            <GruppeStyle>
+                <SkjemaGruppe legend={<Undertittel>Arbeidsforhold</Undertittel>}>
+                    <NyttArbeidsforhold
+                        isOpen={leggTilArbeidsforhold}
+                        callback={leggTilArbeidsforholdCallback}
+                        organisasjonsnummer={organisasjon}
+                    />
+                    {arbeidsforhold.map((forhold: ArbeidsforholdObject, index: number) => {
+                        return <VisArbeidsforhold arbeidsforhold={forhold} key={'arbeid_' + index} />;
                     })}
-                    {!leggTilBarn && <Knapp onClick={() => setLeggTilBarn(true)}>Legg til barn</Knapp>}
+                    {!leggTilArbeidsforhold && (
+                        <Knapp onClick={() => setLeggTilArbeidsforhold(true)}>Legg til arbeidsforhold</Knapp>
+                    )}
                 </SkjemaGruppe>
-                <Select
-                    label="Statsborgerskap"
-                    disabled={lockedMode}
-                    onChange={(evt: any) => setStatsborgerskap(evt.target.value)}
-                    value={starsborgerskap}
-                >
-                    <option value="NOR">Norsk</option>
-                    <option value="SWE">Svensk</option>
-                    <option value="DEN">Dansk</option>
-                    <option value="GER">Tysk</option>
-                    <option value="USA">Amerikansk</option>
-                    <option value="XXX">Statsløs</option>
-                    <option value="XUK">Ukjent/Mangler opplysninger</option>
-                </Select>
-                <SkjemaGruppe legend="Telefonnummer">
-                    <Checkbox
-                        label="Sett telefonnummer"
+            </GruppeStyle>
+            <GruppeStyle>
+                <SkjemaGruppe legend={<Undertittel>Familiesituasjon</Undertittel>}>
+                    <StyledSelect
+                        label="Sivilstand"
                         disabled={lockedMode}
-                        onChange={(evt: any) => setBrukTelefonnummer(evt.target.checked)}
-                        value={brukTelefonnummer ? 'true' : 'false'}
-                    />
-                    <Collapse isOpened={brukTelefonnummer}>
-                        <Input
-                            label="Telefonnummer"
-                            disabled={lockedMode || !brukTelefonnummer}
-                            value={telefonnummer}
-                            onChange={(evt: any) => setTelefonnummer(evt.target.value)}
-                        />
-                    </Collapse>
-                </SkjemaGruppe>
-                <SkjemaGruppe legend="Organisasjon">
-                    <Checkbox
-                        label="Sett organisasjon"
+                        onChange={(evt: any) => setSivilstand(evt.target.value)}
+                        value={sivilstand}
+                    >
+                        {Object.entries(Sivilstand).map(
+                            ([key, value]: any): JSX.Element => {
+                                return <option value={key}>{value}</option>;
+                            }
+                        )}
+                    </StyledSelect>
+                    <StyledSelect
+                        label="Ektefelle"
                         disabled={lockedMode}
-                        onChange={(evt: any) => setBrukOrganisasjon(evt.target.checked)}
-                        value={brukOrganisasjon ? 'true' : 'false'}
-                    />
-                    <Collapse isOpened={brukOrganisasjon}>
-                        <Input
-                            label="Organisasjonsnavn"
-                            disabled={lockedMode || !brukOrganisasjon}
-                            value={organisasjonsNavn}
-                            onChange={(evt: any) => setOrganisasjonsNavn(evt.target.value)}
-                        />
-                        <Input
-                            label="Organisasjonsnummer"
-                            disabled={lockedMode || !brukOrganisasjon}
-                            value={organisasjon}
-                            onChange={(evt: any) => setOrganisasjon(evt.target.value)}
-                        />
-                    </Collapse>
+                        onChange={(evt: any) => setEktefelle(evt.target.value)}
+                        value={ektefelle}
+                    >
+                        <option value="INGEN">Ingen</option>
+                        <option value="EKTEFELLE_SAMME_BOSTED">Samme bosted</option>
+                        <option value="EKTEFELLE_ANNET_BOSTED">Annet bosted</option>
+                        <option value="EKTEFELLE_MED_ADRESSEBESKYTTELSE">Med adressebeskyttelse</option>
+                    </StyledSelect>
+                    <BarnWrapper>
+                        <Element tag="h3">Barn</Element>
+                        <NyttBarn isOpen={leggTilBarn} callback={leggTilBarnCallback} />
+                        {barn.map((barn: BarnObject, index: number) => {
+                            return <VisBarn barn={barn} key={'barn_' + index} />;
+                        })}
+                        {!leggTilBarn && <Knapp onClick={() => setLeggTilBarn(true)}>Legg til barn</Knapp>}
+                    </BarnWrapper>
                 </SkjemaGruppe>
-            </SkjemaGruppe>
-            <SkjemaGruppe legend="Arbeidsforhold">
-                <NyttArbeidsforhold
-                    isOpen={leggTilArbeidsforhold}
-                    callback={leggTilArbeidsforholdCallback}
-                    organisasjonsnummer={organisasjon}
-                />
-                {arbeidsforhold.map((forhold: ArbeidsforholdObject, index: number) => {
-                    return <VisArbeidsforhold arbeidsforhold={forhold} key={'arbeid_' + index} />;
-                })}
-                {!leggTilArbeidsforhold && (
-                    <Knapp onClick={() => setLeggTilArbeidsforhold(true)}>Legg til arbeidsforhold</Knapp>
+            </GruppeStyle>
+            <InntektGruppeStyle>
+                <Undertittel>Inntekt og formue</Undertittel>
+                <SkjemaGruppe legend="Skattetaten">
+                    <NyttSkatteutbetaling isOpen={leggTilSkatt} callback={leggTilSkattCallback} />
+                    {skattutbetalinger.map((utbetaling: SkatteutbetalingObject, index: number) => {
+                        return <VisSkatteutbetaling skatteutbetaling={utbetaling} key={'skatt_' + index} />;
+                    })}
+                    {!leggTilSkatt && <Knapp onClick={() => setLeggTilSkatt(true)}>Legg til utbetaling</Knapp>}
+                </SkjemaGruppe>
+                <SkjemaGruppe legend="Husbanken">
+                    <NyBostotteSak isOpen={leggTilBostotteSak} callback={leggTilBostotteSakCallback} />
+                    {bostotteSaker.map((sak: BostotteSakObject, index: number) => {
+                        return <VisBostotteSak bostotteSak={sak} key={'bostotteSak_' + index} />;
+                    })}
+                    {!leggTilBostotteSak && (
+                        <Knapp className="leggTilBostotte" onClick={() => setLeggTilBostotteSak(true)}>
+                            Legg til sak
+                        </Knapp>
+                    )}
+                    <NyttBostotteUtbetaling
+                        isOpen={leggTilBostotteUtbetaling}
+                        callback={leggTilBostotteUtbetalingCallback}
+                    />
+                    {bostotteUtbetalinger.map((utbetaling: BostotteUtbetalingObject, index: number) => {
+                        return (
+                            <VisBostotteUtbetaling
+                                bostotteUtbetaling={utbetaling}
+                                key={'bostotteUtbetaling_' + index}
+                            />
+                        );
+                    })}
+                    {!leggTilBostotteUtbetaling && (
+                        <Knapp onClick={() => setLeggTilBostotteUtbetaling(true)}>Legg til utbetaling</Knapp>
+                    )}
+                </SkjemaGruppe>
+                <SkjemaGruppe legend="Nav utbetalinger">
+                    <Panel border={true}>Ikke støttet ennå. Bruker standardverdier for utbetalinger.</Panel>
+                </SkjemaGruppe>
+            </InntektGruppeStyle>
+            <Knappegruppe>
+                {!lockedMode && (
+                    <Hovedknapp
+                        onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCreateUser(event)}
+                    >
+                        {editMode ? 'Lagre endringer' : 'Opprett bruker'} {isLoginSession(params) && ' og logg inn'}
+                    </Hovedknapp>
                 )}
-            </SkjemaGruppe>
-            <SkjemaGruppe legend="Bostedsadresse">
-                <Input
-                    label="Adressenavn"
-                    disabled={lockedMode}
-                    value={adressenavn}
-                    onChange={(evt: any) => setAdressenavn(evt.target.value)}
-                />
-                <Input
-                    label="Husnummer"
-                    disabled={lockedMode}
-                    value={husnummer}
-                    onChange={(evt: any) => setHusnummer(evt.target.value)}
-                />
-                <Input
-                    label="Postnummer"
-                    disabled={lockedMode}
-                    value={postnummer}
-                    onChange={(evt: any) => setPostnummer(evt.target.value)}
-                />
-                <Input
-                    label="Kommunenummer"
-                    disabled={lockedMode}
-                    value={kommunenummer}
-                    onChange={(evt: any) => setKommunenummer(evt.target.value)}
-                />
-            </SkjemaGruppe>
-            <SkjemaGruppe legend="Skattetaten">
-                <NyttSkatteutbetaling isOpen={leggTilSkatt} callback={leggTilSkattCallback} />
-                {skattutbetalinger.map((utbetaling: SkatteutbetalingObject, index: number) => {
-                    return <VisSkatteutbetaling skatteutbetaling={utbetaling} key={'skatt_' + index} />;
-                })}
-                {!leggTilSkatt && <Knapp onClick={() => setLeggTilSkatt(true)}>Legg til utbetaling</Knapp>}
-            </SkjemaGruppe>
-            <SkjemaGruppe legend="Husbanken">
-                <NyBostotteSak isOpen={leggTilBostotteSak} callback={leggTilBostotteSakCallback} />
-                {bostotteSaker.map((sak: BostotteSakObject, index: number) => {
-                    return <VisBostotteSak bostotteSak={sak} key={'bostotteSak_' + index} />;
-                })}
-                {!leggTilBostotteSak && <Knapp onClick={() => setLeggTilBostotteSak(true)}>Legg til sak</Knapp>}
-                <NyttBostotteUtbetaling
-                    isOpen={leggTilBostotteUtbetaling}
-                    callback={leggTilBostotteUtbetalingCallback}
-                />
-                {bostotteUtbetalinger.map((utbetaling: BostotteUtbetalingObject, index: number) => {
-                    return (
-                        <VisBostotteUtbetaling bostotteUtbetaling={utbetaling} key={'bostotteUtbetaling_' + index} />
-                    );
-                })}
-                {!leggTilBostotteUtbetaling && (
-                    <Knapp onClick={() => setLeggTilBostotteUtbetaling(true)}>Legg til utbetaling</Knapp>
-                )}
-            </SkjemaGruppe>
-            <SkjemaGruppe legend="Nav utbetalinger">
-                <Panel border={true}>Ikke støttet ennå. Bruker standardverdier for utbetalinger.</Panel>
-            </SkjemaGruppe>
-
-            {!lockedMode && (
-                <Hovedknapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCreateUser(event)}>
-                    {editMode ? 'Lagre endringer' : 'Opprett bruker'} {isLoginSession(params) && ' og logg inn'}
-                </Hovedknapp>
-            )}
-            <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onGoBack(event)}>
-                {lockedMode ? 'Tilbake' : 'Avbryt'}
-            </Knapp>
+                <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onGoBack(event)}>
+                    {lockedMode ? 'Tilbake' : 'Avbryt'}
+                </Knapp>
+            </Knappegruppe>
         </StyledPanel>
     );
 };
