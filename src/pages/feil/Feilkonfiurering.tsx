@@ -171,7 +171,7 @@ export const Feilkonfiurering = () => {
     };
 
     return (
-        <Wrapper border>
+        <Wrapper>
             <Sidetittel>Feilsituasjoner</Sidetittel>
             <Input
                 value={fnr}

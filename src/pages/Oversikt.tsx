@@ -74,7 +74,7 @@ export const Oversikt = () => {
     }, []);
 
     return (
-        <StyledPanel border>
+        <StyledPanel>
             <Sidetittel>Testbrukere - oversikt</Sidetittel>
             {personliste?.length > 0 ? (
                 <TabellWrapper>

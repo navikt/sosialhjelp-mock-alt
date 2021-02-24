@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './nav-frontend.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import '@navikt/ds-tokens/dist/tokens.css';
 
 ReactDOM.render(
     <React.StrictMode>

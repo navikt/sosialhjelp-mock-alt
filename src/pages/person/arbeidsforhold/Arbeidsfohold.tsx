@@ -1,15 +1,16 @@
-import React, {useEffect, useState} from "react";
-import {Collapse} from "react-collapse";
-import {Input, Select} from "nav-frontend-skjema";
-import {getMockAltApiURL} from "../../../utils/restUtils";
-import {Knapp} from "nav-frontend-knapper";
-import Panel from "nav-frontend-paneler";
+import React, { useEffect, useState } from 'react';
+import { Collapse } from 'react-collapse';
+import { Input, Select } from 'nav-frontend-skjema';
+import { getMockAltApiURL } from '../../../utils/restUtils';
+import { Knapp } from 'nav-frontend-knapper';
+import Panel from 'nav-frontend-paneler';
+import { StyledPanel } from '../../../styling/Styles';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
 export enum ArbeidsforholdType {
-    PERSON = "Person",
-    ORGANISASJON = "Organisasjon",
+    PERSON = 'Person',
+    ORGANISASJON = 'Organisasjon',
 }
 
 export interface ArbeidsforholdObject {
@@ -29,22 +30,31 @@ interface Params {
 }
 
 function getIsoDateString(date: Date) {
-    return date.getFullYear() + "-" + (date.getMonth() < 9 ? "0" : "") + (date.getMonth() + 1) + "-" + (date.getDate() < 9 ? "0" : "") + (date.getDate() + 1);
+    return (
+        date.getFullYear() +
+        '-' +
+        (date.getMonth() < 9 ? '0' : '') +
+        (date.getMonth() + 1) +
+        '-' +
+        (date.getDate() < 9 ? '0' : '') +
+        (date.getDate() + 1)
+    );
 }
 
-export const NyttArbeidsforhold = ({isOpen, callback, organisasjonsnummer}: Params) => {
+export const NyttArbeidsforhold = ({ isOpen, callback, organisasjonsnummer }: Params) => {
     let lengesiden = new Date();
     lengesiden.setFullYear(lengesiden.getFullYear() - 3);
     let forrigeMnd = new Date();
     forrigeMnd.setMonth(forrigeMnd.getMonth() - 1);
 
-    const [arbeidsforholdId, setArbeidsforholdId] = useState<string>("1");
+    const [arbeidsforholdId, setArbeidsforholdId] = useState<string>('1');
     const [startdato, setStartdato] = useState<string>(getIsoDateString(lengesiden));
     const [sluttdato, setSluttdato] = useState<string>(getIsoDateString(forrigeMnd));
     const [stillingsprosent, setStillingsprosent] = useState<number>(100);
-    const [arbeidgivertype, setArbeidgivertype] = useState<string>(ArbeidsforholdType.PERSON);
+    const [arbeidgivertype, setArbeidgivertype] = useState<string>(ArbeidsforholdType.ORGANISASJON);
     const [ident, setIdent] = useState<number>(123456789);
     const [orgnummer, setOrgnummer] = useState<string>(organisasjonsnummer);
+    const [organisasjonsNavn, setOrganisasjonsNavn] = useState<string>('Organisasjonsnavn');
 
     useEffect(() => {
         fetch(`${getMockAltApiURL()}/fiks/tilfeldig/fnr`)
@@ -64,85 +74,88 @@ export const NyttArbeidsforhold = ({isOpen, callback, organisasjonsnummer}: Para
         };
 
         callback(nyttArbeidsforholdObject);
-        event.preventDefault()
-    }
+        event.preventDefault();
+    };
     const onCancel = (event: ClickEvent) => {
         callback(null);
-        event.preventDefault()
-    }
+        event.preventDefault();
+    };
 
     return (
         <Collapse isOpened={isOpen}>
-            <Panel border={true}>
-                <Input label="Arbeidsforholdsid"
-                       value={arbeidsforholdId}
-                       onChange={(evt: any) => setArbeidsforholdId(evt.target.value)}
+            <Panel>
+                <Input
+                    label="Arbeidsforholdsid"
+                    value={arbeidsforholdId}
+                    onChange={(evt: any) => setArbeidsforholdId(evt.target.value)}
                 />
-                <Input label="Startdato"
-                       value={startdato}
-                       onChange={(evt: any) => setStartdato(evt.target.value)}
+                <Input label="Startdato" value={startdato} onChange={(evt: any) => setStartdato(evt.target.value)} />
+                <Input label="Sluttdato" value={sluttdato} onChange={(evt: any) => setSluttdato(evt.target.value)} />
+                <Input
+                    label="Stillingsprosent"
+                    value={stillingsprosent}
+                    onChange={(evt: any) => setStillingsprosent(evt.target.value)}
                 />
-                <Input label="Sluttdato"
-                       value={sluttdato}
-                       onChange={(evt: any) => setSluttdato(evt.target.value)}
-                />
-                <Input label="Stillingsprosent"
-                       value={stillingsprosent}
-                       onChange={(evt: any) => setStillingsprosent(evt.target.value)}
-                />
-                <Select label="Velg arbeidsgivertype"
-                        onChange={(evt: any) => setArbeidgivertype(evt.target.value)}
-                        value={arbeidgivertype}
+                <Select
+                    label="Velg arbeidsgivertype"
+                    onChange={(evt: any) => setArbeidgivertype(evt.target.value)}
+                    value={arbeidgivertype}
                 >
-                    <option value={ArbeidsforholdType.PERSON}>Person med ident</option>
                     <option value={ArbeidsforholdType.ORGANISASJON}>Arbeidsgiver med orgnummer</option>
+                    <option value={ArbeidsforholdType.PERSON}>Person med ident</option>
                 </Select>
                 <Collapse isOpened={arbeidgivertype === ArbeidsforholdType.PERSON}>
-                    <Input label="Ident"
-                           value={ident}
-                           onChange={(evt: any) => setIdent(evt.target.value)}
-                    />
+                    <Input label="Ident" value={ident} onChange={(evt: any) => setIdent(evt.target.value)} />
                 </Collapse>
                 <Collapse isOpened={arbeidgivertype === ArbeidsforholdType.ORGANISASJON}>
-                    <Input label="Orgnummer"
-                           value={orgnummer}
-                           onChange={(evt: any) => setOrgnummer(evt.target.value)}
+                    <Input
+                        label="Organisasjonsnavn"
+                        value={organisasjonsNavn}
+                        onChange={(evt: any) => setOrganisasjonsNavn(evt.target.value)}
+                    />
+                    <Input
+                        label="Orgnummer"
+                        value={orgnummer}
+                        onChange={(evt: any) => setOrgnummer(evt.target.value)}
                     />
                 </Collapse>
-                <Knapp
-                    onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}
-                >
+                <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
                     Legg til
                 </Knapp>
                 <Knapp
                     onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}
                     className="leftPadding"
                 >
-                    Cancel
+                    Avbryt
                 </Knapp>
             </Panel>
         </Collapse>
     );
-}
+};
 
 interface ViseParams {
     arbeidsforhold: ArbeidsforholdObject;
 }
 
-export const VisArbeidsforhold = ({arbeidsforhold}: ViseParams) => {
-    return (<Panel border={true}>
+export const VisArbeidsforhold = ({ arbeidsforhold }: ViseParams) => {
+    return (
+        <StyledPanel>
             <div>Arbeidsforholdsid: {arbeidsforhold.id}</div>
             <div>Startdato: {arbeidsforhold.startDato}</div>
             <div>Sluttdato: {arbeidsforhold.sluttDato}</div>
             <div>Stillingsprosent: {arbeidsforhold.stillingsProsent}</div>
-            {arbeidsforhold.type === ArbeidsforholdType.PERSON && (<div>
-                <div>Arbeidsgivertype: Person med ident</div>
-                <div>Ident: {arbeidsforhold.ident}</div>
-            </div>)}
-            {arbeidsforhold.type === ArbeidsforholdType.ORGANISASJON && (<div>
-                <div>Arbeidsgivertype: Arbeidsgiver med orgnummer</div>
-                <div>Orgnummer: {arbeidsforhold.orgnummer}</div>
-            </div>)}
-        </Panel>
+            {arbeidsforhold.type === ArbeidsforholdType.PERSON && (
+                <div>
+                    <div>Arbeidsgivertype: Person med ident</div>
+                    <div>Ident: {arbeidsforhold.ident}</div>
+                </div>
+            )}
+            {arbeidsforhold.type === ArbeidsforholdType.ORGANISASJON && (
+                <div>
+                    <div>Arbeidsgivertype: Arbeidsgiver med orgnummer</div>
+                    <div>Orgnummer: {arbeidsforhold.orgnummer}</div>
+                </div>
+            )}
+        </StyledPanel>
     );
-}
+};
