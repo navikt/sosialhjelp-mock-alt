@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Collapse } from 'react-collapse';
-import { Input, Select } from 'nav-frontend-skjema';
+import { Input } from 'nav-frontend-skjema';
 import { getMockAltApiURL } from '../../../utils/restUtils';
 import { Knapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
@@ -110,7 +110,6 @@ export const NyttArbeidsforhold = ({ isOpen, callback }: Params) => {
                     label="Id"
                     value={arbeidsforholdId}
                     onChange={(evt: any) => setArbeidsforholdId(evt.target.value)}
-                    className="arbforhold_id"
                 />
                 <DatoWrapper>
                     <Input
@@ -204,34 +203,6 @@ const DefinitionList = styled.dl`
     dd {
         float: left;
         margin: 0;
-    }
-`;
-
-const DefinitionList2 = styled.dl`
-    margin: 0;
-    overflow: auto;
-    line-height: 1.5;
-    display: flex;
-    flex-wrap: wrap;
-
-    dt {
-        font-weight: bold;
-        flex: 1 0 25%;
-        &::after {
-            content: ': ';
-        }
-        clear: left;
-    }
-    dd {
-        flex: 1 0 70%;
-        clear: left;
-
-        &::after {
-            content: '';
-            display: flex;
-            flex-basis: 100%;
-        }
-        margin-left: 0.5rem;
     }
 `;
 

@@ -86,13 +86,6 @@ const NameWrapper = styled(FlexWrapper)`
     .etternavn {
         flex-grow: 1;
     }
-
-    /*
-    .skjemaelement {
-        margin-right: 0.5rem;
-    }
-    
- */
 `;
 
 const AdresseWrapper = styled(FlexWrapper)`
@@ -106,13 +99,6 @@ const AdresseWrapper = styled(FlexWrapper)`
             width: 100%;
         }
     }
-
-    /*
-    .skjemaelement {
-        margin-right: 0.5rem;
-    }
-    
- */
 `;
 
 const BarnWrapper = styled.div`

@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components/macro';
+import styled from 'styled-components/macro';
 import Panel from 'nav-frontend-paneler';
 import { Select } from 'nav-frontend-skjema';
 
