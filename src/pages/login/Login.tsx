@@ -14,7 +14,7 @@ import {
 import { Personalia } from '../person/PersonMockData';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { Knappegruppe, StyledSelect, theme } from '../../styling/Styles';
+import { Knappegruppe, StyledSelect } from '../../styling/Styles';
 
 const StyledPanel = styled(Panel)`
     h1 {
