@@ -45,3 +45,9 @@ export const flexWrap = css`
 export const FlexWrapper = styled.div`
     ${flexWrap}
 `;
+
+export const Knappegruppe = styled.div`
+    ${flexWrap};
+
+    margin-top: 2rem;
+`;

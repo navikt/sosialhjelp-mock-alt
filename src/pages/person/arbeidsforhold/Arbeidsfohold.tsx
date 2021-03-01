@@ -4,7 +4,7 @@ import { Input } from 'nav-frontend-skjema';
 import { getMockAltApiURL } from '../../../utils/restUtils';
 import { Knapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
-import { FlexWrapper, StyledInput, StyledPanel, StyledSelect, theme } from '../../../styling/Styles';
+import { FlexWrapper, Knappegruppe, StyledInput, StyledPanel, StyledSelect, theme } from '../../../styling/Styles';
 import styled from 'styled-components/macro';
 import { getIsoDateString } from '../../../utils/dateUtils';
 
@@ -154,15 +154,14 @@ export const NyttArbeidsforhold = ({ isOpen, callback }: Params) => {
                         />
                     </OrganisasjonsWrapper>
                 )}
-                <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
-                    Legg til
-                </Knapp>
-                <Knapp
-                    onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}
-                    className="leftPadding"
-                >
-                    Avbryt
-                </Knapp>
+                <Knappegruppe>
+                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
+                        Legg til
+                    </Knapp>
+                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
+                        Avbryt
+                    </Knapp>
+                </Knappegruppe>
             </ArbeidsforholdPanel>
         </Collapse>
     );

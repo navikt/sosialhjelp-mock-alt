@@ -5,7 +5,7 @@ import { getMockAltApiURL } from '../../../utils/restUtils';
 import { Knapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
 import { Bostedsadresse, NameWrapper, PersonaliaNavn } from '../PersonMockData';
-import { StyledPanel, StyledSelect } from '../../../styling/Styles';
+import { Knappegruppe, StyledPanel, StyledSelect } from '../../../styling/Styles';
 import { getIsoDateString } from '../../../utils/dateUtils';
 import styled from 'styled-components/macro';
 import { Adressebeskyttelse } from '../../personalia/adressebeskyttelse';
@@ -141,15 +141,14 @@ export const NyttBarn = ({ isOpen, callback }: Params) => {
                     <option value="aktiv">Aktiv</option>
                 </StyledSelect>
                 <Adresse state={adresseState} dispatch={dispatchAdresse} />
-                <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
-                    Legg til
-                </Knapp>
-                <Knapp
-                    onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}
-                    className="leftPadding"
-                >
-                    Avbryt
-                </Knapp>
+                <Knappegruppe>
+                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
+                        Legg til
+                    </Knapp>
+                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
+                        Avbryt
+                    </Knapp>
+                </Knappegruppe>
             </Panel>
         </Collapse>
     );
