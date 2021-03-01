@@ -22,6 +22,8 @@ import { UtbetalingFraNavObject } from './utbetalinger/UtbetalingerFraNav';
 import { Adressebeskyttelse } from '../personalia/adressebeskyttelse';
 import { Sivilstand } from './familie/familie';
 import { FlexWrapper, StyledSelect } from '../../styling/Styles';
+import Adresse from './adresse/Adresse';
+import { useAdresse } from './adresse/useAdresse';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -82,22 +84,9 @@ const Knappegruppe = styled(FlexWrapper)`
     }
 `;
 
-const NameWrapper = styled(FlexWrapper)`
+export const NameWrapper = styled(FlexWrapper)`
     .etternavn {
         flex-grow: 1;
-    }
-`;
-
-const AdresseWrapper = styled(FlexWrapper)`
-    input {
-        width: 5rem;
-    }
-
-    .adresse {
-        flex: 1 1 30rem;
-        input {
-            width: 100%;
-        }
     }
 `;
 
@@ -129,12 +118,6 @@ const InntektGruppeStyle = styled(GruppeStyle)`
     }
 `;
 
-const AdresseGruppe = styled(SkjemaGruppe)`
-    .kommunenr {
-        max-width: 5rem;
-    }
-`;
-
 export const PersonMockData = () => {
     const [editMode, setEditMode] = useState<boolean>(false);
     const [lockedMode, setLockedMode] = useState<boolean>(false);
@@ -151,7 +134,7 @@ export const PersonMockData = () => {
     const [brukTelefonnummer, setBrukTelefonnummer] = useState<boolean>(false);
     const [telefonnummer, setTelefonnummer] = useState<string>('99999999');
 
-    const [leggTilBarn, setLeggTilBarn] = useState<boolean>(false);
+    const [visNyttBarnSkjema, setVisNyttBarnSkjema] = useState<boolean>(false);
     const [barn, setBarn] = useState<BarnObject[]>([]);
 
     const [leggTilArbeidsforhold, setLeggTilArbeidsforhold] = useState<boolean>(false);
@@ -166,10 +149,7 @@ export const PersonMockData = () => {
     const [leggTilBostotteUtbetaling, setLeggTilBostotteUtbetaling] = useState<boolean>(false);
     const [bostotteUtbetalinger, setBostotteUtbetalinger] = useState<BostotteUtbetalingObject[]>([]);
 
-    const [adressenavn, setAdressenavn] = useState<string>('Mulholland Drive');
-    const [husnummer, setHusnummer] = useState<number>(42);
-    const [postnummer, setPostnummer] = useState<string>('0101');
-    const [kommunenummer, setKommunenummer] = useState<string>('0301');
+    const { adresseState, dispatchAdresse } = useAdresse();
 
     const queryFnr = useQuery().get('brukerID');
     const params = getRedirectParams();
@@ -200,10 +180,10 @@ export const PersonMockData = () => {
                     setSivilstand(nedlastet.sivilstand);
                     setBarn(nedlastet.barn);
                     setStatsborgerskap(nedlastet.starsborgerskap);
-                    setAdressenavn(nedlastet.bostedsadresse.adressenavn);
-                    setHusnummer(nedlastet.bostedsadresse.husnummer);
-                    setPostnummer(nedlastet.bostedsadresse.postnummer);
-                    setKommunenummer(nedlastet.bostedsadresse.kommunenummer);
+                    dispatchAdresse({ type: 'adressenavn', value: nedlastet.bostedsadresse.adressenavn });
+                    dispatchAdresse({ type: 'husnummer', value: nedlastet.bostedsadresse.husnummer });
+                    dispatchAdresse({ type: 'postnummer', value: nedlastet.bostedsadresse.postnummer });
+                    dispatchAdresse({ type: 'kommunenummer', value: nedlastet.bostedsadresse.kommunenummer });
                     setBrukTelefonnummer(nedlastet.telefonnummer !== '');
                     setTelefonnummer(nedlastet.telefonnummer);
                     setArbeidsforhold(nedlastet.arbeidsforhold);
@@ -225,14 +205,13 @@ export const PersonMockData = () => {
         Promise.all(promises)
             .then(() => setLoading('SUCCESS'))
             .catch(() => setLoading('ERROR'));
-    }, [queryFnr]);
+    }, [queryFnr, dispatchAdresse]);
 
     const leggTilBarnCallback = (nyttTilBarn: BarnObject) => {
         if (nyttTilBarn) {
-            barn.push(nyttTilBarn);
-            setBarn(barn);
+            setBarn([...barn, nyttTilBarn]);
         }
-        setLeggTilBarn(false);
+        setVisNyttBarnSkjema(false);
     };
 
     const leggTilArbeidsforholdCallback = (nyttTilArbeidsforhold: ArbeidsforholdObject) => {
@@ -282,10 +261,10 @@ export const PersonMockData = () => {
             barn: barn,
             starsborgerskap: starsborgerskap,
             bostedsadresse: {
-                adressenavn: adressenavn,
-                husnummer: husnummer,
-                postnummer: postnummer,
-                kommunenummer: kommunenummer,
+                adressenavn: adresseState.adressenavn,
+                husnummer: adresseState.husnummer,
+                postnummer: adresseState.postnummer,
+                kommunenummer: adresseState.kommunenummer,
             },
             telefonnummer: tlf,
             arbeidsforhold: arbeidsforhold,
@@ -389,7 +368,11 @@ export const PersonMockData = () => {
                     >
                         {Object.entries(Adressebeskyttelse).map(
                             ([key, value]: any): JSX.Element => {
-                                return <option value={key}>{value}</option>;
+                                return (
+                                    <option key={key} value={key}>
+                                        {value}
+                                    </option>
+                                );
                             }
                         )}
                     </StyledSelect>
@@ -426,36 +409,7 @@ export const PersonMockData = () => {
                 </SkjemaGruppe>
             </GruppeStyle>
             <GruppeStyle>
-                <AdresseGruppe legend={<Undertittel>Bostedsadresse</Undertittel>}>
-                    <AdresseWrapper>
-                        <Input
-                            label="Gateadresse"
-                            className="adresse"
-                            disabled={lockedMode}
-                            value={adressenavn}
-                            onChange={(evt: any) => setAdressenavn(evt.target.value)}
-                        />
-                        <Input
-                            label="Husnummer"
-                            disabled={lockedMode}
-                            value={husnummer}
-                            onChange={(evt: any) => setHusnummer(evt.target.value)}
-                        />
-                        <Input
-                            label="Postnummer"
-                            disabled={lockedMode}
-                            value={postnummer}
-                            onChange={(evt: any) => setPostnummer(evt.target.value)}
-                        />
-                    </AdresseWrapper>
-                    <Input
-                        label="Kommunenummer"
-                        disabled={lockedMode}
-                        value={kommunenummer}
-                        onChange={(evt: any) => setKommunenummer(evt.target.value)}
-                        className="kommunenr"
-                    />
-                </AdresseGruppe>
+                <Adresse lockedMode={lockedMode} state={adresseState} dispatch={dispatchAdresse} />
             </GruppeStyle>
             <GruppeStyle>
                 <SkjemaGruppe legend={<Undertittel>Arbeidsforhold</Undertittel>}>
@@ -478,7 +432,11 @@ export const PersonMockData = () => {
                     >
                         {Object.entries(Sivilstand).map(
                             ([key, value]: any): JSX.Element => {
-                                return <option value={key}>{value}</option>;
+                                return (
+                                    <option key={key} value={key}>
+                                        {value}
+                                    </option>
+                                );
                             }
                         )}
                     </StyledSelect>
@@ -495,11 +453,11 @@ export const PersonMockData = () => {
                     </StyledSelect>
                     <BarnWrapper>
                         <Element tag="h3">Barn</Element>
-                        <NyttBarn isOpen={leggTilBarn} callback={leggTilBarnCallback} />
+                        <NyttBarn isOpen={visNyttBarnSkjema} callback={leggTilBarnCallback} />
                         {barn.map((barn: BarnObject, index: number) => {
                             return <VisBarn barn={barn} key={'barn_' + index} />;
                         })}
-                        {!leggTilBarn && <Knapp onClick={() => setLeggTilBarn(true)}>Legg til barn</Knapp>}
+                        {!visNyttBarnSkjema && <Knapp onClick={() => setVisNyttBarnSkjema(true)}>Legg til barn</Knapp>}
                     </BarnWrapper>
                 </SkjemaGruppe>
             </GruppeStyle>
