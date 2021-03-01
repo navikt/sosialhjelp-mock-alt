@@ -4,7 +4,7 @@ import { Input } from 'nav-frontend-skjema';
 import { getMockAltApiURL } from '../../../utils/restUtils';
 import { Knapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
-import { FlexWrapper, StyledPanel, StyledSelect, theme } from '../../../styling/Styles';
+import { FlexWrapper, StyledInput, StyledPanel, StyledSelect, theme } from '../../../styling/Styles';
 import styled from 'styled-components/macro';
 import { getIsoDateString } from '../../../utils/dateUtils';
 
@@ -35,12 +35,7 @@ const ArbeidsforholdPanel = styled(Panel)`
     input {
         margin-right: 1rem;
     }
-`;
-
-const StyledInput = styled(Input)<{ size?: number }>`
-    input {
-        max-width: ${(props) => (props.size ? `${props.size}rem` : '10rem')};
-    }
+    margin-bottom: 1rem;
 `;
 
 const OrganisasjonsWrapper = styled(FlexWrapper)`
