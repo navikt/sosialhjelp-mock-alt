@@ -79,8 +79,8 @@ export const NyttBarn = ({ isOpen, callback }: Params) => {
         // Reset state
         setFnr('');
         event.preventDefault();
-        setFnr("")
     };
+
     const onCancel = (event: ClickEvent) => {
         callback(null);
         event.preventDefault();
