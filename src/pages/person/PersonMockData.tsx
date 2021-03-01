@@ -1,27 +1,23 @@
 import AlertStripe from 'nav-frontend-alertstriper';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
+import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
-import { Checkbox, Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Sidetittel, Undertittel, Element } from 'nav-frontend-typografi';
-import React, { useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import { addParams, getMockAltApiURL, getRedirectParams, isLoginSession } from '../../utils/restUtils';
-import { ArbeidsforholdObject, NyttArbeidsforhold, VisArbeidsforhold } from './arbeidsforhold/Arbeidsfohold';
-import { BostotteSakObject, NyBostotteSak, VisBostotteSak } from './husbanken/BostotteSak';
-import {
-    BostotteUtbetalingObject,
-    NyttBostotteUtbetaling,
-    VisBostotteUtbetaling,
-} from './husbanken/BostotteUtbetaling';
-import { NyttSkatteutbetaling, SkatteutbetalingObject, VisSkatteutbetaling } from './skattetaten/Skattetaten';
-import { Collapse } from 'react-collapse';
-import { BarnObject, NyttBarn, VisBarn } from './barn/Barn';
+import {Checkbox, Input, Select, SkjemaGruppe} from 'nav-frontend-skjema';
+import {Element, Sidetittel, Undertittel} from 'nav-frontend-typografi';
+import React, {useEffect, useState} from 'react';
+import {useHistory, useLocation} from 'react-router-dom';
+import {addParams, getMockAltApiURL, getRedirectParams, isLoginSession} from '../../utils/restUtils';
+import {ArbeidsforholdObject, NyttArbeidsforhold, VisArbeidsforhold} from './arbeidsforhold/Arbeidsfohold';
+import {BostotteSakObject, NyBostotteSak, VisBostotteSak} from './husbanken/BostotteSak';
+import {BostotteUtbetalingObject, NyttBostotteUtbetaling, VisBostotteUtbetaling,} from './husbanken/BostotteUtbetaling';
+import {NyttSkatteutbetaling, SkatteutbetalingObject, VisSkatteutbetaling} from './skattetaten/Skattetaten';
+import {Collapse} from 'react-collapse';
+import {BarnObject, NyttBarn, VisBarn} from './barn/Barn';
 import styled from 'styled-components/macro';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import { UtbetalingFraNavObject } from './utbetalinger/UtbetalingerFraNav';
-import { Adressebeskyttelse } from '../personalia/adressebeskyttelse';
-import { Sivilstand } from './familie/familie';
-import { FlexWrapper, StyledSelect } from '../../styling/Styles';
+import {NyttUtbetalingerFraNav, UtbetalingFraNavObject, VisUtbetalingerFraNav} from './utbetalinger/UtbetalingerFraNav';
+import {Adressebeskyttelse} from '../personalia/adressebeskyttelse';
+import {Sivilstand} from './familie/familie';
+import {FlexWrapper, StyledSelect} from '../../styling/Styles';
 import Adresse from './adresse/Adresse';
 import { useAdresse } from './adresse/useAdresse';
 
@@ -149,6 +145,9 @@ export const PersonMockData = () => {
     const [leggTilBostotteUtbetaling, setLeggTilBostotteUtbetaling] = useState<boolean>(false);
     const [bostotteUtbetalinger, setBostotteUtbetalinger] = useState<BostotteUtbetalingObject[]>([]);
 
+    const [leggTilUtbetalingFraNav, setLeggTilUtbetalingFraNav] = useState<boolean>(false);
+    const [utbetalingerFraNav, setUtbetalingerFraNav] = useState<UtbetalingFraNavObject[]>([]);
+
     const { adresseState, dispatchAdresse } = useAdresse();
 
     const queryFnr = useQuery().get('brukerID');
@@ -190,6 +189,7 @@ export const PersonMockData = () => {
                     setSkattutbetalinger(nedlastet.skattetatenUtbetalinger);
                     setBostotteSaker(nedlastet.bostotteSaker);
                     setBostotteUtbetalinger(nedlastet.bostotteUtbetalinger);
+                    setUtbetalingerFraNav((nedlastet.utbetalingerFraNav));
                 });
 
             promises.push(promise);
@@ -246,6 +246,14 @@ export const PersonMockData = () => {
         setLeggTilBostotteUtbetaling(false);
     };
 
+    const leggTilUtbetalingFraNavCallback = (nyUtbetaling: UtbetalingFraNavObject) => {
+        if (nyUtbetaling) {
+            utbetalingerFraNav.push(nyUtbetaling);
+            setUtbetalingerFraNav(utbetalingerFraNav);
+        }
+        setLeggTilUtbetalingFraNav(false);
+    };
+
     const createPersonaliaObject = (): Personalia => {
         const tlf = brukTelefonnummer ? telefonnummer : '';
         return {
@@ -271,7 +279,7 @@ export const PersonMockData = () => {
             bostotteSaker: bostotteSaker,
             bostotteUtbetalinger: bostotteUtbetalinger,
             skattetatenUtbetalinger: skattutbetalinger,
-            utbetalingerFraNav: [],
+            utbetalingerFraNav: utbetalingerFraNav,
             locked: false,
         };
     };
@@ -315,7 +323,7 @@ export const PersonMockData = () => {
     };
 
     if (loading === 'LOADING') {
-        return <NavFrontendSpinner />;
+        return <NavFrontendSpinner/>;
     } else if (loading === 'ERROR') {
         return <Sidetittel>Klarte ikke fetche data :( </Sidetittel>;
     }
@@ -391,12 +399,14 @@ export const PersonMockData = () => {
                         <option value="XUK">Ukjent/Mangler opplysninger</option>
                     </Select>
                     <SkjemaGruppe legend="Telefonnummer">
+                        {!lockedMode &&
                         <Checkbox
                             label="Sett telefonnummer"
                             disabled={lockedMode}
                             onChange={(evt: any) => setBrukTelefonnummer(evt.target.checked)}
-                            value={brukTelefonnummer ? 'true' : 'false'}
+                            defaultChecked={brukTelefonnummer}
                         />
+                        }
                         <Collapse isOpened={brukTelefonnummer}>
                             <Input
                                 label="Telefonnummer"
@@ -413,11 +423,11 @@ export const PersonMockData = () => {
             </GruppeStyle>
             <GruppeStyle>
                 <SkjemaGruppe legend={<Undertittel>Arbeidsforhold</Undertittel>}>
-                    <NyttArbeidsforhold isOpen={leggTilArbeidsforhold} callback={leggTilArbeidsforholdCallback} />
+                    <NyttArbeidsforhold isOpen={leggTilArbeidsforhold} callback={leggTilArbeidsforholdCallback}/>
                     {arbeidsforhold.map((forhold: ArbeidsforholdObject, index: number) => {
-                        return <VisArbeidsforhold arbeidsforhold={forhold} key={'arbeid_' + index} />;
+                        return <VisArbeidsforhold arbeidsforhold={forhold} key={'arbeid_' + index}/>;
                     })}
-                    {!leggTilArbeidsforhold && (
+                    {!lockedMode && !leggTilArbeidsforhold && (
                         <Knapp onClick={() => setLeggTilArbeidsforhold(true)}>Legg til arbeidsforhold</Knapp>
                     )}
                 </SkjemaGruppe>
@@ -455,27 +465,28 @@ export const PersonMockData = () => {
                         <Element tag="h3">Barn</Element>
                         <NyttBarn isOpen={visNyttBarnSkjema} callback={leggTilBarnCallback} />
                         {barn.map((barn: BarnObject, index: number) => {
-                            return <VisBarn barn={barn} key={'barn_' + index} />;
+                            return <VisBarn barn={barn} key={'barn_' + index}/>;
                         })}
-                        {!visNyttBarnSkjema && <Knapp onClick={() => setVisNyttBarnSkjema(true)}>Legg til barn</Knapp>}
+                        {!lockedMode && !visNyttBarnSkjema && <Knapp onClick={() => setVisNyttBarnSkjema(true)}>Legg til barn</Knapp>}
                     </BarnWrapper>
                 </SkjemaGruppe>
             </GruppeStyle>
             <InntektGruppeStyle>
                 <Undertittel>Inntekt og formue</Undertittel>
                 <SkjemaGruppe legend="Skattetaten">
-                    <NyttSkatteutbetaling isOpen={leggTilSkatt} callback={leggTilSkattCallback} />
+                    <NyttSkatteutbetaling isOpen={leggTilSkatt} callback={leggTilSkattCallback}/>
                     {skattutbetalinger.map((utbetaling: SkatteutbetalingObject, index: number) => {
-                        return <VisSkatteutbetaling skatteutbetaling={utbetaling} key={'skatt_' + index} />;
+                        return <VisSkatteutbetaling skatteutbetaling={utbetaling} key={'skatt_' + index}/>;
                     })}
-                    {!leggTilSkatt && <Knapp onClick={() => setLeggTilSkatt(true)}>Legg til utbetaling</Knapp>}
+                    {!lockedMode && !leggTilSkatt &&
+                    <Knapp onClick={() => setLeggTilSkatt(true)}>Legg til utbetaling</Knapp>}
                 </SkjemaGruppe>
                 <SkjemaGruppe legend="Husbanken">
-                    <NyBostotteSak isOpen={leggTilBostotteSak} callback={leggTilBostotteSakCallback} />
+                    <NyBostotteSak isOpen={leggTilBostotteSak} callback={leggTilBostotteSakCallback}/>
                     {bostotteSaker.map((sak: BostotteSakObject, index: number) => {
-                        return <VisBostotteSak bostotteSak={sak} key={'bostotteSak_' + index} />;
+                        return <VisBostotteSak bostotteSak={sak} key={'bostotteSak_' + index}/>;
                     })}
-                    {!leggTilBostotteSak && (
+                    {!lockedMode && !leggTilBostotteSak && (
                         <Knapp className="leggTilBostotte" onClick={() => setLeggTilBostotteSak(true)}>
                             Legg til sak
                         </Knapp>
@@ -492,12 +503,26 @@ export const PersonMockData = () => {
                             />
                         );
                     })}
-                    {!leggTilBostotteUtbetaling && (
+                    {!lockedMode && !leggTilBostotteUtbetaling && (
                         <Knapp onClick={() => setLeggTilBostotteUtbetaling(true)}>Legg til utbetaling</Knapp>
                     )}
                 </SkjemaGruppe>
                 <SkjemaGruppe legend="Nav utbetalinger">
-                    <Panel border={true}>Ikke støttet ennå. Bruker standardverdier for utbetalinger.</Panel>
+                    <NyttUtbetalingerFraNav
+                        isOpen={leggTilUtbetalingFraNav}
+                        callback={leggTilUtbetalingFraNavCallback}
+                    />
+                    {utbetalingerFraNav.map((utbetaling: UtbetalingFraNavObject, index: number) => {
+                        return (
+                            <VisUtbetalingerFraNav
+                                utbetalingFraNav={utbetaling}
+                                key={'utbetalingFraNav_' + index}
+                            />
+                        )
+                    })}
+                    {!lockedMode && !leggTilUtbetalingFraNav && (
+                        <Knapp onClick={() => setLeggTilUtbetalingFraNav(true)}>Legg til utbetaling</Knapp>
+                    )}
                 </SkjemaGruppe>
             </InntektGruppeStyle>
             <Knappegruppe>

@@ -80,6 +80,7 @@ export const NyttBarn = ({ isOpen, callback }: Params) => {
         setFnr('');
         event.preventDefault();
     };
+
     const onCancel = (event: ClickEvent) => {
         callback(null);
         event.preventDefault();
