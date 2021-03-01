@@ -12,6 +12,9 @@ export interface UtbetalingFraNavObject {
     belop: string;
     dato: string;
     ytelsestype: string;
+    melding: string;
+    skattebelop: string;
+    ytelseskomponenttype: string;
 }
 
 interface Params {
@@ -26,12 +29,18 @@ export const NyttUtbetalingerFraNav = ({isOpen, callback}: Params) => {
     const [belop, setBelop] = useState<string>('10000');
     const [dato, setDato] = useState<string>(getIsoDateString(dato1));
     const [ytelsestype, setYtelsestype] = useState<string>("Dagpenger");
+    const [melding, setMelding] = useState<string>("");
+    const [skattebelop, setSkattebelop] = useState<string>("0");
+    const [ytelseskomponenttype, setYtelseskomponenttype] = useState<string>("");
 
     const onLagre = (event: ClickEvent) => {
         const nyttUtbetalingerFraNavObject: UtbetalingFraNavObject = {
             belop: belop,
             dato: dato,
             ytelsestype: ytelsestype,
+            melding: melding,
+            skattebelop: skattebelop,
+            ytelseskomponenttype: ytelseskomponenttype,
         };
 
         callback(nyttUtbetalingerFraNavObject);
@@ -50,6 +59,12 @@ export const NyttUtbetalingerFraNav = ({isOpen, callback}: Params) => {
                        onChange={(evt: any) => setDato(evt.target.value)}/>
                 <Input label="Ytelsestype" value={ytelsestype}
                        onChange={(evt: any) => setYtelsestype(evt.target.value)}/>
+                <Input label="Melding" value={melding}
+                       onChange={(evt: any) => setMelding(evt.target.value)}/>
+                <Input label="Skattebeløp" value={skattebelop}
+                       onChange={(evt: any) => setSkattebelop(evt.target.value)}/>
+                <Input label="Ytelseskomponenttype" value={ytelseskomponenttype}
+                       onChange={(evt: any) => setYtelseskomponenttype(evt.target.value)}/>
                 <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
                     Legg til
                 </Knapp>
@@ -74,6 +89,9 @@ export const VisUtbetalingerFraNav = ({utbetalingFraNav}: ViseParams) => {
             <div>Beløp: {utbetalingFraNav.belop}</div>
             <div>Utbetalingsdato: {utbetalingFraNav.dato}</div>
             <div>Ytelsestype: {utbetalingFraNav.ytelsestype}</div>
+            <div>Melding: {utbetalingFraNav.melding}</div>
+            <div>Skattebeløp: {utbetalingFraNav.skattebelop}</div>
+            <div>Ytelseskomponenttype: {utbetalingFraNav.ytelseskomponenttype}</div>
         </StyledPanel>
     );
 };
