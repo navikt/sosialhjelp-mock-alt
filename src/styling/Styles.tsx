@@ -1,6 +1,6 @@
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import Panel from 'nav-frontend-paneler';
-import { Select } from 'nav-frontend-skjema';
+import { Input, Select } from 'nav-frontend-skjema';
 
 export const theme = {
     mobileMaxWidth: 'only screen and (max-width: 30em)',
@@ -22,7 +22,13 @@ export const StyledSelect = styled(Select)`
     }
 `;
 
-export const FlexWrapper = styled.div`
+export const StyledInput = styled(Input)<{ size?: number }>`
+    input {
+        max-width: ${(props) => (props.size ? `${props.size}rem` : '10rem')};
+    }
+`;
+
+export const flexWrap = css`
     display: flex;
     flex-wrap: wrap;
 
@@ -34,4 +40,8 @@ export const FlexWrapper = styled.div`
     > *:last-child {
         margin-right: 0;
     }
+`;
+
+export const FlexWrapper = styled.div`
+    ${flexWrap}
 `;
