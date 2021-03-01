@@ -91,6 +91,9 @@ export const Login = () => {
                     <option key="modia" value={getModiaURL()}>
                         Modia
                     </option>
+                    <option key="ingen" value={window.location.origin + '/sosialhjelp/mock-alt/'}>
+                        Gå tilbake til oversikten
+                    </option>
                 </StyledSelect>
             )}
             <Knappegruppe>
