@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
-import { Input, Select } from 'nav-frontend-skjema';
 import { Knapp } from 'nav-frontend-knapper';
-import Panel from 'nav-frontend-paneler';
-import { StyledPanel } from '../../../styling/Styles';
+import { FlexWrapper, Knappegruppe, StyledInput, StyledPanel, StyledSelect } from '../../../styling/Styles';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -126,45 +124,44 @@ export const NyBostotteSak = ({ isOpen, callback }: Params) => {
     return (
         <Collapse isOpened={isOpen}>
             <StyledPanel>
-                <Input label="År" value={ar} onChange={(evt: any) => setAr(evt.target.value)} />
-                <Input label="Måned" value={mnd} onChange={(evt: any) => setMnd(evt.target.value)} />
-                <Select label="Status" onChange={(evt: any) => setStatus(evt.target.value)} value={status}>
+                <FlexWrapper>
+                    <StyledInput label="År" value={ar} onChange={(evt: any) => setAr(evt.target.value)} size={5} />
+                    <StyledInput label="Måned" value={mnd} onChange={(evt: any) => setMnd(evt.target.value)} size={5} />
+                </FlexWrapper>
+                <StyledSelect label="Status" onChange={(evt: any) => setStatus(evt.target.value)} value={status}>
                     <option value={BostotteStatus.VEDTATT}>Vedtak er fattet</option>
                     <option value={BostotteStatus.UNDER_BEHANDLING}>Under behandling</option>
-                </Select>
-                <Collapse isOpened={status === BostotteStatus.VEDTATT}>
-                    <Panel>
-                        <Select
-                            label="Vedtak"
-                            onChange={(evt: any) => setVedtaksKode(evt.target.value)}
-                            value={vedtaksKode}
-                        >
-                            <option value={Vedtakskode.V00}>{getVedtaksbeskrivelse(Vedtakskode.V00)}</option>
-                            <option value={Vedtakskode.V02}>{getVedtaksbeskrivelse(Vedtakskode.V02)}</option>
-                            <option value={Vedtakskode.V03}>{getVedtaksbeskrivelse(Vedtakskode.V03)}</option>
-                            <option value={Vedtakskode.V04}>{getVedtaksbeskrivelse(Vedtakskode.V04)}</option>
-                            <option value={Vedtakskode.V05}>{getVedtaksbeskrivelse(Vedtakskode.V05)}</option>
-                            <option value={Vedtakskode.V07}>{getVedtaksbeskrivelse(Vedtakskode.V07)}</option>
-                            <option value={Vedtakskode.V09}>{getVedtaksbeskrivelse(Vedtakskode.V09)}</option>
-                            <option value={Vedtakskode.V11}>{getVedtaksbeskrivelse(Vedtakskode.V11)}</option>
-                            <option value={Vedtakskode.V12}>{getVedtaksbeskrivelse(Vedtakskode.V12)}</option>
-                            <option value={Vedtakskode.V48}>{getVedtaksbeskrivelse(Vedtakskode.V48)}</option>
-                        </Select>
-                    </Panel>
-                </Collapse>
-                <Select label="Rolle" onChange={(evt: any) => setRolle(evt.target.value)} value={rolle}>
+                </StyledSelect>
+                {status === BostotteStatus.VEDTATT && (
+                    <StyledSelect
+                        label="Vedtak"
+                        onChange={(evt: any) => setVedtaksKode(evt.target.value)}
+                        value={vedtaksKode}
+                    >
+                        <option value={Vedtakskode.V00}>{getVedtaksbeskrivelse(Vedtakskode.V00)}</option>
+                        <option value={Vedtakskode.V02}>{getVedtaksbeskrivelse(Vedtakskode.V02)}</option>
+                        <option value={Vedtakskode.V03}>{getVedtaksbeskrivelse(Vedtakskode.V03)}</option>
+                        <option value={Vedtakskode.V04}>{getVedtaksbeskrivelse(Vedtakskode.V04)}</option>
+                        <option value={Vedtakskode.V05}>{getVedtaksbeskrivelse(Vedtakskode.V05)}</option>
+                        <option value={Vedtakskode.V07}>{getVedtaksbeskrivelse(Vedtakskode.V07)}</option>
+                        <option value={Vedtakskode.V09}>{getVedtaksbeskrivelse(Vedtakskode.V09)}</option>
+                        <option value={Vedtakskode.V11}>{getVedtaksbeskrivelse(Vedtakskode.V11)}</option>
+                        <option value={Vedtakskode.V12}>{getVedtaksbeskrivelse(Vedtakskode.V12)}</option>
+                        <option value={Vedtakskode.V48}>{getVedtaksbeskrivelse(Vedtakskode.V48)}</option>
+                    </StyledSelect>
+                )}
+                <StyledSelect label="Rolle" onChange={(evt: any) => setRolle(evt.target.value)} value={rolle}>
                     <option value={BostotteRolle.HOVEDPERSON}>Hovedperson</option>
                     <option value={BostotteRolle.BIPERSON}>Biperson</option>
-                </Select>
-                <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
-                    Legg til
-                </Knapp>
-                <Knapp
-                    onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}
-                    className="leftPadding"
-                >
-                    Avbryt
-                </Knapp>
+                </StyledSelect>
+                <Knappegruppe>
+                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
+                        Legg til
+                    </Knapp>
+                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
+                        Avbryt
+                    </Knapp>
+                </Knappegruppe>
             </StyledPanel>
         </Collapse>
     );

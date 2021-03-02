@@ -14,27 +14,11 @@ import {
 import { Personalia } from '../person/PersonMockData';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { StyledSelect, theme } from '../../styling/Styles';
+import { Knappegruppe, StyledSelect } from '../../styling/Styles';
 
 const StyledPanel = styled(Panel)`
     h1 {
         margin-bottom: 1rem;
-    }
-`;
-
-const Knappegruppe = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 2rem;
-
-    > *:not(:last-child) {
-        margin-right: 0.5rem;
-    }
-
-    @media ${theme.mobileMaxWidth} {
-        > *:not(:last-child) {
-            margin: 0 0 0.5rem;
-        }
     }
 `;
 

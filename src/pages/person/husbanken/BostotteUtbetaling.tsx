@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
-import { Input, Select } from 'nav-frontend-skjema';
 import { Knapp } from 'nav-frontend-knapper';
 import { BostotteRolle } from './BostotteSak';
-import { StyledPanel } from '../../../styling/Styles';
-import {getIsoDateString} from "../../../utils/dateUtils";
+import { Knappegruppe, StyledInput, StyledPanel, StyledSelect } from '../../../styling/Styles';
+import { getIsoDateString } from '../../../utils/dateUtils';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -53,29 +52,28 @@ export const NyttBostotteUtbetaling = ({ isOpen, callback }: Params) => {
     return (
         <Collapse isOpened={isOpen}>
             <StyledPanel>
-                <Input label="Beløp" value={belop} onChange={(evt: any) => setBelop(evt.target.value)} />
-                <Input
-                    label="Utbetalingsdato"
+                <StyledInput label="Beløp" value={belop} onChange={(evt: any) => setBelop(evt.target.value)} />
+                <StyledInput
+                    label="Utbetalingsdato (åååå-mm-dd)"
                     value={utbetalingsdato}
                     onChange={(evt: any) => setUtbetalingsdato(evt.target.value)}
                 />
-                <Select label="Mottaker" onChange={(evt: any) => setMottaker(evt.target.value)} value={mottaker}>
+                <StyledSelect label="Mottaker" onChange={(evt: any) => setMottaker(evt.target.value)} value={mottaker}>
                     <option value={BostotteMottaker.HUSSTAND}>Husstand</option>
                     <option value={BostotteMottaker.KOMMUNE}>Kommunen</option>
-                </Select>
-                <Select label="Rolle" onChange={(evt: any) => setRolle(evt.target.value)} value={rolle}>
+                </StyledSelect>
+                <StyledSelect label="Rolle" onChange={(evt: any) => setRolle(evt.target.value)} value={rolle}>
                     <option value={BostotteRolle.HOVEDPERSON}>Hovedperson</option>
                     <option value={BostotteRolle.BIPERSON}>Biperson</option>
-                </Select>
-                <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
-                    Legg til
-                </Knapp>
-                <Knapp
-                    onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}
-                    className="leftPadding"
-                >
-                    Avbryt
-                </Knapp>
+                </StyledSelect>
+                <Knappegruppe>
+                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
+                        Legg til
+                    </Knapp>
+                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
+                        Avbryt
+                    </Knapp>
+                </Knappegruppe>
             </StyledPanel>
         </Collapse>
     );

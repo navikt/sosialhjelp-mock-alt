@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
-import { Input, Select } from 'nav-frontend-skjema';
 import { Knapp } from 'nav-frontend-knapper';
-import Panel from 'nav-frontend-paneler';
-import { StyledPanel } from '../../../styling/Styles';
+import { Knappegruppe, StyledInput, StyledPanel, StyledSelect } from '../../../styling/Styles';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -69,17 +67,25 @@ export const NyttSkatteutbetaling = ({ isOpen, callback }: Params) => {
 
     return (
         <Collapse isOpened={isOpen}>
-            <Panel>
-                <Input label="Beløp" value={belop} onChange={(evt: any) => setBelop(evt.target.value)} />
-                <Input label="Trekk" value={trekk} onChange={(evt: any) => setTrekk(evt.target.value)} />
-                <Input label="Orgnummer" value={orgnummer} onChange={(evt: any) => setOrgnummer(evt.target.value)} />
-                <Select label="Måned" onChange={(evt: any) => setManed(evt.target.value)} value={maned}>
+            <StyledPanel>
+                <StyledInput label="Beløp" value={belop} onChange={(evt: any) => setBelop(evt.target.value)} />
+                <StyledInput label="Trekk" value={trekk} onChange={(evt: any) => setTrekk(evt.target.value)} />
+                <StyledInput
+                    label="Orgnummer"
+                    value={orgnummer}
+                    onChange={(evt: any) => setOrgnummer(evt.target.value)}
+                />
+                <StyledSelect label="Måned" onChange={(evt: any) => setManed(evt.target.value)} value={maned}>
                     <option value={getMonthDateString(month_1)}>{getMonthDateString(month_1)}</option>
                     <option value={getMonthDateString(month_2)}>{getMonthDateString(month_2)}</option>
                     <option value={getMonthDateString(month_3)}>{getMonthDateString(month_3)}</option>
                     <option value={getMonthDateString(month_4)}>{getMonthDateString(month_4)}</option>
-                </Select>
-                <Select label="Velg arbeidsgivertype" onChange={(evt: any) => setType(evt.target.value)} value={type}>
+                </StyledSelect>
+                <StyledSelect
+                    label="Velg arbeidsgivertype"
+                    onChange={(evt: any) => setType(evt.target.value)}
+                    value={type}
+                >
                     <option value={SkatteutbetalingType.LOENNSINNTEKT}>Lønnsinntekt</option>
                     <option value={SkatteutbetalingType.YTELSEFRAOFFENTLIGE}>Ytelse fra det offentliger</option>
                     <option value={SkatteutbetalingType.PENSJONELLERTRYGD}>Pensjon eller trygd</option>
@@ -89,17 +95,16 @@ export const NyttSkatteutbetaling = ({ isOpen, callback }: Params) => {
                     <option value={SkatteutbetalingType.ALDERSUFOEREETTERLATTEAVTALEFESTETOGKRIGSPENSJON}>
                         Alder, uføre, etterlatte, avtalefestet og krigspensjon
                     </option>
-                </Select>
-                <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
-                    Legg til
-                </Knapp>
-                <Knapp
-                    onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}
-                    className="leftPadding"
-                >
-                    Avbryt
-                </Knapp>
-            </Panel>
+                </StyledSelect>
+                <Knappegruppe>
+                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
+                        Legg til
+                    </Knapp>
+                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
+                        Avbryt
+                    </Knapp>
+                </Knappegruppe>
+            </StyledPanel>
         </Collapse>
     );
 };

@@ -43,7 +43,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "concurrently --kill-others \"npm run start\" \"npm run start:css\"",
-    "typeCheck": "tsc"
+    "typeCheck": "tsc",
+    "lint": "eslint ./src/**/*.{js,ts,tsx}"
   },
   "eslintConfig": {
     "extends": [
@@ -87,11 +88,10 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "npm run typeCheck"
+      "pre-push": "npm run typeCheck && npm run lint"
     }
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "eslint",
     "*.{ts,tsx,less,css,md}": "prettier --write"
   }
 }
