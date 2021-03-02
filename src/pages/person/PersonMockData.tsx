@@ -1,23 +1,31 @@
 import AlertStripe from 'nav-frontend-alertstriper';
-import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
+import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
-import {Checkbox, Input, Select, SkjemaGruppe} from 'nav-frontend-skjema';
-import {Element, Sidetittel, Undertittel} from 'nav-frontend-typografi';
-import React, {useEffect, useState} from 'react';
-import {useHistory, useLocation} from 'react-router-dom';
-import {addParams, getMockAltApiURL, getRedirectParams, isLoginSession} from '../../utils/restUtils';
-import {ArbeidsforholdObject, NyttArbeidsforhold, VisArbeidsforhold} from './arbeidsforhold/Arbeidsfohold';
-import {BostotteSakObject, NyBostotteSak, VisBostotteSak} from './husbanken/BostotteSak';
-import {BostotteUtbetalingObject, NyttBostotteUtbetaling, VisBostotteUtbetaling,} from './husbanken/BostotteUtbetaling';
-import {NyttSkatteutbetaling, SkatteutbetalingObject, VisSkatteutbetaling} from './skattetaten/Skattetaten';
-import {Collapse} from 'react-collapse';
-import {BarnObject, NyttBarn, VisBarn} from './barn/Barn';
+import { Checkbox, Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Element, Sidetittel, Undertittel } from 'nav-frontend-typografi';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
+import { addParams, getMockAltApiURL, getRedirectParams, isLoginSession } from '../../utils/restUtils';
+import { ArbeidsforholdObject, NyttArbeidsforhold, VisArbeidsforhold } from './arbeidsforhold/Arbeidsfohold';
+import { BostotteSakObject, NyBostotteSak, VisBostotteSak } from './husbanken/BostotteSak';
+import {
+    BostotteUtbetalingObject,
+    NyttBostotteUtbetaling,
+    VisBostotteUtbetaling,
+} from './husbanken/BostotteUtbetaling';
+import { NyttSkatteutbetaling, SkatteutbetalingObject, VisSkatteutbetaling } from './skattetaten/Skattetaten';
+import { Collapse } from 'react-collapse';
+import { BarnObject, NyttBarn, VisBarn } from './barn/Barn';
 import styled from 'styled-components/macro';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import {NyttUtbetalingerFraNav, UtbetalingFraNavObject, VisUtbetalingerFraNav} from './utbetalinger/UtbetalingerFraNav';
-import {Adressebeskyttelse} from '../personalia/adressebeskyttelse';
-import {Sivilstand} from './familie/familie';
-import {FlexWrapper, StyledSelect} from '../../styling/Styles';
+import {
+    NyttUtbetalingerFraNav,
+    UtbetalingFraNavObject,
+    VisUtbetalingerFraNav,
+} from './utbetalinger/UtbetalingerFraNav';
+import { Adressebeskyttelse } from '../personalia/adressebeskyttelse';
+import { Sivilstand } from './familie/familie';
+import { FlexWrapper, StyledSelect } from '../../styling/Styles';
 import Adresse from './adresse/Adresse';
 import { useAdresse } from './adresse/useAdresse';
 
@@ -26,7 +34,7 @@ type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseE
 export interface Personalia {
     fnr: string;
     navn: PersonaliaNavn;
-    addressebeskyttelse: string;
+    adressebeskyttelse: string;
     sivilstand: string;
     ektefelle: string;
     barn: BarnObject[];
@@ -106,11 +114,11 @@ const InntektGruppeStyle = styled(GruppeStyle)`
     }
 
     .skjemagruppe {
-        margin-bottom: 1rem;
+        margin-bottom: 2.5rem;
     }
 
     .leggTilBostotte {
-        margin-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
     }
 `;
 
@@ -122,7 +130,7 @@ export const PersonMockData = () => {
     const [fornavn, setFornavn] = useState<string>('Ukjent');
     const [mellomnavn, setMellomnavn] = useState<string>('');
     const [etternavn, setEtternavn] = useState<string>('Mockperson');
-    const [addressebeskyttelse, setAddressebeskyttelse] = useState<string>('UGRADERT');
+    const [adressebeskyttelse, setAdressebeskyttelse] = useState<string>('UGRADERT');
     const [sivilstand, setSivilstand] = useState<string>('UOPPGITT');
     const [ektefelle, setEktefelle] = useState<string>('INGEN');
     const [starsborgerskap, setStatsborgerskap] = useState<string>('NOR');
@@ -174,7 +182,7 @@ export const PersonMockData = () => {
                     setFornavn(nedlastet.navn.fornavn);
                     setMellomnavn(nedlastet.navn.mellomnavn);
                     setEtternavn(nedlastet.navn.etternavn);
-                    setAddressebeskyttelse(nedlastet.addressebeskyttelse);
+                    setAdressebeskyttelse(nedlastet.adressebeskyttelse);
                     setEktefelle(nedlastet.ektefelle);
                     setSivilstand(nedlastet.sivilstand);
                     setBarn(nedlastet.barn);
@@ -189,7 +197,7 @@ export const PersonMockData = () => {
                     setSkattutbetalinger(nedlastet.skattetatenUtbetalinger);
                     setBostotteSaker(nedlastet.bostotteSaker);
                     setBostotteUtbetalinger(nedlastet.bostotteUtbetalinger);
-                    setUtbetalingerFraNav((nedlastet.utbetalingerFraNav));
+                    setUtbetalingerFraNav(nedlastet.utbetalingerFraNav);
                 });
 
             promises.push(promise);
@@ -263,7 +271,7 @@ export const PersonMockData = () => {
                 mellomnavn: mellomnavn,
                 etternavn: etternavn,
             },
-            addressebeskyttelse: addressebeskyttelse,
+            adressebeskyttelse: adressebeskyttelse,
             sivilstand: sivilstand,
             ektefelle: ektefelle,
             barn: barn,
@@ -323,7 +331,7 @@ export const PersonMockData = () => {
     };
 
     if (loading === 'LOADING') {
-        return <NavFrontendSpinner/>;
+        return <NavFrontendSpinner />;
     } else if (loading === 'ERROR') {
         return <Sidetittel>Klarte ikke fetche data :( </Sidetittel>;
     }
@@ -369,16 +377,16 @@ export const PersonMockData = () => {
                         />
                     </NameWrapper>
                     <StyledSelect
-                        label="Addressebeskyttelse"
+                        label="Adressebeskyttelse"
                         disabled={lockedMode}
-                        onChange={(evt: any) => setAddressebeskyttelse(evt.target.value)}
-                        value={addressebeskyttelse}
+                        onChange={(evt: any) => setAdressebeskyttelse(evt.target.value)}
+                        value={adressebeskyttelse}
                     >
                         {Object.entries(Adressebeskyttelse).map(
-                            ([key, value]: any): JSX.Element => {
+                            ([key, label]): JSX.Element => {
                                 return (
                                     <option key={key} value={key}>
-                                        {value}
+                                        {label}
                                     </option>
                                 );
                             }
@@ -399,14 +407,14 @@ export const PersonMockData = () => {
                         <option value="XUK">Ukjent/Mangler opplysninger</option>
                     </Select>
                     <SkjemaGruppe legend="Telefonnummer">
-                        {!lockedMode &&
-                        <Checkbox
-                            label="Sett telefonnummer"
-                            disabled={lockedMode}
-                            onChange={(evt: any) => setBrukTelefonnummer(evt.target.checked)}
-                            defaultChecked={brukTelefonnummer}
-                        />
-                        }
+                        {!lockedMode && (
+                            <Checkbox
+                                label="Sett telefonnummer"
+                                disabled={lockedMode}
+                                onChange={(evt: any) => setBrukTelefonnummer(evt.target.checked)}
+                                defaultChecked={brukTelefonnummer}
+                            />
+                        )}
                         <Collapse isOpened={brukTelefonnummer}>
                             <Input
                                 label="Telefonnummer"
@@ -423,9 +431,9 @@ export const PersonMockData = () => {
             </GruppeStyle>
             <GruppeStyle>
                 <SkjemaGruppe legend={<Undertittel>Arbeidsforhold</Undertittel>}>
-                    <NyttArbeidsforhold isOpen={leggTilArbeidsforhold} callback={leggTilArbeidsforholdCallback}/>
+                    <NyttArbeidsforhold isOpen={leggTilArbeidsforhold} callback={leggTilArbeidsforholdCallback} />
                     {arbeidsforhold.map((forhold: ArbeidsforholdObject, index: number) => {
-                        return <VisArbeidsforhold arbeidsforhold={forhold} key={'arbeid_' + index}/>;
+                        return <VisArbeidsforhold arbeidsforhold={forhold} key={'arbeid_' + index} />;
                     })}
                     {!lockedMode && !leggTilArbeidsforhold && (
                         <Knapp onClick={() => setLeggTilArbeidsforhold(true)}>Legg til arbeidsforhold</Knapp>
@@ -465,26 +473,29 @@ export const PersonMockData = () => {
                         <Element tag="h3">Barn</Element>
                         <NyttBarn isOpen={visNyttBarnSkjema} callback={leggTilBarnCallback} />
                         {barn.map((barn: BarnObject, index: number) => {
-                            return <VisBarn barn={barn} key={'barn_' + index}/>;
+                            return <VisBarn barn={barn} key={'barn_' + index} />;
                         })}
-                        {!lockedMode && !visNyttBarnSkjema && <Knapp onClick={() => setVisNyttBarnSkjema(true)}>Legg til barn</Knapp>}
+                        {!lockedMode && !visNyttBarnSkjema && (
+                            <Knapp onClick={() => setVisNyttBarnSkjema(true)}>Legg til barn</Knapp>
+                        )}
                     </BarnWrapper>
                 </SkjemaGruppe>
             </GruppeStyle>
             <InntektGruppeStyle>
                 <Undertittel>Inntekt og formue</Undertittel>
                 <SkjemaGruppe legend="Skattetaten">
-                    <NyttSkatteutbetaling isOpen={leggTilSkatt} callback={leggTilSkattCallback}/>
+                    <NyttSkatteutbetaling isOpen={leggTilSkatt} callback={leggTilSkattCallback} />
                     {skattutbetalinger.map((utbetaling: SkatteutbetalingObject, index: number) => {
-                        return <VisSkatteutbetaling skatteutbetaling={utbetaling} key={'skatt_' + index}/>;
+                        return <VisSkatteutbetaling skatteutbetaling={utbetaling} key={'skatt_' + index} />;
                     })}
-                    {!lockedMode && !leggTilSkatt &&
-                    <Knapp onClick={() => setLeggTilSkatt(true)}>Legg til utbetaling</Knapp>}
+                    {!lockedMode && !leggTilSkatt && (
+                        <Knapp onClick={() => setLeggTilSkatt(true)}>Legg til utbetaling</Knapp>
+                    )}
                 </SkjemaGruppe>
                 <SkjemaGruppe legend="Husbanken">
-                    <NyBostotteSak isOpen={leggTilBostotteSak} callback={leggTilBostotteSakCallback}/>
+                    <NyBostotteSak isOpen={leggTilBostotteSak} callback={leggTilBostotteSakCallback} />
                     {bostotteSaker.map((sak: BostotteSakObject, index: number) => {
-                        return <VisBostotteSak bostotteSak={sak} key={'bostotteSak_' + index}/>;
+                        return <VisBostotteSak bostotteSak={sak} key={'bostotteSak_' + index} />;
                     })}
                     {!lockedMode && !leggTilBostotteSak && (
                         <Knapp className="leggTilBostotte" onClick={() => setLeggTilBostotteSak(true)}>
@@ -514,11 +525,8 @@ export const PersonMockData = () => {
                     />
                     {utbetalingerFraNav.map((utbetaling: UtbetalingFraNavObject, index: number) => {
                         return (
-                            <VisUtbetalingerFraNav
-                                utbetalingFraNav={utbetaling}
-                                key={'utbetalingFraNav_' + index}
-                            />
-                        )
+                            <VisUtbetalingerFraNav utbetalingFraNav={utbetaling} key={'utbetalingFraNav_' + index} />
+                        );
                     })}
                     {!lockedMode && !leggTilUtbetalingFraNav && (
                         <Knapp onClick={() => setLeggTilUtbetalingFraNav(true)}>Legg til utbetaling</Knapp>

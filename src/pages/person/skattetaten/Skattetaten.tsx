@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
-import { Input, Select } from 'nav-frontend-skjema';
 import { Knapp } from 'nav-frontend-knapper';
-import Panel from 'nav-frontend-paneler';
-import { StyledPanel } from '../../../styling/Styles';
+import { DefinitionList, Knappegruppe, StyledInput, StyledPanel, StyledSelect } from '../../../styling/Styles';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -17,12 +15,33 @@ export enum SkatteutbetalingType {
     ALDERSUFOEREETTERLATTEAVTALEFESTETOGKRIGSPENSJON = 'AldersUfoereEtterlatteAvtalefestetOgKrigspensjon',
 }
 
+const getSkatteutbetalingLabel = (key: SkatteutbetalingType) => {
+    switch (key) {
+        case 'Loennsinntekt':
+            return 'Lønnsinntekt';
+        case 'YtelseFraOffentlige':
+            return 'Ytelse fra det offentlige';
+        case 'PensjonEllerTrygd':
+            return 'Pensjon eller trygd';
+        case 'LottOgPartInnenFiske':
+            return 'Lott og part innen fiske';
+        case 'DagmammaIEgenBolig':
+            return 'Dagmamma i egen bolig';
+        case 'Naeringsinntekt':
+            return 'Næringsinntekt';
+        case 'AldersUfoereEtterlatteAvtalefestetOgKrigspensjon':
+            return 'Alder, uføre, etterlatte, avtalefestet og krigspensjon';
+        default:
+            return '';
+    }
+};
+
 export interface SkatteutbetalingObject {
     beloep: string;
     trekk: string;
     orgnummer: string;
     maned: string;
-    type: string;
+    type: SkatteutbetalingType;
 }
 
 interface Params {
@@ -48,7 +67,7 @@ export const NyttSkatteutbetaling = ({ isOpen, callback }: Params) => {
     const [trekk, setTrekk] = useState<string>('3333');
     const [orgnummer, setOrgnummer] = useState<number>(123456785);
     const [maned, setManed] = useState<string>(getMonthDateString(month_1));
-    const [type, setType] = useState<string>(SkatteutbetalingType.LOENNSINNTEKT);
+    const [type, setType] = useState<SkatteutbetalingType>(SkatteutbetalingType.LOENNSINNTEKT);
 
     const onLagre = (event: ClickEvent) => {
         const nyttSkatteutbetalingObject: SkatteutbetalingObject = {
@@ -69,37 +88,44 @@ export const NyttSkatteutbetaling = ({ isOpen, callback }: Params) => {
 
     return (
         <Collapse isOpened={isOpen}>
-            <Panel>
-                <Input label="Beløp" value={belop} onChange={(evt: any) => setBelop(evt.target.value)} />
-                <Input label="Trekk" value={trekk} onChange={(evt: any) => setTrekk(evt.target.value)} />
-                <Input label="Orgnummer" value={orgnummer} onChange={(evt: any) => setOrgnummer(evt.target.value)} />
-                <Select label="Måned" onChange={(evt: any) => setManed(evt.target.value)} value={maned}>
+            <StyledPanel>
+                <StyledInput label="Beløp" value={belop} onChange={(evt: any) => setBelop(evt.target.value)} />
+                <StyledInput label="Trekk" value={trekk} onChange={(evt: any) => setTrekk(evt.target.value)} />
+                <StyledInput
+                    label="Orgnummer"
+                    value={orgnummer}
+                    onChange={(evt: any) => setOrgnummer(evt.target.value)}
+                />
+                <StyledSelect label="Måned" onChange={(evt: any) => setManed(evt.target.value)} value={maned}>
                     <option value={getMonthDateString(month_1)}>{getMonthDateString(month_1)}</option>
                     <option value={getMonthDateString(month_2)}>{getMonthDateString(month_2)}</option>
                     <option value={getMonthDateString(month_3)}>{getMonthDateString(month_3)}</option>
                     <option value={getMonthDateString(month_4)}>{getMonthDateString(month_4)}</option>
-                </Select>
-                <Select label="Velg arbeidsgivertype" onChange={(evt: any) => setType(evt.target.value)} value={type}>
-                    <option value={SkatteutbetalingType.LOENNSINNTEKT}>Lønnsinntekt</option>
-                    <option value={SkatteutbetalingType.YTELSEFRAOFFENTLIGE}>Ytelse fra det offentliger</option>
-                    <option value={SkatteutbetalingType.PENSJONELLERTRYGD}>Pensjon eller trygd</option>
-                    <option value={SkatteutbetalingType.LOTTOGPARTINNENFISKE}>Lott og part innen fiske</option>
-                    <option value={SkatteutbetalingType.DAGMAMMAIEGENBOLIG}>Dagmamma i egen bolig</option>
-                    <option value={SkatteutbetalingType.NAERINGSINNTEKT}>Næringsinntekt</option>
-                    <option value={SkatteutbetalingType.ALDERSUFOEREETTERLATTEAVTALEFESTETOGKRIGSPENSJON}>
-                        Alder, uføre, etterlatte, avtalefestet og krigspensjon
-                    </option>
-                </Select>
-                <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
-                    Legg til
-                </Knapp>
-                <Knapp
-                    onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}
-                    className="leftPadding"
+                </StyledSelect>
+                <StyledSelect
+                    label="Velg arbeidsgivertype"
+                    onChange={(evt: any) => setType(evt.target.value)}
+                    value={type}
                 >
-                    Avbryt
-                </Knapp>
-            </Panel>
+                    {Object.values(SkatteutbetalingType).map(
+                        (value: SkatteutbetalingType): JSX.Element => {
+                            return (
+                                <option key={value} value={value}>
+                                    {getSkatteutbetalingLabel(value)}
+                                </option>
+                            );
+                        }
+                    )}
+                </StyledSelect>
+                <Knappegruppe>
+                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
+                        Legg til
+                    </Knapp>
+                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
+                        Avbryt
+                    </Knapp>
+                </Knappegruppe>
+            </StyledPanel>
         </Collapse>
     );
 };
@@ -111,11 +137,18 @@ interface ViseParams {
 export const VisSkatteutbetaling = ({ skatteutbetaling }: ViseParams) => {
     return (
         <StyledPanel>
-            <div>Beløp: {skatteutbetaling.beloep}</div>
-            <div>Trekk: {skatteutbetaling.trekk}</div>
-            <div>Orgnummer: {skatteutbetaling.orgnummer}</div>
-            <div>Måned: {skatteutbetaling.maned}</div>
-            <div>Type: {skatteutbetaling.type}</div>
+            <DefinitionList>
+                <dt>Beløp</dt>
+                <dd>{skatteutbetaling.beloep}</dd>
+                <dt>Trekk</dt>
+                <dd>{skatteutbetaling.trekk}</dd>
+                <dt>Orgnummer</dt>
+                <dd>{skatteutbetaling.orgnummer}</dd>
+                <dt>Måned</dt>
+                <dd>{skatteutbetaling.maned}</dd>
+                <dt>Type</dt>
+                <dd>{getSkatteutbetalingLabel(skatteutbetaling.type)}</dd>
+            </DefinitionList>
         </StyledPanel>
     );
 };

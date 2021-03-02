@@ -18,19 +18,12 @@ body {
     color: black;
 }
 
-button, a {
-    white-space: normal!important;
+button,
+a {
+    white-space: normal !important;
 }
 
 .container {
     margin-top: 2rem;
     max-width: 48rem;
-}
-
-.leftPadding {
-    margin-left: 1em;
-}
-
-.rightPadding {
-    margin-left: 1em;
 }
