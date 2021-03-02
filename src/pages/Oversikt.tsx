@@ -1,7 +1,7 @@
 import Panel from 'nav-frontend-paneler';
 import { Sidetittel, Normaltekst } from 'nav-frontend-typografi';
 import React, { useEffect, useState } from 'react';
-import { addParams, getMockAltApiURL, getRedirectParams } from '../utils/restUtils';
+import { addParams, getFagsystemmockURL, getMockAltApiURL, getRedirectParams } from '../utils/restUtils';
 import { Personalia } from './person/PersonMockData';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
@@ -9,6 +9,11 @@ import { Bold } from '../styling/Styles';
 
 const StyledLink = styled(Link).attrs({ className: 'lenke' })`
     margin-right: 1rem;
+`;
+
+const StyledEksternLink = styled.a.attrs({ className: 'lenke' })`
+    margin-top: 1rem;
+    display: block;
 `;
 
 const LinkWithButtonStyle = styled(Link).attrs({ className: 'knapp knapp--standard' })`
@@ -112,6 +117,7 @@ export const Oversikt = () => {
             )}
             <LinkWithButtonStyle to={'/person' + addParams(params)}>Opprett bruker</LinkWithButtonStyle>
             <LinkWithButtonStyle to={'/login' + addParams(params)}>Logg inn</LinkWithButtonStyle>
+            <StyledEksternLink href={getFagsystemmockURL()}>Fagsystemmock</StyledEksternLink>
         </StyledPanel>
     );
 };
