@@ -44,7 +44,7 @@
     "eject": "react-scripts eject",
     "dev": "concurrently --kill-others \"npm run start\" \"npm run start:css\"",
     "typeCheck": "tsc",
-    "lint": "eslint ./src/**/*.{js,ts,tsx}"
+    "lint": "eslint ./src/**/*.{ts,tsx}"
   },
   "eslintConfig": {
     "extends": [
