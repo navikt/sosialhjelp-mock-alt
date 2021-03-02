@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
 import { Knapp } from 'nav-frontend-knapper';
-import { Knappegruppe, StyledInput, StyledPanel } from '../../../styling/Styles';
+import { DefinitionList, Knappegruppe, StyledInput, StyledPanel } from '../../../styling/Styles';
 import { getIsoDateString } from '../../../utils/dateUtils';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
@@ -95,11 +95,18 @@ interface ViseParams {
 export const VisUtbetalingerFraNav = ({ utbetalingFraNav }: ViseParams) => {
     return (
         <StyledPanel>
-            <div>Beløp: {utbetalingFraNav.belop}</div>
-            <div>Utbetalingsdato: {utbetalingFraNav.dato}</div>
-            <div>Ytelsestype: {utbetalingFraNav.ytelsestype}</div>
-            <div>Skattebeløp: {utbetalingFraNav.skattebelop}</div>
-            <div>Ytelseskomponenttype: {utbetalingFraNav.ytelseskomponenttype}</div>
+            <DefinitionList labelWidth={10.5}>
+                <dt>Beløp</dt>
+                <dd>{utbetalingFraNav.belop}</dd>
+                <dt>Utbetalingsdato</dt>
+                <dd>{utbetalingFraNav.dato}</dd>
+                <dt>Ytelsestype</dt>
+                <dd>{utbetalingFraNav.ytelsestype}</dd>
+                <dt>Skattebeløp</dt>
+                <dd>{utbetalingFraNav.skattebelop}</dd>
+                <dt>Ytelseskomponenttype</dt>
+                <dd>{utbetalingFraNav.ytelseskomponenttype}</dd>
+            </DefinitionList>
         </StyledPanel>
     );
 };

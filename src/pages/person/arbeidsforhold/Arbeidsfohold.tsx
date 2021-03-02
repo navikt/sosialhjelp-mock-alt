@@ -4,7 +4,14 @@ import { Input } from 'nav-frontend-skjema';
 import { getMockAltApiURL } from '../../../utils/restUtils';
 import { Knapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
-import { FlexWrapper, Knappegruppe, StyledInput, StyledPanel, StyledSelect, theme } from '../../../styling/Styles';
+import {
+    DefinitionList,
+    FlexWrapper,
+    Knappegruppe,
+    StyledInput,
+    StyledPanel,
+    StyledSelect,
+} from '../../../styling/Styles';
 import styled from 'styled-components/macro';
 import { getIsoDateString } from '../../../utils/dateUtils';
 
@@ -170,35 +177,6 @@ export const NyttArbeidsforhold = ({ isOpen, callback }: Params) => {
 interface ViseParams {
     arbeidsforhold: ArbeidsforholdObject;
 }
-
-const DefinitionList = styled.dl`
-    margin: 0;
-    overflow: auto;
-    line-height: 1.5;
-    &:after {
-        content: '';
-        clear: both;
-    }
-
-    dt {
-        float: left;
-        clear: left;
-        font-weight: bold;
-        min-width: 8.5rem;
-        margin-right: 0.5rem;
-        &::after {
-            content: ': ';
-        }
-
-        @media ${theme.mobileMaxWidth} {
-            min-width: initial;
-        }
-    }
-    dd {
-        float: left;
-        margin: 0;
-    }
-`;
 
 export const VisArbeidsforhold = ({ arbeidsforhold }: ViseParams) => {
     return (

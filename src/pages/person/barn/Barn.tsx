@@ -5,20 +5,21 @@ import { getMockAltApiURL } from '../../../utils/restUtils';
 import { Knapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
 import { Bostedsadresse, NameWrapper, PersonaliaNavn } from '../PersonMockData';
-import { Knappegruppe, StyledPanel, StyledSelect } from '../../../styling/Styles';
+import { DefinitionList, Knappegruppe, StyledPanel, StyledSelect } from '../../../styling/Styles';
 import { getIsoDateString } from '../../../utils/dateUtils';
 import styled from 'styled-components/macro';
-import { Adressebeskyttelse } from '../../personalia/adressebeskyttelse';
+import { Adressebeskyttelse, AdressebeskyttelseType } from '../../personalia/adressebeskyttelse';
 import Adresse from '../adresse/Adresse';
 import { useAdresse } from '../adresse/useAdresse';
+import { Folkeregisterpersonstatus, FolkeregisterpersonstatusType } from './folkeregisterpersonstatus';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
 export interface BarnObject {
     fnr: string;
-    adressebeskyttelse: string;
+    adressebeskyttelse: AdressebeskyttelseType;
     bostedsadresse: Bostedsadresse;
-    folkeregistepersonstatus: string;
+    folkeregisterpersonstatus: FolkeregisterpersonstatusType;
     foedsel: string;
     navn: PersonaliaNavn;
 }
@@ -45,8 +46,8 @@ export const NyttBarn = ({ isOpen, callback }: Params) => {
     const [etternavn, setEtternavn] = useState<string>('Mockbarn');
 
     const [foedselsdato, setFoedselsdato] = useState<string>(getIsoDateString(lengesiden));
-    const [adressebeskyttelse, setAdressebeskyttelse] = useState<string>('UGRADERT');
-    const [folkeregistepersonstatus, setFolkeregistepersonstatus] = useState<string>('bosatt');
+    const [adressebeskyttelse, setAdressebeskyttelse] = useState<AdressebeskyttelseType>('UGRADERT');
+    const [folkeregisterpersonstatus, setFolkeregisterpersonstatus] = useState<FolkeregisterpersonstatusType>('bosatt');
 
     const { adresseState, dispatchAdresse } = useAdresse();
 
@@ -70,7 +71,7 @@ export const NyttBarn = ({ isOpen, callback }: Params) => {
                 kommunenummer: adresseState.kommunenummer,
                 postnummer: adresseState.postnummer,
             },
-            folkeregistepersonstatus: folkeregistepersonstatus,
+            folkeregisterpersonstatus: folkeregisterpersonstatus,
             foedsel: foedselsdato,
             navn: { fornavn: fornavn, mellomnavn: mellomnavn, etternavn: etternavn },
         };
@@ -115,10 +116,10 @@ export const NyttBarn = ({ isOpen, callback }: Params) => {
                     value={adressebeskyttelse}
                 >
                     {Object.entries(Adressebeskyttelse).map(
-                        ([key, value]: any): JSX.Element => {
+                        ([key, label]): JSX.Element => {
                             return (
                                 <option key={key} value={key}>
-                                    {value}
+                                    {label}
                                 </option>
                             );
                         }
@@ -126,19 +127,18 @@ export const NyttBarn = ({ isOpen, callback }: Params) => {
                 </StyledSelect>
                 <StyledSelect
                     label="Folkeregisterpersonstatus"
-                    onChange={(evt: any) => setFolkeregistepersonstatus(evt.target.value)}
-                    value={folkeregistepersonstatus}
+                    onChange={(evt: any) => setFolkeregisterpersonstatus(evt.target.value)}
+                    value={folkeregisterpersonstatus}
                 >
-                    <option value="bosatt">Bosatt</option>
-                    <option value="utflyttet">Utflyttet</option>
-                    <option value="forsvunnet">Forsvunnet</option>
-                    <option value="doed">Død</option>
-                    <option value="opphoert">Opphørt</option>
-                    <option value="foedselsregistrert">Fødselsregistrert</option>
-                    <option value="midlertidig">Midlertidig</option>
-                    <option value="inaktiv">Inaktiv</option>
-                    <option value="ikkeBosatt">Ikke bosatt</option>
-                    <option value="aktiv">Aktiv</option>
+                    {Object.entries(Folkeregisterpersonstatus).map(
+                        ([key, label]): JSX.Element => {
+                            return (
+                                <option key={key} value={key}>
+                                    {label}
+                                </option>
+                            );
+                        }
+                    )}
                 </StyledSelect>
                 <Adresse state={adresseState} dispatch={dispatchAdresse} />
                 <Knappegruppe>
@@ -154,24 +154,32 @@ export const NyttBarn = ({ isOpen, callback }: Params) => {
     );
 };
 
-interface ViseParams {
+interface Props {
     barn: BarnObject;
 }
 
-export const VisBarn = ({ barn }: ViseParams) => {
+export const VisBarn = ({ barn }: Props) => {
     return (
         <StyledPanel>
-            <div>Ident: {barn.fnr}</div>
-            <div>
-                Navn: {barn.navn.fornavn} {barn.navn.mellomnavn} {barn.navn.etternavn}
-            </div>
-            <div>Fødselsdato: {barn.foedsel}</div>
-            <div>Adressebeskyttelse: {barn.adressebeskyttelse}</div>
-            <div>Folkeregisterpersonstatus: {barn.folkeregistepersonstatus}</div>
-            <div>
-                Addresse: {barn.bostedsadresse.adressenavn}, {barn.bostedsadresse.husnummer},{' '}
-                {barn.bostedsadresse.postnummer}, {barn.bostedsadresse.kommunenummer}
-            </div>
+            <DefinitionList labelWidth={12}>
+                <dt>Ident</dt>
+                <dd>{barn.fnr}</dd>
+                <dt>Navn</dt>
+                <dd>
+                    {barn.navn.fornavn} {barn.navn.mellomnavn} {barn.navn.etternavn}
+                </dd>
+                <dt>Fødselsdato</dt>
+                <dd>{barn.foedsel}</dd>
+                <dt>Adressebeskyttelse</dt>
+                <dd>{Adressebeskyttelse[barn.adressebeskyttelse]}</dd>
+                <dt>Folkeregisterpersonstatus </dt>
+                <dd>{Folkeregisterpersonstatus[barn.folkeregisterpersonstatus]}</dd>
+                <dt>Adresse</dt>
+                <dd>
+                    {barn.bostedsadresse.adressenavn}, {barn.bostedsadresse.husnummer}, {barn.bostedsadresse.postnummer}
+                    , {barn.bostedsadresse.kommunenummer}
+                </dd>
+            </DefinitionList>
         </StyledPanel>
     );
 };
