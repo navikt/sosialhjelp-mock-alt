@@ -51,3 +51,32 @@ export const Knappegruppe = styled.div`
 
     margin-top: 2rem;
 `;
+
+export const DefinitionList = styled.dl<{ labelWidth?: number }>`
+    margin: 0;
+    overflow: auto;
+    line-height: 1.5;
+    &:after {
+        content: '';
+        clear: both;
+    }
+
+    dt {
+        float: left;
+        clear: left;
+        font-weight: bold;
+        min-width: ${(props) => (props.labelWidth ? `${props.labelWidth}rem` : '8.5rem')};
+        margin-right: 0.5rem;
+        &::after {
+            content: ': ';
+        }
+
+        @media ${theme.mobileMaxWidth} {
+            min-width: initial;
+        }
+    }
+    dd {
+        float: left;
+        margin: 0;
+    }
+`;

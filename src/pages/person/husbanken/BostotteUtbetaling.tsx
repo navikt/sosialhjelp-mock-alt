@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
 import { Knapp } from 'nav-frontend-knapper';
-import { BostotteRolle } from './BostotteSak';
-import { Knappegruppe, StyledInput, StyledPanel, StyledSelect } from '../../../styling/Styles';
+import { BostotteRolle, getBostotteRolleLabel } from './BostotteSak';
+import { DefinitionList, Knappegruppe, StyledInput, StyledPanel, StyledSelect } from '../../../styling/Styles';
 import { getIsoDateString } from '../../../utils/dateUtils';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
@@ -12,11 +12,22 @@ export enum BostotteMottaker {
     HUSSTAND = 'HUSSTAND',
 }
 
+const getBostotteMottakerLabel = (key: BostotteMottaker) => {
+    switch (key) {
+        case 'KOMMUNE':
+            return 'Kommunen';
+        case 'HUSSTAND':
+            return 'Husstand';
+        default:
+            return '';
+    }
+};
+
 export interface BostotteUtbetalingObject {
     belop: string;
     utbetalingsdato: string;
-    mottaker: string;
-    rolle: string;
+    mottaker: BostotteMottaker;
+    rolle: BostotteRolle;
 }
 
 interface Params {
@@ -59,12 +70,18 @@ export const NyttBostotteUtbetaling = ({ isOpen, callback }: Params) => {
                     onChange={(evt: any) => setUtbetalingsdato(evt.target.value)}
                 />
                 <StyledSelect label="Mottaker" onChange={(evt: any) => setMottaker(evt.target.value)} value={mottaker}>
-                    <option value={BostotteMottaker.HUSSTAND}>Husstand</option>
-                    <option value={BostotteMottaker.KOMMUNE}>Kommunen</option>
+                    <option value={BostotteMottaker.HUSSTAND}>
+                        {getBostotteMottakerLabel(BostotteMottaker.HUSSTAND)}
+                    </option>
+                    <option value={BostotteMottaker.KOMMUNE}>
+                        {getBostotteMottakerLabel(BostotteMottaker.KOMMUNE)}
+                    </option>
                 </StyledSelect>
                 <StyledSelect label="Rolle" onChange={(evt: any) => setRolle(evt.target.value)} value={rolle}>
-                    <option value={BostotteRolle.HOVEDPERSON}>Hovedperson</option>
-                    <option value={BostotteRolle.BIPERSON}>Biperson</option>
+                    <option value={BostotteRolle.HOVEDPERSON}>
+                        {getBostotteRolleLabel(BostotteRolle.HOVEDPERSON)}
+                    </option>
+                    <option value={BostotteRolle.BIPERSON}>{getBostotteRolleLabel(BostotteRolle.BIPERSON)}</option>
                 </StyledSelect>
                 <Knappegruppe>
                     <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
@@ -86,10 +103,16 @@ interface ViseParams {
 export const VisBostotteUtbetaling = ({ bostotteUtbetaling }: ViseParams) => {
     return (
         <StyledPanel>
-            <div>Beløp: {bostotteUtbetaling.belop}</div>
-            <div>Utbetalingsdato: {bostotteUtbetaling.utbetalingsdato}</div>
-            <div>Mottaker: {bostotteUtbetaling.mottaker}</div>
-            <div>Rolle: {bostotteUtbetaling.rolle}</div>
+            <DefinitionList>
+                <dt>Beløp</dt>
+                <dd>{bostotteUtbetaling.belop}</dd>
+                <dt>Utbetalingsdato </dt>
+                <dd>{bostotteUtbetaling.utbetalingsdato}</dd>
+                <dt>Mottaker </dt>
+                <dd>{getBostotteMottakerLabel(bostotteUtbetaling.mottaker)}</dd>
+                <dt>Rolle </dt>
+                <dd>{getBostotteRolleLabel(bostotteUtbetaling.rolle)}</dd>
+            </DefinitionList>
         </StyledPanel>
     );
 };

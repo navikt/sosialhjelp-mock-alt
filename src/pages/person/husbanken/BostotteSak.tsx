@@ -1,19 +1,47 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
 import { Knapp } from 'nav-frontend-knapper';
-import { FlexWrapper, Knappegruppe, StyledInput, StyledPanel, StyledSelect } from '../../../styling/Styles';
+import {
+    DefinitionList,
+    FlexWrapper,
+    Knappegruppe,
+    StyledInput,
+    StyledPanel,
+    StyledSelect,
+} from '../../../styling/Styles';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
 export enum BostotteStatus {
-    UNDER_BEHANDLING = 'UNDER_BEHANDLING',
     VEDTATT = 'VEDTATT',
+    UNDER_BEHANDLING = 'UNDER_BEHANDLING',
 }
+const getBostotteStatusLabel = (key: BostotteStatus) => {
+    switch (key) {
+        case 'VEDTATT':
+            return 'Vedtak er fattet';
+        case 'UNDER_BEHANDLING':
+            return 'Under behandling';
+        default:
+            return '';
+    }
+};
 
 export enum BostotteRolle {
     HOVEDPERSON = 'HOVEDPERSON',
     BIPERSON = 'BIPERSON',
 }
+
+export const getBostotteRolleLabel = (key: BostotteRolle) => {
+    switch (key) {
+        case 'HOVEDPERSON':
+            return 'Hovedperson';
+        case 'BIPERSON':
+            return 'Biperson';
+        default:
+            return '';
+    }
+};
 
 export enum Vedtakskode {
     V00 = 'Søknaden din er innvilget.',
@@ -31,8 +59,8 @@ export enum Vedtakskode {
 export interface BostotteSakObject {
     mnd: string;
     ar: string;
-    status: string;
-    rolle: string;
+    status: BostotteStatus;
+    rolle: BostotteRolle;
     vedtak: VedtakObject | null;
 }
 
@@ -99,8 +127,8 @@ export const NyBostotteSak = ({ isOpen, callback }: Params) => {
             const nyttBostotteSakObject: BostotteSakObject = {
                 ar: ar.toString(),
                 mnd: mnd.toString(),
-                status: status.toString(),
-                rolle: rolle.toString(),
+                status: status,
+                rolle: rolle,
                 vedtak: vedtaket,
             };
             callback(nyttBostotteSakObject);
@@ -108,8 +136,8 @@ export const NyBostotteSak = ({ isOpen, callback }: Params) => {
             const nyttBostotteSakObject: BostotteSakObject = {
                 ar: ar.toString(),
                 mnd: mnd.toString(),
-                status: status.toString(),
-                rolle: rolle.toString(),
+                status: status,
+                rolle: rolle,
                 vedtak: null,
             };
             callback(nyttBostotteSakObject);
@@ -129,8 +157,10 @@ export const NyBostotteSak = ({ isOpen, callback }: Params) => {
                     <StyledInput label="Måned" value={mnd} onChange={(evt: any) => setMnd(evt.target.value)} size={5} />
                 </FlexWrapper>
                 <StyledSelect label="Status" onChange={(evt: any) => setStatus(evt.target.value)} value={status}>
-                    <option value={BostotteStatus.VEDTATT}>Vedtak er fattet</option>
-                    <option value={BostotteStatus.UNDER_BEHANDLING}>Under behandling</option>
+                    <option value={BostotteStatus.VEDTATT}>{getBostotteStatusLabel(BostotteStatus.VEDTATT)}</option>
+                    <option value={BostotteStatus.UNDER_BEHANDLING}>
+                        {getBostotteStatusLabel(BostotteStatus.UNDER_BEHANDLING)}
+                    </option>
                 </StyledSelect>
                 {status === BostotteStatus.VEDTATT && (
                     <StyledSelect
@@ -151,8 +181,10 @@ export const NyBostotteSak = ({ isOpen, callback }: Params) => {
                     </StyledSelect>
                 )}
                 <StyledSelect label="Rolle" onChange={(evt: any) => setRolle(evt.target.value)} value={rolle}>
-                    <option value={BostotteRolle.HOVEDPERSON}>Hovedperson</option>
-                    <option value={BostotteRolle.BIPERSON}>Biperson</option>
+                    <option value={BostotteRolle.HOVEDPERSON}>
+                        {getBostotteRolleLabel(BostotteRolle.HOVEDPERSON)}
+                    </option>
+                    <option value={BostotteRolle.BIPERSON}>{getBostotteRolleLabel(BostotteRolle.BIPERSON)}</option>
                 </StyledSelect>
                 <Knappegruppe>
                     <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
@@ -174,15 +206,22 @@ interface ViseParams {
 export const VisBostotteSak = ({ bostotteSak }: ViseParams) => {
     return (
         <StyledPanel>
-            <div>År: {bostotteSak.ar}</div>
-            <div>Måned: {bostotteSak.mnd}</div>
-            <div>Status: {bostotteSak.status}</div>
-            {bostotteSak.status === BostotteStatus.VEDTATT && (
-                <div>
-                    <div>Ident: {bostotteSak.vedtak?.beskrivelse}</div>
-                </div>
-            )}
-            <div>Rolle: {bostotteSak.rolle}</div>
+            <DefinitionList>
+                <dt>År</dt>
+                <dd>{bostotteSak.ar}</dd>
+                <dt>Måned</dt>
+                <dd>{bostotteSak.mnd}</dd>
+                <dt>Status</dt>
+                <dd>{getBostotteStatusLabel(bostotteSak.status)}</dd>
+                {bostotteSak.status === BostotteStatus.VEDTATT && (
+                    <>
+                        <dt>Ident</dt>
+                        <dd>{bostotteSak.vedtak?.beskrivelse}</dd>
+                    </>
+                )}
+                <dt>Rolle</dt>
+                <dd>{getBostotteRolleLabel(bostotteSak.rolle)}</dd>
+            </DefinitionList>
         </StyledPanel>
     );
 };
