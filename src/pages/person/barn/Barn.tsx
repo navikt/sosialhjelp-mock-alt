@@ -139,16 +139,6 @@ export const NyttBarn = ({ isOpen, callback }: Params) => {
                             );
                         }
                     )}
-                    <option value="bosatt">Bosatt</option>
-                    <option value="utflyttet">Utflyttet</option>
-                    <option value="forsvunnet">Forsvunnet</option>
-                    <option value="doed">Død</option>
-                    <option value="opphoert">Opphørt</option>
-                    <option value="foedselsregistrert">Fødselsregistrert</option>
-                    <option value="midlertidig">Midlertidig</option>
-                    <option value="inaktiv">Inaktiv</option>
-                    <option value="ikkeBosatt">Ikke bosatt</option>
-                    <option value="aktiv">Aktiv</option>
                 </StyledSelect>
                 <Adresse state={adresseState} dispatch={dispatchAdresse} />
                 <Knappegruppe>
