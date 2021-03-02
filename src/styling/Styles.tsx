@@ -61,11 +61,14 @@ export const DefinitionList = styled.dl<{ labelWidth?: number }>`
         clear: both;
     }
 
+    --dtWidth: ${(props) => (props.labelWidth ? `${props.labelWidth}%` : '22%')};
+    --ddWidth: ${(props) => (props.labelWidth ? `${90 - props.labelWidth}%` : '68%')};
+
     dt {
         float: left;
         clear: left;
         font-weight: bold;
-        min-width: ${(props) => (props.labelWidth ? `${props.labelWidth}rem` : '8.5rem')};
+        min-width: var(--dtWidth);
         margin-right: 0.5rem;
         &::after {
             content: ': ';
@@ -78,5 +81,6 @@ export const DefinitionList = styled.dl<{ labelWidth?: number }>`
     dd {
         float: left;
         margin: 0;
+        max-width: var(--ddWidth);
     }
 `;
