@@ -63,7 +63,7 @@ export const getRedirectParams = (): string => {
     const expiry = query.get('expiry');
     return cookiename
         ? '&cookiename=' + cookiename
-        : '' + (redirect ? '&redirect=' + redirect : '') + (expiry ? '&cookiename=' + expiry : '');
+        : '' + (redirect ? '&redirect=' + redirect : '') + (expiry ? '&expiry=' + expiry : '');
 };
 
 export const addParams = (params: string | null = null, firstChar: string = '?'): string => {
