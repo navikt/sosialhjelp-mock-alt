@@ -240,8 +240,7 @@ export const PersonMockData = () => {
 
     const leggTilBostotteSakCallback = (nyBostotteSak: BostotteSakObject) => {
         if (nyBostotteSak) {
-            bostotteSaker.push(nyBostotteSak);
-            setBostotteSaker(bostotteSaker);
+            setBostotteSaker([...bostotteSaker, nyBostotteSak]);
         }
         setLeggTilBostotteSak(false);
     };
