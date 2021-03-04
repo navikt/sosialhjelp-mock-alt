@@ -163,8 +163,6 @@ export const PersonMockData = () => {
 
     const { adresseState, dispatchAdresse } = useAdresse();
 
-    // const [opprettPersonFeilet, setOpprettPersonFeilet] = useState<boolean>(false);
-
     const queryFnr = useQuery().get('brukerID');
     const params = getRedirectParams();
     const history = useHistory();
@@ -330,7 +328,6 @@ export const PersonMockData = () => {
                 if (response.ok) {
                     dispatchAppStatus({ type: 'success' });
 
-                    //setOpprettPersonFeilet(false);
                     if (isLoginSession(params)) {
                         window.location.href = `${getMockAltApiURL()}/login/cookie?subject=${fnr}${addParams(
                             params,
