@@ -8,10 +8,11 @@ import { Bostedsadresse, NameWrapper, PersonaliaNavn } from '../PersonMockData';
 import { DefinitionList, Knappegruppe, StyledPanel, StyledSelect } from '../../../styling/Styles';
 import { getIsoDateString } from '../../../utils/dateUtils';
 import styled from 'styled-components/macro';
-import { Adressebeskyttelse, AdressebeskyttelseType } from '../../personalia/adressebeskyttelse';
+import { Adressebeskyttelse, AdressebeskyttelseType } from '../personalia/adressebeskyttelse';
 import Adresse from '../adresse/Adresse';
 import { useAdresse } from '../adresse/useAdresse';
 import { Folkeregisterpersonstatus, FolkeregisterpersonstatusType } from './folkeregisterpersonstatus';
+import SletteKnapp from '../../../components/SletteKnapp';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -24,9 +25,9 @@ export interface BarnObject {
     navn: PersonaliaNavn;
 }
 
-interface Params {
+interface Params<T> {
     isOpen: boolean;
-    callback: (data: any) => void;
+    callback: (data?: T) => void;
 }
 
 const StyledInput = styled(Input)<{ size?: number }>`
@@ -35,7 +36,7 @@ const StyledInput = styled(Input)<{ size?: number }>`
     }
 `;
 
-export const NyttBarn = ({ isOpen, callback }: Params) => {
+export const NyttBarn = ({ isOpen, callback }: Params<BarnObject>) => {
     let lengesiden = new Date();
     lengesiden.setFullYear(lengesiden.getFullYear() - 10);
 
@@ -62,12 +63,19 @@ export const NyttBarn = ({ isOpen, callback }: Params) => {
     }, [fnr.length]);
 
     const onLagre = (event: ClickEvent) => {
+        const husnummerAsNumber = Number(adresseState.husnummer);
+        if (!Number.isInteger(husnummerAsNumber)) {
+            dispatchAdresse({ type: 'validHusnummer', value: false });
+            event.preventDefault();
+            return;
+        }
+
         const nyttBarnObject: BarnObject = {
             fnr: fnr,
             adressebeskyttelse: adressebeskyttelse,
             bostedsadresse: {
                 adressenavn: adresseState.adressenavn,
-                husnummer: adresseState.husnummer,
+                husnummer: husnummerAsNumber,
                 kommunenummer: adresseState.kommunenummer,
                 postnummer: adresseState.postnummer,
             },
@@ -83,7 +91,7 @@ export const NyttBarn = ({ isOpen, callback }: Params) => {
     };
 
     const onCancel = (event: ClickEvent) => {
-        callback(null);
+        callback(undefined);
         event.preventDefault();
     };
 
@@ -156,9 +164,10 @@ export const NyttBarn = ({ isOpen, callback }: Params) => {
 
 interface Props {
     barn: BarnObject;
+    onSlett: () => void;
 }
 
-export const VisBarn = ({ barn }: Props) => {
+export const VisBarn = ({ barn, onSlett }: Props) => {
     return (
         <StyledPanel>
             <DefinitionList labelWidth={35}>
@@ -180,6 +189,7 @@ export const VisBarn = ({ barn }: Props) => {
                     , {barn.bostedsadresse.kommunenummer}
                 </dd>
             </DefinitionList>
+            <SletteKnapp onClick={onSlett} />
         </StyledPanel>
     );
 };

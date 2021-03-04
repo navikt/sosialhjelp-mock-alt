@@ -14,6 +14,7 @@ import {
 } from '../../../styling/Styles';
 import styled from 'styled-components/macro';
 import { getIsoDateString } from '../../../utils/dateUtils';
+import SletteKnapp from '../../../components/SletteKnapp';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -176,9 +177,10 @@ export const NyttArbeidsforhold = ({ isOpen, callback }: Params) => {
 
 interface ViseParams {
     arbeidsforhold: ArbeidsforholdObject;
+    onSlett: () => void;
 }
 
-export const VisArbeidsforhold = ({ arbeidsforhold }: ViseParams) => {
+export const VisArbeidsforhold = ({ arbeidsforhold, onSlett }: ViseParams) => {
     return (
         <StyledPanel>
             <DefinitionList>
@@ -209,6 +211,7 @@ export const VisArbeidsforhold = ({ arbeidsforhold }: ViseParams) => {
                     </>
                 )}
             </DefinitionList>
+            <SletteKnapp onClick={onSlett} />
         </StyledPanel>
     );
 };

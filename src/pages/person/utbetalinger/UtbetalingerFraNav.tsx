@@ -3,6 +3,7 @@ import { Collapse } from 'react-collapse';
 import { Knapp } from 'nav-frontend-knapper';
 import { DefinitionList, Knappegruppe, StyledInput, StyledPanel } from '../../../styling/Styles';
 import { getIsoDateString } from '../../../utils/dateUtils';
+import SletteKnapp from '../../../components/SletteKnapp';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -90,9 +91,10 @@ export const NyttUtbetalingerFraNav = ({ isOpen, callback }: Params) => {
 
 interface ViseParams {
     utbetalingFraNav: UtbetalingFraNavObject;
+    onSlett: () => void;
 }
 
-export const VisUtbetalingerFraNav = ({ utbetalingFraNav }: ViseParams) => {
+export const VisUtbetalingerFraNav = ({ utbetalingFraNav, onSlett }: ViseParams) => {
     return (
         <StyledPanel>
             <DefinitionList labelWidth={30}>
@@ -107,6 +109,7 @@ export const VisUtbetalingerFraNav = ({ utbetalingFraNav }: ViseParams) => {
                 <dt>Ytelseskomponenttype</dt>
                 <dd>{utbetalingFraNav.ytelseskomponenttype}</dd>
             </DefinitionList>
+            <SletteKnapp onClick={onSlett} />
         </StyledPanel>
     );
 };

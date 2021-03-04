@@ -12,6 +12,7 @@ export const Bold = styled.span`
 
 export const StyledPanel = styled(Panel)`
     margin-bottom: 1rem;
+    overflow: auto;
 `;
 
 export const StyledSelect = styled(Select)`
