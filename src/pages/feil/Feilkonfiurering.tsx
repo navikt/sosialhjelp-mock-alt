@@ -6,9 +6,8 @@ import { Flatknapp, Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import { addParams, getMockAltApiURL, getRedirectParams } from '../../utils/restUtils';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Personalia } from '../person/PersonMockData';
-import { Collapse } from 'react-collapse';
 import styled from 'styled-components/macro';
-import { Bold, Knappegruppe, theme } from '../../styling/Styles';
+import { Bold, Knappegruppe } from '../../styling/Styles';
 import AlertStripe from 'nav-frontend-alertstriper';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
