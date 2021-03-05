@@ -4,6 +4,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import { BostotteRolle, getBostotteRolleLabel } from './BostotteSak';
 import { DefinitionList, Knappegruppe, StyledInput, StyledPanel, StyledSelect } from '../../../styling/Styles';
 import { getIsoDateString } from '../../../utils/dateUtils';
+import SletteKnapp from '../../../components/SletteKnapp';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -98,9 +99,10 @@ export const NyttBostotteUtbetaling = ({ isOpen, callback }: Params) => {
 
 interface ViseParams {
     bostotteUtbetaling: BostotteUtbetalingObject;
+    onSlett: () => void;
 }
 
-export const VisBostotteUtbetaling = ({ bostotteUtbetaling }: ViseParams) => {
+export const VisBostotteUtbetaling = ({ bostotteUtbetaling, onSlett }: ViseParams) => {
     return (
         <StyledPanel>
             <DefinitionList>
@@ -113,6 +115,7 @@ export const VisBostotteUtbetaling = ({ bostotteUtbetaling }: ViseParams) => {
                 <dt>Rolle </dt>
                 <dd>{getBostotteRolleLabel(bostotteUtbetaling.rolle)}</dd>
             </DefinitionList>
+            <SletteKnapp onClick={onSlett} />
         </StyledPanel>
     );
 };

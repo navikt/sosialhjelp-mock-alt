@@ -1,4 +1,4 @@
-import AlertStripe from 'nav-frontend-alertstriper';
+import AlertStripe, { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
 import { Checkbox, Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
@@ -23,11 +23,12 @@ import {
     UtbetalingFraNavObject,
     VisUtbetalingerFraNav,
 } from './utbetalinger/UtbetalingerFraNav';
-import { Adressebeskyttelse } from '../personalia/adressebeskyttelse';
+import { Adressebeskyttelse } from './personalia/adressebeskyttelse';
 import { Sivilstand } from './familie/familie';
 import { FlexWrapper, StyledSelect } from '../../styling/Styles';
 import Adresse from './adresse/Adresse';
 import { useAdresse } from './adresse/useAdresse';
+import { useAppStatus } from './useAppStatus';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -122,10 +123,14 @@ const InntektGruppeStyle = styled(GruppeStyle)`
     }
 `;
 
+const StyledSidetittel = styled(Sidetittel)`
+    margin-bottom: 1.5rem;
+`;
+
 export const PersonMockData = () => {
     const [editMode, setEditMode] = useState<boolean>(false);
     const [lockedMode, setLockedMode] = useState<boolean>(false);
-    const [loading, setLoading] = useState<'LOADING' | 'SUCCESS' | 'ERROR'>('LOADING');
+    const { appStatus, dispatchAppStatus } = useAppStatus();
     const [fnr, setFnr] = useState<string>('');
     const [fornavn, setFornavn] = useState<string>('Ukjent');
     const [mellomnavn, setMellomnavn] = useState<string>('');
@@ -168,7 +173,9 @@ export const PersonMockData = () => {
             const promise = fetch(`${getMockAltApiURL()}/mock-alt/personalia?ident=` + queryFnr)
                 .then((response) => {
                     if (response.status === 204)
-                        throw new Error('Person med personnummer: ' + queryFnr + ' ikke funnet: ' + response.status);
+                        throw new Error(
+                            `Person med personnummer ${queryFnr}  ikke funnet. Feilkode:  ${response.status}`
+                        );
                     if (response.status > 199 && response.status < 300) {
                         return response.json();
                     }
@@ -188,7 +195,7 @@ export const PersonMockData = () => {
                     setBarn(nedlastet.barn);
                     setStatsborgerskap(nedlastet.starsborgerskap);
                     dispatchAdresse({ type: 'adressenavn', value: nedlastet.bostedsadresse.adressenavn });
-                    dispatchAdresse({ type: 'husnummer', value: nedlastet.bostedsadresse.husnummer });
+                    dispatchAdresse({ type: 'husnummer', value: nedlastet.bostedsadresse.husnummer.toString() });
                     dispatchAdresse({ type: 'postnummer', value: nedlastet.bostedsadresse.postnummer });
                     dispatchAdresse({ type: 'kommunenummer', value: nedlastet.bostedsadresse.kommunenummer });
                     setBrukTelefonnummer(nedlastet.telefonnummer !== '');
@@ -211,16 +218,22 @@ export const PersonMockData = () => {
         }
 
         Promise.all(promises)
-            .then(() => setLoading('SUCCESS'))
-            .catch(() => setLoading('ERROR'));
-    }, [queryFnr, dispatchAdresse]);
+            .then(() => dispatchAppStatus({ type: 'success' }))
+            .catch((e) => {
+                dispatchAppStatus({ type: 'fetchError', msg: e.message });
+            });
+    }, [queryFnr, dispatchAdresse, dispatchAppStatus]);
 
-    const leggTilBarnCallback = (nyttTilBarn: BarnObject) => {
+    const leggTilBarnCallback = (nyttTilBarn?: BarnObject) => {
         if (nyttTilBarn) {
             setBarn([...barn, nyttTilBarn]);
         }
         setVisNyttBarnSkjema(false);
     };
+
+    function fjernObject<T>(state: T[], setState: (newState: T[]) => void, toBeRemoved: T) {
+        setState(state.filter((item) => item !== toBeRemoved));
+    }
 
     const leggTilArbeidsforholdCallback = (nyttTilArbeidsforhold: ArbeidsforholdObject) => {
         if (nyttTilArbeidsforhold) {
@@ -261,8 +274,15 @@ export const PersonMockData = () => {
         setLeggTilUtbetalingFraNav(false);
     };
 
-    const createPersonaliaObject = (): Personalia => {
+    const createPersonaliaObject = (): Personalia | null => {
         const tlf = brukTelefonnummer ? telefonnummer : '';
+
+        const husnummerAsNumber = Number(adresseState.husnummer);
+        if (!Number.isInteger(husnummerAsNumber)) {
+            dispatchAdresse({ type: 'validHusnummer', value: false });
+            return null;
+        }
+
         return {
             fnr: fnr,
             navn: {
@@ -277,7 +297,7 @@ export const PersonMockData = () => {
             starsborgerskap: starsborgerskap,
             bostedsadresse: {
                 adressenavn: adresseState.adressenavn,
-                husnummer: adresseState.husnummer,
+                husnummer: husnummerAsNumber,
                 postnummer: adresseState.postnummer,
                 kommunenummer: adresseState.kommunenummer,
             },
@@ -291,7 +311,11 @@ export const PersonMockData = () => {
         };
     };
     const onCreateUser = (event: ClickEvent): void => {
-        const personalia: Personalia = createPersonaliaObject();
+        const personalia = createPersonaliaObject();
+        if (!personalia) {
+            event.preventDefault();
+            return;
+        }
         fetch(`${getMockAltApiURL()}/mock-alt/personalia`, {
             method: 'POST',
             headers: {
@@ -301,15 +325,27 @@ export const PersonMockData = () => {
             body: JSON.stringify(personalia),
         })
             .then((response) => {
-                console.log(response);
-                if (isLoginSession(params)) {
-                    window.location.href = `${getMockAltApiURL()}/login/cookie?subject=${fnr}${addParams(params, '&')}`;
+                if (response.ok) {
+                    dispatchAppStatus({ type: 'success' });
+
+                    if (isLoginSession(params)) {
+                        window.location.href = `${getMockAltApiURL()}/login/cookie?subject=${fnr}${addParams(
+                            params,
+                            '&'
+                        )}`;
+                    } else {
+                        history.push('/' + addParams(params));
+                    }
+                } else if (response.status === 500) {
+                    throw new Error(
+                        `Noe gikk galt ved opprettelse av person, se over om feltene har riktig format og prøv igjen.`
+                    );
                 } else {
-                    history.push('/' + addParams(params));
+                    throw new Error(`Opprettelse av person feilet. Feilkode:  ${response.status}`);
                 }
             })
             .catch((error) => {
-                console.log(error);
+                dispatchAppStatus({ type: 'postError', msg: error.toString() });
             });
         event.preventDefault();
     };
@@ -329,10 +365,15 @@ export const PersonMockData = () => {
         }
     };
 
-    if (loading === 'LOADING') {
+    if (appStatus.status === 'loading') {
         return <NavFrontendSpinner />;
-    } else if (loading === 'ERROR') {
-        return <Sidetittel>Klarte ikke fetche data :( </Sidetittel>;
+    } else if (appStatus.status === 'fetchError') {
+        return (
+            <>
+                <StyledSidetittel>Noe gikk galt..</StyledSidetittel>
+                <Undertittel>{appStatus.errorMessage}</Undertittel>
+            </>
+        );
     }
 
     return (
@@ -430,10 +471,16 @@ export const PersonMockData = () => {
             </GruppeStyle>
             <GruppeStyle>
                 <SkjemaGruppe legend={<Undertittel>Arbeidsforhold</Undertittel>}>
-                    <NyttArbeidsforhold isOpen={leggTilArbeidsforhold} callback={leggTilArbeidsforholdCallback} />
                     {arbeidsforhold.map((forhold: ArbeidsforholdObject, index: number) => {
-                        return <VisArbeidsforhold arbeidsforhold={forhold} key={'arbeid_' + index} />;
+                        return (
+                            <VisArbeidsforhold
+                                arbeidsforhold={forhold}
+                                key={'arbeid_' + index}
+                                onSlett={() => fjernObject(arbeidsforhold, setArbeidsforhold, forhold)}
+                            />
+                        );
                     })}
+                    <NyttArbeidsforhold isOpen={leggTilArbeidsforhold} callback={leggTilArbeidsforholdCallback} />
                     {!lockedMode && !leggTilArbeidsforhold && (
                         <Knapp onClick={() => setLeggTilArbeidsforhold(true)}>Legg til arbeidsforhold</Knapp>
                     )}
@@ -470,10 +517,16 @@ export const PersonMockData = () => {
                     </StyledSelect>
                     <BarnWrapper>
                         <Element tag="h3">Barn</Element>
-                        <NyttBarn isOpen={visNyttBarnSkjema} callback={leggTilBarnCallback} />
-                        {barn.map((barn: BarnObject, index: number) => {
-                            return <VisBarn barn={barn} key={'barn_' + index} />;
+                        {barn.map((obj: BarnObject, index: number) => {
+                            return (
+                                <VisBarn
+                                    barn={obj}
+                                    key={'barn_' + index}
+                                    onSlett={() => fjernObject(barn, setBarn, obj)}
+                                />
+                            );
                         })}
+                        <NyttBarn isOpen={visNyttBarnSkjema} callback={leggTilBarnCallback} />
                         {!lockedMode && !visNyttBarnSkjema && (
                             <Knapp onClick={() => setVisNyttBarnSkjema(true)}>Legg til barn</Knapp>
                         )}
@@ -483,55 +536,76 @@ export const PersonMockData = () => {
             <InntektGruppeStyle>
                 <Undertittel>Inntekt og formue</Undertittel>
                 <SkjemaGruppe legend="Skattetaten">
-                    <NyttSkatteutbetaling isOpen={leggTilSkatt} callback={leggTilSkattCallback} />
                     {skattutbetalinger.map((utbetaling: SkatteutbetalingObject, index: number) => {
-                        return <VisSkatteutbetaling skatteutbetaling={utbetaling} key={'skatt_' + index} />;
+                        return (
+                            <VisSkatteutbetaling
+                                skatteutbetaling={utbetaling}
+                                key={'skatt_' + index}
+                                onSlett={() => fjernObject(skattutbetalinger, setSkattutbetalinger, utbetaling)}
+                            />
+                        );
                     })}
+                    <NyttSkatteutbetaling isOpen={leggTilSkatt} callback={leggTilSkattCallback} />
                     {!lockedMode && !leggTilSkatt && (
                         <Knapp onClick={() => setLeggTilSkatt(true)}>Legg til utbetaling</Knapp>
                     )}
                 </SkjemaGruppe>
                 <SkjemaGruppe legend="Husbanken">
-                    <NyBostotteSak isOpen={leggTilBostotteSak} callback={leggTilBostotteSakCallback} />
                     {bostotteSaker.map((sak: BostotteSakObject, index: number) => {
-                        return <VisBostotteSak bostotteSak={sak} key={'bostotteSak_' + index} />;
+                        return (
+                            <VisBostotteSak
+                                bostotteSak={sak}
+                                key={'bostotteSak_' + index}
+                                onSlett={() => fjernObject(bostotteSaker, setBostotteSaker, sak)}
+                            />
+                        );
                     })}
+                    <NyBostotteSak isOpen={leggTilBostotteSak} callback={leggTilBostotteSakCallback} />
                     {!lockedMode && !leggTilBostotteSak && (
                         <Knapp className="leggTilBostotte" onClick={() => setLeggTilBostotteSak(true)}>
                             Legg til sak
                         </Knapp>
                     )}
-                    <NyttBostotteUtbetaling
-                        isOpen={leggTilBostotteUtbetaling}
-                        callback={leggTilBostotteUtbetalingCallback}
-                    />
                     {bostotteUtbetalinger.map((utbetaling: BostotteUtbetalingObject, index: number) => {
                         return (
                             <VisBostotteUtbetaling
                                 bostotteUtbetaling={utbetaling}
                                 key={'bostotteUtbetaling_' + index}
+                                onSlett={() => fjernObject(bostotteUtbetalinger, setBostotteUtbetalinger, utbetaling)}
                             />
                         );
                     })}
+                    <NyttBostotteUtbetaling
+                        isOpen={leggTilBostotteUtbetaling}
+                        callback={leggTilBostotteUtbetalingCallback}
+                    />
                     {!lockedMode && !leggTilBostotteUtbetaling && (
                         <Knapp onClick={() => setLeggTilBostotteUtbetaling(true)}>Legg til utbetaling</Knapp>
                     )}
                 </SkjemaGruppe>
                 <SkjemaGruppe legend="Nav utbetalinger">
+                    {utbetalingerFraNav.map((utbetaling: UtbetalingFraNavObject, index: number) => {
+                        return (
+                            <VisUtbetalingerFraNav
+                                utbetalingFraNav={utbetaling}
+                                key={'utbetalingFraNav_' + index}
+                                onSlett={() => fjernObject(utbetalingerFraNav, setUtbetalingerFraNav, utbetaling)}
+                            />
+                        );
+                    })}
                     <NyttUtbetalingerFraNav
                         isOpen={leggTilUtbetalingFraNav}
                         callback={leggTilUtbetalingFraNavCallback}
                     />
-                    {utbetalingerFraNav.map((utbetaling: UtbetalingFraNavObject, index: number) => {
-                        return (
-                            <VisUtbetalingerFraNav utbetalingFraNav={utbetaling} key={'utbetalingFraNav_' + index} />
-                        );
-                    })}
                     {!lockedMode && !leggTilUtbetalingFraNav && (
                         <Knapp onClick={() => setLeggTilUtbetalingFraNav(true)}>Legg til utbetaling</Knapp>
                     )}
                 </SkjemaGruppe>
             </InntektGruppeStyle>
+            {
+                /*midlertidig løsning, bør ha validering på felter som kan feile*/
+                appStatus.status === 'postError' && <AlertStripeFeil>{appStatus.errorMessage}</AlertStripeFeil>
+            }
             <Knappegruppe>
                 {!lockedMode && (
                     <Hovedknapp

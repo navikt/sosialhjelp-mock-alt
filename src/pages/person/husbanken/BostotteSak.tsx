@@ -10,6 +10,7 @@ import {
     StyledSelect,
 } from '../../../styling/Styles';
 import { getVedtakstype, VedtakKodeType, Vedtakskode } from './vedtak';
+import SletteKnapp from '../../../components/SletteKnapp';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -45,8 +46,8 @@ export const getBostotteRolleLabel = (key: BostotteRolle) => {
 };
 
 export interface BostotteSakObject {
-    mnd: string;
-    ar: string;
+    mnd: number;
+    ar: number;
     status: BostotteStatus;
     rolle: BostotteRolle;
     vedtak: VedtakObject | null;
@@ -80,8 +81,8 @@ export const NyBostotteSak = ({ isOpen, callback }: Params) => {
             const type = getVedtakstype(vedtaksKode);
             const vedtaket: VedtakObject = { kode, beskrivelse, type };
             const nyttBostotteSakObject: BostotteSakObject = {
-                ar: ar.toString(),
-                mnd: mnd.toString(),
+                ar: ar,
+                mnd: mnd,
                 status: status,
                 rolle: rolle,
                 vedtak: vedtaket,
@@ -89,8 +90,8 @@ export const NyBostotteSak = ({ isOpen, callback }: Params) => {
             callback(nyttBostotteSakObject);
         } else {
             const nyttBostotteSakObject: BostotteSakObject = {
-                ar: ar.toString(),
-                mnd: mnd.toString(),
+                ar: ar,
+                mnd: mnd,
                 status: status,
                 rolle: rolle,
                 vedtak: null,
@@ -155,9 +156,10 @@ export const NyBostotteSak = ({ isOpen, callback }: Params) => {
 
 interface ViseParams {
     bostotteSak: BostotteSakObject;
+    onSlett: () => void;
 }
 
-export const VisBostotteSak = ({ bostotteSak }: ViseParams) => {
+export const VisBostotteSak = ({ bostotteSak, onSlett }: ViseParams) => {
     return (
         <StyledPanel>
             <DefinitionList>
@@ -176,6 +178,7 @@ export const VisBostotteSak = ({ bostotteSak }: ViseParams) => {
                 <dt>Rolle</dt>
                 <dd>{getBostotteRolleLabel(bostotteSak.rolle)}</dd>
             </DefinitionList>
+            <SletteKnapp onClick={onSlett} />
         </StyledPanel>
     );
 };

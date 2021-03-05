@@ -4,6 +4,7 @@ import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import { flexWrap } from '../../../styling/Styles';
 import { Undertittel } from 'nav-frontend-typografi';
 import { AdresseAction, AdresseState } from './useAdresse';
+import { useEffect, useRef } from 'react';
 
 export const AdresseSkjemaGruppe = styled(SkjemaGruppe)`
     ${flexWrap};
@@ -13,13 +14,14 @@ export const AdresseSkjemaGruppe = styled(SkjemaGruppe)`
     }
 
     .gateAdresse {
-        flex: 1 1 29rem;
+        flex: 1 1 100%;
         input {
             width: 100%;
         }
     }
-    .kommunenr {
-        max-width: 5rem;
+
+    .skjemaelement__feilmelding {
+        width: 6rem;
     }
 `;
 
@@ -32,6 +34,20 @@ interface Props {
 const Adresse = (props: Props) => {
     const { lockedMode, state, dispatch } = props;
 
+    const inputRef = useRef<HTMLInputElement | null>(null);
+
+    useEffect(() => {
+        if (!state.validHusnummer) {
+            inputRef?.current?.focus();
+        }
+    }, [state.validHusnummer]);
+
+    const onHusnummerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!state.validHusnummer) {
+            dispatch({ type: 'validHusnummer', value: true });
+        }
+        dispatch({ type: 'husnummer', value: e.target.value });
+    };
     return (
         <AdresseSkjemaGruppe legend={<Undertittel>Bostedsadresse</Undertittel>}>
             <Input
@@ -45,7 +61,11 @@ const Adresse = (props: Props) => {
                 label="Husnummer"
                 disabled={!!lockedMode}
                 value={state.husnummer}
-                onChange={(e) => dispatch({ type: 'husnummer', value: parseInt(e.target.value) })}
+                inputRef={(ref) => {
+                    inputRef.current = ref;
+                }}
+                feil={state.validHusnummer ? null : 'Husnummer må være et heltall'}
+                onChange={onHusnummerChange}
             />
             <Input
                 label="Postnummer"

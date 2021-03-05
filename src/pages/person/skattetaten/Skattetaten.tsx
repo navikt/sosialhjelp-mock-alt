@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
 import { Knapp } from 'nav-frontend-knapper';
 import { DefinitionList, Knappegruppe, StyledInput, StyledPanel, StyledSelect } from '../../../styling/Styles';
+import SletteKnapp from '../../../components/SletteKnapp';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -132,9 +133,10 @@ export const NyttSkatteutbetaling = ({ isOpen, callback }: Params) => {
 
 interface ViseParams {
     skatteutbetaling: SkatteutbetalingObject;
+    onSlett: () => void;
 }
 
-export const VisSkatteutbetaling = ({ skatteutbetaling }: ViseParams) => {
+export const VisSkatteutbetaling = ({ skatteutbetaling, onSlett }: ViseParams) => {
     return (
         <StyledPanel>
             <DefinitionList>
@@ -149,6 +151,7 @@ export const VisSkatteutbetaling = ({ skatteutbetaling }: ViseParams) => {
                 <dt>Type</dt>
                 <dd>{getSkatteutbetalingLabel(skatteutbetaling.type)}</dd>
             </DefinitionList>
+            <SletteKnapp onClick={onSlett} />
         </StyledPanel>
     );
 };
