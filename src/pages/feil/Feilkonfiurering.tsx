@@ -6,9 +6,8 @@ import { Flatknapp, Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import { addParams, getMockAltApiURL, getRedirectParams } from '../../utils/restUtils';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Personalia } from '../person/PersonMockData';
-import { Collapse } from 'react-collapse';
 import styled from 'styled-components/macro';
-import { Bold, theme } from '../../styling/Styles';
+import { Bold, Knappegruppe } from '../../styling/Styles';
 import AlertStripe from 'nav-frontend-alertstriper';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
@@ -47,23 +46,15 @@ const Wrapper = styled(Panel)`
 
 const ConfigPanel = styled(Panel)`
     margin-bottom: 1rem;
+
+    .leggTilKnapp {
+        margin-top: 1.5rem;
+    }
 `;
 
-const Knappegruppe = styled.div`
-    margin-bottom: 2rem;
-    display: flex;
-    flex-wrap: wrap;
+const FeilKnappegruppe = styled(Knappegruppe)`
+    margin: 1rem 0 2rem;
     align-items: flex-end;
-    button,
-    a {
-        margin-right: 1rem;
-        white-space: normal;
-
-        @media ${theme.mobileMaxWidth} {
-            padding-left: 1rem;
-            padding-right: 1rem;
-        }
-    }
 `;
 
 export const Feilkonfiurering = () => {
@@ -209,21 +200,7 @@ export const Feilkonfiurering = () => {
                 <AlertStripe type="info">Du kan ikke konfigurere feil på standardbrukere.</AlertStripe>
             ) : (
                 <>
-                    <Collapse isOpened={!leggTilFeil}>
-                        <Knappegruppe>
-                            <Knapp onClick={() => setLeggTilFeil(true)}>+ Legg til feil</Knapp>
-                            {feilsituasjoner.length > 0 && (
-                                <Flatknapp
-                                    onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
-                                        resetFeil(event)
-                                    }
-                                >
-                                    Tøm liste
-                                </Flatknapp>
-                            )}
-                        </Knappegruppe>
-                    </Collapse>
-                    <Collapse isOpened={leggTilFeil}>
+                    {leggTilFeil ? (
                         <ConfigPanel border={true}>
                             <SkjemaGruppe legend="Feilsituasjon" className="feilsituasjon">
                                 <Input
@@ -303,14 +280,27 @@ export const Feilkonfiurering = () => {
                                 onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
                                     onLeggTilFeilkonfigurering(event)
                                 }
+                                className="leggTilKnapp"
                             >
                                 Legg til
                             </Knapp>
                         </ConfigPanel>
-                    </Collapse>
+                    ) : (
+                        <FeilKnappegruppe>
+                            <Knapp onClick={() => setLeggTilFeil(true)}>+ Legg til feil</Knapp>
+                            {feilsituasjoner.length > 0 && (
+                                <Flatknapp
+                                    onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+                                        resetFeil(event)
+                                    }
+                                >
+                                    Tøm liste
+                                </Flatknapp>
+                            )}
+                        </FeilKnappegruppe>
+                    )}
                 </>
             )}
-
             <Knappegruppe>
                 {!lockedMode && (
                     <Hovedknapp
