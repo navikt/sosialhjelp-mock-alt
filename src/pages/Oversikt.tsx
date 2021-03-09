@@ -102,7 +102,7 @@ export const Oversikt = () => {
                                                 {bruker.locked ? 'Detaljer' : 'Rediger'}
                                             </StyledLink>
                                             <StyledLink to={'/feil?brukerID=' + bruker.fnr + addParams(params, '&')}>
-                                                Feilsitasjoner
+                                                Feilsituasjoner
                                             </StyledLink>
                                             {mockAltDefaultFnr === bruker.fnr && <Bold>{checkmark} Default</Bold>}
                                         </MerInfo>
@@ -117,6 +117,7 @@ export const Oversikt = () => {
             )}
             <LinkWithButtonStyle to={'/person' + addParams(params)}>Opprett bruker</LinkWithButtonStyle>
             <LinkWithButtonStyle to={'/login' + addParams(params)}>Logg inn</LinkWithButtonStyle>
+            <LinkWithButtonStyle to={'/soknader' + addParams(params)}>Søknader</LinkWithButtonStyle>
             <StyledEksternLink href={getFagsystemmockURL()}>Fagsystemmock</StyledEksternLink>
         </StyledPanel>
     );

@@ -1,10 +1,11 @@
 import React from 'react';
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
-import {PersonMockData} from './pages/person/PersonMockData';
-import {Login} from './pages/login/Login';
-import {Oversikt} from "./pages/Oversikt";
-import {Feilkonfiurering} from "./pages/feil/Feilkonfiurering";
+import { PersonMockData } from './pages/person/PersonMockData';
+import { Login } from './pages/login/Login';
+import { Oversikt } from './pages/Oversikt';
+import { Feilkonfigurering } from './pages/feil/Feilkonfigurering';
+import { Soknader } from './pages/soknader/Soknader';
 
 function App() {
     return (
@@ -13,16 +14,19 @@ function App() {
                 <Router basename="sosialhjelp/mock-alt">
                     <Switch>
                         <Route path="/login">
-                            <Login/>
+                            <Login />
                         </Route>
                         <Route path="/person">
-                            <PersonMockData/>
+                            <PersonMockData />
                         </Route>
                         <Route path="/feil">
-                            <Feilkonfiurering/>
+                            <Feilkonfigurering />
+                        </Route>
+                        <Route path="/soknader">
+                            <Soknader />
                         </Route>
                         <Route path="/">
-                            <Oversikt/>
+                            <Oversikt />
                         </Route>
                     </Switch>
                 </Router>
