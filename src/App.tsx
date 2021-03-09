@@ -4,7 +4,7 @@ import './App.css';
 import { PersonMockData } from './pages/person/PersonMockData';
 import { Login } from './pages/login/Login';
 import { Oversikt } from './pages/Oversikt';
-import { Feilkonfiurering } from './pages/feil/Feilkonfiurering';
+import { Feilkonfigurering } from './pages/feil/Feilkonfigurering';
 import { Soknader } from './pages/soknader/Soknader';
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
                             <PersonMockData />
                         </Route>
                         <Route path="/feil">
-                            <Feilkonfiurering />
+                            <Feilkonfigurering />
                         </Route>
                         <Route path="/soknader">
                             <Soknader />

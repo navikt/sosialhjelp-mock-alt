@@ -14,10 +14,10 @@ type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseE
 
 interface FeilsituasjonerFrontend {
     fnr: string;
-    feilsituasjoner: Feilkonfiurerasjon[];
+    feilsituasjoner: Feilkonfigurerasjon[];
 }
 
-interface Feilkonfiurerasjon {
+interface Feilkonfigurerasjon {
     fnr: string;
     timeout: number;
     timeoutSansynlighet: number;
@@ -57,7 +57,7 @@ const FeilKnappegruppe = styled(Knappegruppe)`
     align-items: flex-end;
 `;
 
-export const Feilkonfiurering = () => {
+export const Feilkonfigurering = () => {
     const [leggTilFeil, setLeggTilFeil] = useState<boolean>(false);
     const [editMode, setEditMode] = useState<boolean>(false);
     const [lockedMode, setLockedMode] = useState<boolean>(false);
@@ -71,7 +71,7 @@ export const Feilkonfiurering = () => {
     const [navn, setNavn] = useState<string>('');
 
     const [fnr, setFnr] = useState<string>('');
-    const [feilsituasjoner, setFeilsituasjoner] = useState<Feilkonfiurerasjon[]>([]);
+    const [feilsituasjoner, setFeilsituasjoner] = useState<Feilkonfigurerasjon[]>([]);
 
     const queryFnr = useQuery().get('brukerID');
     const params = getRedirectParams();
@@ -111,7 +111,7 @@ export const Feilkonfiurering = () => {
     }, [fnr]);
 
     const onLeggTilFeilkonfigurering = (event: ClickEvent): void => {
-        const feilkonfiurerasjon: Feilkonfiurerasjon = {
+        const feilkonfigurerasjon: Feilkonfigurerasjon = {
             fnr: fnr,
             timeout: timeout,
             timeoutSansynlighet: timeoutSansynlighet,
@@ -122,7 +122,7 @@ export const Feilkonfiurering = () => {
             functionName: funksjon,
         };
         const nyeFeilsituasjoner = feilsituasjoner;
-        nyeFeilsituasjoner.push(feilkonfiurerasjon);
+        nyeFeilsituasjoner.push(feilkonfigurerasjon);
         setFeilsituasjoner(nyeFeilsituasjoner);
         setLeggTilFeil(false);
         event.preventDefault();
@@ -175,7 +175,7 @@ export const Feilkonfiurering = () => {
                     <Bold>Navn:</Bold> {navn}
                 </p>
             )}
-            {feilsituasjoner.map((feil: Feilkonfiurerasjon, index: number) => {
+            {feilsituasjoner.map((feil: Feilkonfigurerasjon, index: number) => {
                 return (
                     <ConfigPanel border={true} key={'feil_' + index}>
                         <div>Klasse: {feil.className}</div>
