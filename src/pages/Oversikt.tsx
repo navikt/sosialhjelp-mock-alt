@@ -15,15 +15,20 @@ const StyledEksternLink = styled.a.attrs({ className: 'lenke' })`
     margin-top: 1rem;
     display: block;
 `;
+const SoknaderLink = styled(Link).attrs({ className: 'lenke' })`
+    display: block;
+    margin-top: 2rem;
+`;
 
 const LinkWithButtonStyle = styled(Link).attrs({ className: 'knapp knapp--standard' })`
-    margin: 1rem 0.5rem 0 0;
+    margin: 0 0.5rem 0 0;
 `;
 
 const StyledPanel = styled(Panel)`
     h1 {
         margin-bottom: 1rem;
     }
+    margin-bottom: 3rem;
 `;
 
 const TabellWrapper = styled.div`
@@ -117,7 +122,7 @@ export const Oversikt = () => {
             )}
             <LinkWithButtonStyle to={'/person' + addParams(params)}>Opprett bruker</LinkWithButtonStyle>
             <LinkWithButtonStyle to={'/login' + addParams(params)}>Logg inn</LinkWithButtonStyle>
-            <LinkWithButtonStyle to={'/soknader' + addParams(params)}>Søknader</LinkWithButtonStyle>
+            <SoknaderLink to={'/soknader' + addParams(params)}>Søknader</SoknaderLink>
             <StyledEksternLink href={getFagsystemmockURL()}>Fagsystemmock</StyledEksternLink>
         </StyledPanel>
     );
