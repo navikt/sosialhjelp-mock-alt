@@ -15,11 +15,16 @@ import { Personalia } from '../person/PersonMockData';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { Knappegruppe, StyledSelect } from '../../styling/Styles';
+import AlertStripe from 'nav-frontend-alertstriper';
 
 const StyledPanel = styled(Panel)`
     h1 {
         margin-bottom: 1rem;
     }
+`;
+
+const StyledAlertStripe = styled(AlertStripe)`
+    margin-bottom: 1rem;
 `;
 
 export const Login = () => {
@@ -51,6 +56,10 @@ export const Login = () => {
     return (
         <StyledPanel>
             <Sidetittel>Mock login</Sidetittel>
+            <StyledAlertStripe type="advarsel">
+                Alt som gjøres i mock-miljø er tilgjengelig for andre under pålogging. Ikke legg inn noe sensitiv
+                informasjon!
+            </StyledAlertStripe>
             <StyledSelect onChange={(event) => setFnr(event.target.value)} label="Velg bruker" value={fnr}>
                 {personliste.map((bruker) => {
                     return (
