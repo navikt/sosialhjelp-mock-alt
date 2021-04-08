@@ -1,7 +1,7 @@
 import Panel from 'nav-frontend-paneler';
 import { Normaltekst, Sidetittel } from 'nav-frontend-typografi';
 import React, { useEffect, useState } from 'react';
-import { addParams, getMockAltApiURL, getRedirectParams } from '../../utils/restUtils';
+import { addParams, getFagsystemmockURL, getMockAltApiURL, getRedirectParams } from '../../utils/restUtils';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { Knapp } from 'nav-frontend-knapper';
@@ -139,6 +139,11 @@ export const Soknader = () => {
                                                 href={getMockAltApiURL() + '/mock-alt/soknad/' + soknad.fiksDigisosId}
                                             >
                                                 Last ned som zip
+                                            </StyledEksternLink>
+                                            <StyledEksternLink
+                                                href={getFagsystemmockURL() + '/?fiksDigisosId=' + soknad.fiksDigisosId}
+                                            >
+                                                Åpne i Woldena
                                             </StyledEksternLink>
                                         </MerInfo>
                                     </tr>
