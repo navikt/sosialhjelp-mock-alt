@@ -42,6 +42,7 @@ export interface Personalia {
     starsborgerskap: string;
     bostedsadresse: Bostedsadresse;
     telefonnummer: string;
+    kontonummer: string;
     arbeidsforhold: ArbeidsforholdObject[];
     bostotteSaker: BostotteSakObject[];
     bostotteUtbetalinger: BostotteUtbetalingObject[];
@@ -143,6 +144,9 @@ export const PersonMockData = () => {
     const [brukTelefonnummer, setBrukTelefonnummer] = useState<boolean>(false);
     const [telefonnummer, setTelefonnummer] = useState<string>('99999999');
 
+    const [brukKontonummer, setBrukKontonummer] = useState<boolean>(false);
+    const [kontonummer, setKontonummer] = useState<string>('11112233333');
+
     const [visNyttBarnSkjema, setVisNyttBarnSkjema] = useState<boolean>(false);
     const [barn, setBarn] = useState<BarnObject[]>([]);
 
@@ -200,6 +204,8 @@ export const PersonMockData = () => {
                     dispatchAdresse({ type: 'kommunenummer', value: nedlastet.bostedsadresse.kommunenummer });
                     setBrukTelefonnummer(nedlastet.telefonnummer !== '');
                     setTelefonnummer(nedlastet.telefonnummer);
+                    setBrukKontonummer(nedlastet.kontonummer !== '');
+                    setKontonummer(nedlastet.kontonummer);
                     setArbeidsforhold(nedlastet.arbeidsforhold);
                     setSkattutbetalinger(nedlastet.skattetatenUtbetalinger);
                     setBostotteSaker(nedlastet.bostotteSaker);
@@ -276,6 +282,7 @@ export const PersonMockData = () => {
 
     const createPersonaliaObject = (): Personalia | null => {
         const tlf = brukTelefonnummer ? telefonnummer : '';
+        const kontonr = brukKontonummer ? kontonummer : '';
 
         const husnummerAsNumber = Number(adresseState.husnummer);
         if (!Number.isInteger(husnummerAsNumber)) {
@@ -302,6 +309,7 @@ export const PersonMockData = () => {
                 kommunenummer: adresseState.kommunenummer,
             },
             telefonnummer: tlf,
+            kontonummer: kontonr,
             arbeidsforhold: arbeidsforhold,
             bostotteSaker: bostotteSaker,
             bostotteUtbetalinger: bostotteUtbetalinger,
@@ -461,6 +469,24 @@ export const PersonMockData = () => {
                                 disabled={lockedMode || !brukTelefonnummer}
                                 value={telefonnummer}
                                 onChange={(evt: any) => setTelefonnummer(evt.target.value)}
+                            />
+                        </Collapse>
+                    </SkjemaGruppe>
+                    <SkjemaGruppe legend="Kontonummer">
+                        {!lockedMode && (
+                            <Checkbox
+                                label="Sett kontonummer"
+                                disabled={lockedMode}
+                                onChange={(evt: any) => setBrukKontonummer(evt.target.checked)}
+                                defaultChecked={brukKontonummer}
+                            />
+                        )}
+                        <Collapse isOpened={brukKontonummer}>
+                            <Input
+                                label="Kontonummer"
+                                disabled={lockedMode || !brukKontonummer}
+                                value={kontonummer}
+                                onChange={(evt: any) => setKontonummer(evt.target.value)}
                             />
                         </Collapse>
                     </SkjemaGruppe>
