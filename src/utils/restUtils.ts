@@ -3,7 +3,7 @@ const erDevGcp = () => {
 };
 
 const erLocalhost = () => {
-    return window.location.origin.indexOf('localhost:') > -1;
+    return window.location.origin.indexOf('localhost:') > -1 || window.location.origin.indexOf('127.0.0.1:');
 };
 
 export const getMockAltApiURL = () => {
