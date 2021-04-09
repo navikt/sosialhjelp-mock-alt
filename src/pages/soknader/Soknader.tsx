@@ -143,7 +143,7 @@ export const Soknader = () => {
                                             <StyledEksternLink
                                                 href={getFagsystemmockURL() + '/?fiksDigisosId=' + soknad.fiksDigisosId}
                                             >
-                                                Åpne i Woldena
+                                                Åpne i "fagsystem"
                                             </StyledEksternLink>
                                         </MerInfo>
                                     </tr>
