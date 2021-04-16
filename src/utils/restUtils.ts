@@ -1,5 +1,8 @@
 const erDevGcp = () => {
-    return window.location.origin === 'https://digisos-gcp.dev.nav.no';
+    return (
+        window.location.origin === 'https://digisos-gcp.dev.nav.no' ||
+        window.location.origin.indexOf('https://sosialhjelp-mock-alt-gcp.dev.nav.no') > -1
+    );
 };
 
 const erLocalhost = () => {
