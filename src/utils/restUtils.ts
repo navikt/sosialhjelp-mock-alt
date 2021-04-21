@@ -39,15 +39,15 @@ export const getInnsynURL = () => {
     }
 };
 
-export const getModiaURL = () => {
-    if (erLocalhost()) {
-        return 'http://localhost:3003/sosialhjelp/modia';
-    } else if (erDevGcp()) {
-        return 'https://digisos-gcp.dev.nav.no/sosialhjelp/modia';
-    } else {
-        return 'https://digisos.labs.nais.io/sosialhjelp/modia';
-    }
-};
+// export const getModiaURL = () => {
+//     if (erLocalhost()) {
+//         return 'http://localhost:3003/sosialhjelp/modia';
+//     } else if (erDevGcp()) {
+//         return 'https://digisos-gcp.dev.nav.no/sosialhjelp/modia';
+//     } else {
+//         return 'https://digisos.labs.nais.io/sosialhjelp/modia';
+//     }
+// };
 
 export const getFagsystemmockURL = () => {
     if (erLocalhost()) {
