@@ -6,7 +6,6 @@ import {
     addParams,
     getInnsynURL,
     getMockAltApiURL,
-    getModiaURL,
     getRedirectParams,
     getSoknadURL,
     isLoginSession,
@@ -57,8 +56,8 @@ export const Login = () => {
         <StyledPanel>
             <Sidetittel>Mock login</Sidetittel>
             <StyledAlertStripe type="advarsel">
-                Alt som gjøres i mock-miljø er tilgjengelig for andre under pålogging. Ikke legg inn noe sensitiv
-                informasjon!
+                DETTE ER KUN FOR TESTING! Alt som gjøres i mock-miljø er tilgjengelig for alle. Ikke legg inn noe
+                sensitiv informasjon!
             </StyledAlertStripe>
             <StyledSelect onChange={(event) => setFnr(event.target.value)} label="Velg bruker" value={fnr}>
                 {personliste.map((bruker) => {
@@ -81,9 +80,6 @@ export const Login = () => {
                     <option key="innsyn" value={getInnsynURL()}>
                         Innsyn
                     </option>
-                    <option key="modia" value={getModiaURL()}>
-                        Modia
-                    </option>
                     <option key="ingen" value={window.location.origin + '/sosialhjelp/mock-alt/'}>
                         Gå tilbake til oversikten
                     </option>
@@ -92,7 +88,7 @@ export const Login = () => {
             <Knappegruppe>
                 <Hovedknapp onClick={() => handleOnClick()}>Login</Hovedknapp>
                 <Link className="knapp" to={'/person' + addParams(params)} type="knapp">
-                    Lag ny bruker
+                    Opprett bruker
                 </Link>
                 <Link className="knapp" to={'/' + addParams(params)}>
                     Gå til oversikten
