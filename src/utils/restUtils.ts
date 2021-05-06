@@ -62,7 +62,10 @@ export const getFagsystemmockURL = () => {
 export const getRedirectParams = (): string => {
     const query = new URLSearchParams(window.location.search);
     const cookiename = query.get('cookiename');
-    const redirect = query.get('redirect');
+    let redirect = query.get('redirect');
+    if (!redirect) {
+        redirect = query.get('redirect_uri');
+    }
     const expiry = query.get('expiry');
     return cookiename
         ? '&cookiename=' + cookiename
