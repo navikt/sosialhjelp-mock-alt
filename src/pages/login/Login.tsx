@@ -49,7 +49,7 @@ export const Login = () => {
         if (!isLoginSession(params)) {
             queryString = '&redirect=' + redirect;
         }
-        window.location.href = `${getMockAltApiURL()}/login/cookie?subject=${fnr}${queryString}`;
+        window.location.href = `${getMockAltApiURL()}/login/cookie?subject=${fnr}&issuerId=selvbetjening&audience=someaudience${queryString}`;
     };
 
     return (

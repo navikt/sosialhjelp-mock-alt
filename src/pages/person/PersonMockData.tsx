@@ -337,7 +337,7 @@ export const PersonMockData = () => {
                     dispatchAppStatus({ type: 'success' });
 
                     if (isLoginSession(params)) {
-                        window.location.href = `${getMockAltApiURL()}/login/cookie?subject=${fnr}${addParams(
+                        window.location.href = `${getMockAltApiURL()}/login/cookie?subject=${fnr}&issuerId=selvbetjening&audience=someaudience${addParams(
                             params,
                             '&'
                         )}`;
