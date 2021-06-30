@@ -76,6 +76,7 @@ export const NyttBarn = ({ isOpen, callback }: Params<BarnObject>) => {
             bostedsadresse: {
                 adressenavn: adresseState.adressenavn,
                 husnummer: husnummerAsNumber,
+                husbokstav: adresseState.husbokstav,
                 kommunenummer: adresseState.kommunenummer,
                 postnummer: adresseState.postnummer,
             },
@@ -185,8 +186,8 @@ export const VisBarn = ({ barn, onSlett }: Props) => {
                 <dd>{Folkeregisterpersonstatus[barn.folkeregisterpersonstatus]}</dd>
                 <dt>Adresse</dt>
                 <dd>
-                    {barn.bostedsadresse.adressenavn}, {barn.bostedsadresse.husnummer}, {barn.bostedsadresse.postnummer}
-                    , {barn.bostedsadresse.kommunenummer}
+                    {barn.bostedsadresse.adressenavn}, {barn.bostedsadresse.husnummer}, {barn.bostedsadresse.husbokstav}
+                    , {barn.bostedsadresse.postnummer}, {barn.bostedsadresse.kommunenummer}
                 </dd>
             </DefinitionList>
             <SletteKnapp onClick={onSlett} />

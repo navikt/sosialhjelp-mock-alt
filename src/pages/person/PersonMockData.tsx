@@ -60,6 +60,7 @@ export interface PersonaliaNavn {
 export interface Bostedsadresse {
     adressenavn: string;
     husnummer: number;
+    husbokstav: string;
     postnummer: string;
     kommunenummer: string;
 }
@@ -200,6 +201,7 @@ export const PersonMockData = () => {
                     setStatsborgerskap(nedlastet.starsborgerskap);
                     dispatchAdresse({ type: 'adressenavn', value: nedlastet.bostedsadresse.adressenavn });
                     dispatchAdresse({ type: 'husnummer', value: nedlastet.bostedsadresse.husnummer.toString() });
+                    dispatchAdresse({ type: 'husbokstav', value: nedlastet.bostedsadresse.husbokstav });
                     dispatchAdresse({ type: 'postnummer', value: nedlastet.bostedsadresse.postnummer });
                     dispatchAdresse({ type: 'kommunenummer', value: nedlastet.bostedsadresse.kommunenummer });
                     setBrukTelefonnummer(nedlastet.telefonnummer !== '');
@@ -305,6 +307,7 @@ export const PersonMockData = () => {
             bostedsadresse: {
                 adressenavn: adresseState.adressenavn,
                 husnummer: husnummerAsNumber,
+                husbokstav: adresseState.husbokstav,
                 postnummer: adresseState.postnummer,
                 kommunenummer: adresseState.kommunenummer,
             },
