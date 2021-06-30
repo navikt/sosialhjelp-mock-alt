@@ -68,6 +68,12 @@ const Adresse = (props: Props) => {
                 onChange={onHusnummerChange}
             />
             <Input
+                label="Husbokstav"
+                disabled={!!lockedMode}
+                value={state.husbokstav}
+                onChange={(e) => dispatch({ type: 'husbokstav', value: e.target.value })}
+            />
+            <Input
                 label="Postnummer"
                 disabled={!!lockedMode}
                 value={state.postnummer}

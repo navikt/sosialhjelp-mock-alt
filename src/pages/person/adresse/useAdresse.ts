@@ -3,6 +3,7 @@ import { useReducer } from 'react';
 export interface AdresseState {
     adressenavn: string;
     husnummer: string;
+    husbokstav: string;
     postnummer: string;
     kommunenummer: string;
     validHusnummer: boolean;
@@ -11,6 +12,7 @@ export interface AdresseState {
 export type AdresseAction =
     | { type: 'adressenavn'; value: string }
     | { type: 'husnummer'; value: string }
+    | { type: 'husbokstav'; value: string }
     | { type: 'postnummer'; value: string }
     | { type: 'kommunenummer'; value: string }
     | { type: 'validHusnummer'; value: boolean };
@@ -22,6 +24,7 @@ function adresseReducer(state: AdresseState, action: AdresseAction) {
 const initialAdresseState: AdresseState = {
     adressenavn: 'Mulholland Drive',
     husnummer: '42',
+    husbokstav: '',
     postnummer: '0101',
     kommunenummer: '0301',
     validHusnummer: true,
