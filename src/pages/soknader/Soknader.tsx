@@ -138,7 +138,16 @@ export const Soknader = () => {
                                             <StyledEksternLink
                                                 href={getMockAltApiURL() + '/mock-alt/soknad/' + soknad.fiksDigisosId}
                                             >
-                                                Last ned som zip
+                                                Last ned soknad-zip
+                                            </StyledEksternLink>
+                                            <StyledEksternLink
+                                                href={
+                                                    getMockAltApiURL() +
+                                                    '/mock-alt/ettersendelse/' +
+                                                    soknad.fiksDigisosId
+                                                }
+                                            >
+                                                Last ned ettersendelse-zip
                                             </StyledEksternLink>
                                             <StyledEksternLink
                                                 href={getFagsystemmockURL() + '/?fiksDigisosId=' + soknad.fiksDigisosId}
