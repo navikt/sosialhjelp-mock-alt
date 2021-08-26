@@ -1,29 +1,25 @@
-import Panel from 'nav-frontend-paneler';
-import { Sidetittel, Normaltekst } from 'nav-frontend-typografi';
 import React, { useEffect, useState } from 'react';
 import { addParams, getMockAltApiURL, getRedirectParams } from '../utils/restUtils';
 import { Personalia } from './person/PersonMockData';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { Bold } from '../styling/Styles';
+import { BodyShort, Panel, Title } from '@navikt/ds-react';
 
-const StyledLink = styled(Link).attrs({ className: 'lenke' })`
+const StyledLink = styled(Link).attrs({ className: 'navds-link' })`
     margin-right: 1rem;
 `;
 
-const SoknaderLink = styled(Link).attrs({ className: 'lenke' })`
+const SoknaderLink = styled(Link).attrs({ className: 'navds-link' })`
     display: block;
     margin-top: 2rem;
 `;
 
-const LinkWithButtonStyle = styled(Link).attrs({ className: 'knapp knapp--standard' })`
+const LinkWithButtonStyle = styled(Link).attrs({ className: 'navds-button navds-button--m navds-body-short' })`
     margin: 0 0.5rem 0 0;
 `;
 
 const StyledPanel = styled(Panel)`
-    h1 {
-        margin-bottom: 1rem;
-    }
     margin-bottom: 3rem;
 `;
 
@@ -81,7 +77,9 @@ export const Oversikt = () => {
 
     return (
         <StyledPanel>
-            <Sidetittel>Testbrukere - oversikt</Sidetittel>
+            <Title level={1} size="2xl" spacing>
+                Testbrukere - oversikt
+            </Title>
             {personliste?.length > 0 ? (
                 <TabellWrapper>
                     <Tabell>
@@ -114,7 +112,7 @@ export const Oversikt = () => {
                     </Tabell>
                 </TabellWrapper>
             ) : (
-                <Normaltekst>Fant ingen eksisterende testbrukere</Normaltekst>
+                <BodyShort>Fant ingen eksisterende testbrukere</BodyShort>
             )}
             <LinkWithButtonStyle to={'/person' + addParams(params)}>Opprett bruker</LinkWithButtonStyle>
             <LinkWithButtonStyle to={'/login' + addParams(params)}>Logg inn</LinkWithButtonStyle>

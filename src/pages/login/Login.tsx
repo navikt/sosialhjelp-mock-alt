@@ -1,6 +1,4 @@
-import { Hovedknapp } from 'nav-frontend-knapper';
-import Panel from 'nav-frontend-paneler';
-import { Sidetittel } from 'nav-frontend-typografi';
+import { Alert, Panel, Button, Title } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import {
     addParams,
@@ -14,15 +12,8 @@ import { Personalia } from '../person/PersonMockData';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { Knappegruppe, StyledSelect } from '../../styling/Styles';
-import AlertStripe from 'nav-frontend-alertstriper';
 
-const StyledPanel = styled(Panel)`
-    h1 {
-        margin-bottom: 1rem;
-    }
-`;
-
-const StyledAlertStripe = styled(AlertStripe)`
+const StyledAlertStripe = styled(Alert)`
     margin-bottom: 1rem;
 `;
 
@@ -53,9 +44,11 @@ export const Login = () => {
     };
 
     return (
-        <StyledPanel>
-            <Sidetittel>Mock login</Sidetittel>
-            <StyledAlertStripe type="advarsel">
+        <Panel>
+            <Title level={1} size="2xl" spacing>
+                Mock login
+            </Title>
+            <StyledAlertStripe variant="warning">
                 DETTE ER KUN FOR TESTING! Alt som gjøres i mock-miljø er tilgjengelig for alle. Ikke legg inn noe
                 sensitiv informasjon!
             </StyledAlertStripe>
@@ -86,14 +79,20 @@ export const Login = () => {
                 </StyledSelect>
             )}
             <Knappegruppe>
-                <Hovedknapp onClick={() => handleOnClick()}>Login</Hovedknapp>
-                <Link className="knapp" to={'/person' + addParams(params)} type="knapp">
+                <Button variant="action" onClick={() => handleOnClick()}>
+                    Login
+                </Button>
+                <Link
+                    className="navds-button navds-button--m navds-body-short"
+                    to={'/person' + addParams(params)}
+                    type="knapp"
+                >
                     Opprett bruker
                 </Link>
-                <Link className="knapp" to={'/' + addParams(params)}>
+                <Link className="navds-button navds-button--m navds-body-short" to={'/' + addParams(params)}>
                     Gå til oversikten
                 </Link>
             </Knappegruppe>
-        </StyledPanel>
+        </Panel>
     );
 };

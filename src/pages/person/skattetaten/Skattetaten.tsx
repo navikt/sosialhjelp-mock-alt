@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
-import { Knapp } from 'nav-frontend-knapper';
+import { Button, Fieldset } from '@navikt/ds-react';
 import { DefinitionList, Knappegruppe, StyledInput, StyledPanel, StyledSelect } from '../../../styling/Styles';
 import SletteKnapp from '../../../components/SletteKnapp';
 
@@ -90,41 +90,43 @@ export const NyttSkatteutbetaling = ({ isOpen, callback }: Params) => {
     return (
         <Collapse isOpened={isOpen}>
             <StyledPanel>
-                <StyledInput label="Beløp" value={belop} onChange={(evt: any) => setBelop(evt.target.value)} />
-                <StyledInput label="Trekk" value={trekk} onChange={(evt: any) => setTrekk(evt.target.value)} />
-                <StyledInput
-                    label="Orgnummer"
-                    value={orgnummer}
-                    onChange={(evt: any) => setOrgnummer(evt.target.value)}
-                />
-                <StyledSelect label="Måned" onChange={(evt: any) => setManed(evt.target.value)} value={maned}>
-                    <option value={getMonthDateString(month_1)}>{getMonthDateString(month_1)}</option>
-                    <option value={getMonthDateString(month_2)}>{getMonthDateString(month_2)}</option>
-                    <option value={getMonthDateString(month_3)}>{getMonthDateString(month_3)}</option>
-                    <option value={getMonthDateString(month_4)}>{getMonthDateString(month_4)}</option>
-                </StyledSelect>
-                <StyledSelect
-                    label="Velg arbeidsgivertype"
-                    onChange={(evt: any) => setType(evt.target.value)}
-                    value={type}
-                >
-                    {Object.values(SkatteutbetalingType).map(
-                        (value: SkatteutbetalingType): JSX.Element => {
-                            return (
-                                <option key={value} value={value}>
-                                    {getSkatteutbetalingLabel(value)}
-                                </option>
-                            );
-                        }
-                    )}
-                </StyledSelect>
+                <Fieldset legend="Legg til utbetaling (Data fra Skatteetaten)">
+                    <StyledInput label="Beløp" value={belop} onChange={(evt: any) => setBelop(evt.target.value)} />
+                    <StyledInput label="Trekk" value={trekk} onChange={(evt: any) => setTrekk(evt.target.value)} />
+                    <StyledInput
+                        label="Orgnummer"
+                        value={orgnummer}
+                        onChange={(evt: any) => setOrgnummer(evt.target.value)}
+                    />
+                    <StyledSelect label="Måned" onChange={(evt: any) => setManed(evt.target.value)} value={maned}>
+                        <option value={getMonthDateString(month_1)}>{getMonthDateString(month_1)}</option>
+                        <option value={getMonthDateString(month_2)}>{getMonthDateString(month_2)}</option>
+                        <option value={getMonthDateString(month_3)}>{getMonthDateString(month_3)}</option>
+                        <option value={getMonthDateString(month_4)}>{getMonthDateString(month_4)}</option>
+                    </StyledSelect>
+                    <StyledSelect
+                        label="Velg arbeidsgivertype"
+                        onChange={(evt: any) => setType(evt.target.value)}
+                        value={type}
+                    >
+                        {Object.values(SkatteutbetalingType).map(
+                            (value: SkatteutbetalingType): JSX.Element => {
+                                return (
+                                    <option key={value} value={value}>
+                                        {getSkatteutbetalingLabel(value)}
+                                    </option>
+                                );
+                            }
+                        )}
+                    </StyledSelect>
+                </Fieldset>
                 <Knappegruppe>
-                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
+                    <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
                         Legg til
-                    </Knapp>
-                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
+                    </Button>
+                    <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
                         Avbryt
-                    </Knapp>
+                    </Button>
                 </Knappegruppe>
             </StyledPanel>
         </Collapse>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
-import { Knapp } from 'nav-frontend-knapper';
+import { Button, Fieldset } from '@navikt/ds-react';
 import { DefinitionList, Knappegruppe, StyledInput, StyledPanel } from '../../../styling/Styles';
 import { getIsoDateString } from '../../../utils/dateUtils';
 import SletteKnapp from '../../../components/SletteKnapp';
@@ -52,37 +52,39 @@ export const NyttUtbetalingerFraNav = ({ isOpen, callback }: Params) => {
     return (
         <Collapse isOpened={isOpen}>
             <StyledPanel>
-                <StyledInput label="Beløp" value={belop} onChange={(evt: any) => setBelop(evt.target.value)} />
-                <StyledInput
-                    label="Utbetalingsdato (åååå-mm-dd)"
-                    value={dato}
-                    onChange={(evt: any) => setDato(evt.target.value)}
-                />
-                <StyledInput
-                    label="Ytelsestype"
-                    value={ytelsestype}
-                    onChange={(evt: any) => setYtelsestype(evt.target.value)}
-                />
-                <StyledInput
-                    label="Skattebeløp"
-                    value={skattebelop}
-                    onChange={(evt: any) => setSkattebelop(evt.target.value)}
-                />
-                <StyledInput
-                    label="Ytelseskomponenttype"
-                    value={ytelseskomponenttype}
-                    onChange={(evt: any) => setYtelseskomponenttype(evt.target.value)}
-                />
+                <Fieldset legend="Legg til utbetaling fra Nav">
+                    <StyledInput label="Beløp" value={belop} onChange={(evt: any) => setBelop(evt.target.value)} />
+                    <StyledInput
+                        label="Utbetalingsdato (åååå-mm-dd)"
+                        value={dato}
+                        onChange={(evt: any) => setDato(evt.target.value)}
+                    />
+                    <StyledInput
+                        label="Ytelsestype"
+                        value={ytelsestype}
+                        onChange={(evt: any) => setYtelsestype(evt.target.value)}
+                    />
+                    <StyledInput
+                        label="Skattebeløp"
+                        value={skattebelop}
+                        onChange={(evt: any) => setSkattebelop(evt.target.value)}
+                    />
+                    <StyledInput
+                        label="Ytelseskomponenttype"
+                        value={ytelseskomponenttype}
+                        onChange={(evt: any) => setYtelseskomponenttype(evt.target.value)}
+                    />
+                </Fieldset>
                 <Knappegruppe>
-                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
+                    <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
                         Legg til
-                    </Knapp>
-                    <Knapp
+                    </Button>
+                    <Button
                         onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}
                         className="leftPadding"
                     >
                         Avbryt
-                    </Knapp>
+                    </Button>
                 </Knappegruppe>
             </StyledPanel>
         </Collapse>

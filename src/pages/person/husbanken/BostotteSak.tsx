@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
-import { Knapp } from 'nav-frontend-knapper';
+import { Button, Fieldset } from '@navikt/ds-react';
 import {
     DefinitionList,
     FlexWrapper,
@@ -108,46 +108,58 @@ export const NyBostotteSak = ({ isOpen, callback }: Params) => {
     return (
         <Collapse isOpened={isOpen}>
             <StyledPanel>
-                <FlexWrapper>
-                    <StyledInput label="År" value={ar} onChange={(evt: any) => setAr(evt.target.value)} size={5} />
-                    <StyledInput label="Måned" value={mnd} onChange={(evt: any) => setMnd(evt.target.value)} size={5} />
-                </FlexWrapper>
-                <StyledSelect label="Status" onChange={(evt: any) => setStatus(evt.target.value)} value={status}>
-                    <option value={BostotteStatus.VEDTATT}>{getBostotteStatusLabel(BostotteStatus.VEDTATT)}</option>
-                    <option value={BostotteStatus.UNDER_BEHANDLING}>
-                        {getBostotteStatusLabel(BostotteStatus.UNDER_BEHANDLING)}
-                    </option>
-                </StyledSelect>
-                {status === BostotteStatus.VEDTATT && (
-                    <StyledSelect
-                        label="Vedtak"
-                        onChange={(evt: any) => setVedtaksKode(evt.target.value)}
-                        value={vedtaksKode}
-                    >
-                        {Object.entries(Vedtakskode).map(
-                            ([key, label]): JSX.Element => {
-                                return (
-                                    <option key={key} value={key}>
-                                        {label}
-                                    </option>
-                                );
-                            }
-                        )}
+                <Fieldset legend="Legg til sak fra Husbanken">
+                    <FlexWrapper>
+                        <StyledInput
+                            label="År"
+                            value={ar}
+                            onChange={(evt: any) => setAr(evt.target.value)}
+                            htmlSize={5}
+                        />
+                        <StyledInput
+                            label="Måned"
+                            value={mnd}
+                            onChange={(evt: any) => setMnd(evt.target.value)}
+                            htmlSize={5}
+                        />
+                    </FlexWrapper>
+                    <StyledSelect label="Status" onChange={(evt: any) => setStatus(evt.target.value)} value={status}>
+                        <option value={BostotteStatus.VEDTATT}>{getBostotteStatusLabel(BostotteStatus.VEDTATT)}</option>
+                        <option value={BostotteStatus.UNDER_BEHANDLING}>
+                            {getBostotteStatusLabel(BostotteStatus.UNDER_BEHANDLING)}
+                        </option>
                     </StyledSelect>
-                )}
-                <StyledSelect label="Rolle" onChange={(evt: any) => setRolle(evt.target.value)} value={rolle}>
-                    <option value={BostotteRolle.HOVEDPERSON}>
-                        {getBostotteRolleLabel(BostotteRolle.HOVEDPERSON)}
-                    </option>
-                    <option value={BostotteRolle.BIPERSON}>{getBostotteRolleLabel(BostotteRolle.BIPERSON)}</option>
-                </StyledSelect>
+                    {status === BostotteStatus.VEDTATT && (
+                        <StyledSelect
+                            label="Vedtak"
+                            onChange={(evt: any) => setVedtaksKode(evt.target.value)}
+                            value={vedtaksKode}
+                        >
+                            {Object.entries(Vedtakskode).map(
+                                ([key, label]): JSX.Element => {
+                                    return (
+                                        <option key={key} value={key}>
+                                            {label}
+                                        </option>
+                                    );
+                                }
+                            )}
+                        </StyledSelect>
+                    )}
+                    <StyledSelect label="Rolle" onChange={(evt: any) => setRolle(evt.target.value)} value={rolle}>
+                        <option value={BostotteRolle.HOVEDPERSON}>
+                            {getBostotteRolleLabel(BostotteRolle.HOVEDPERSON)}
+                        </option>
+                        <option value={BostotteRolle.BIPERSON}>{getBostotteRolleLabel(BostotteRolle.BIPERSON)}</option>
+                    </StyledSelect>
+                </Fieldset>
                 <Knappegruppe>
-                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
+                    <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
                         Legg til
-                    </Knapp>
-                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
+                    </Button>
+                    <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
                         Avbryt
-                    </Knapp>
+                    </Button>
                 </Knappegruppe>
             </StyledPanel>
         </Collapse>

@@ -3,10 +3,9 @@ import 'react-app-polyfill/stable';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './nav-frontend.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import '@navikt/ds-tokens/dist/tokens.css';
+import '@navikt/ds-css';
 
 ReactDOM.render(
     <React.StrictMode>

@@ -7,16 +7,6 @@ body {
     display: flex;
     justify-content: center;
 }
-.skjemaelement__input:disabled,
-.skjemaelement__select:disabled {
-    color: black;
-    opacity: 1;
-}
-
-.checkboks:disabled + .skjemaelement__label,
-.radioknapp:disabled + .skjemaelement__label {
-    color: black;
-}
 
 button,
 a {
@@ -25,5 +15,5 @@ a {
 
 .container {
     margin-top: 2rem;
-    max-width: 48rem;
+    max-width: 56rem;
 }

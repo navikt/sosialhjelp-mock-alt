@@ -1,14 +1,10 @@
-import Panel from 'nav-frontend-paneler';
-import { Sidetittel } from 'nav-frontend-typografi';
 import React, { useEffect, useState } from 'react';
-import { Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Flatknapp, Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import { addParams, getMockAltApiURL, getRedirectParams } from '../../utils/restUtils';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Personalia } from '../person/PersonMockData';
 import styled from 'styled-components/macro';
 import { Bold, Knappegruppe } from '../../styling/Styles';
-import AlertStripe from 'nav-frontend-alertstriper';
+import { Alert, Button, BodyShort, Fieldset, Panel, Select, TextField, Title } from '@navikt/ds-react';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -33,13 +29,13 @@ function useQuery() {
 }
 
 const Wrapper = styled(Panel)`
-    h1 {
+    .navds-alert {
         margin-bottom: 1rem;
     }
-    .alertstripe {
+    .navds-alert {
         margin-bottom: 1rem;
     }
-    .feilsituasjon {
+    .navds-fieldset {
         margin-bottom: 1rem;
     }
 `;
@@ -163,17 +159,19 @@ export const Feilkonfigurering = () => {
 
     return (
         <Wrapper>
-            <Sidetittel>Feilsituasjoner</Sidetittel>
-            <Input
+            <Title level={1} size="2xl" spacing>
+                Feilsituasjoner
+            </Title>
+            <TextField
                 value={fnr}
                 label="Ident / Fødselsnummer"
                 disabled={lockedMode || editMode}
                 onChange={(evt: any) => setFnr(evt.target.value)}
             />
             {navn?.length > 0 && (
-                <p>
+                <BodyShort spacing>
                     <Bold>Navn:</Bold> {navn}
-                </p>
+                </BodyShort>
             )}
             {feilsituasjoner.map((feil: Feilkonfigurerasjon, index: number) => {
                 return (
@@ -197,44 +195,44 @@ export const Feilkonfigurering = () => {
                 );
             })}
             {lockedMode ? (
-                <AlertStripe type="info">Du kan ikke konfigurere feil på standardbrukere.</AlertStripe>
+                <Alert variant="info">Du kan ikke konfigurere feil på standardbrukere.</Alert>
             ) : (
                 <>
                     {leggTilFeil ? (
                         <ConfigPanel border={true}>
-                            <SkjemaGruppe legend="Feilsituasjon" className="feilsituasjon">
-                                <Input
+                            <Fieldset legend="Feilsituasjon" className="feilsituasjon">
+                                <TextField
                                     value={feilkode}
                                     label="Feilkode"
                                     disabled={lockedMode}
                                     onChange={(evt: any) => setFeilkode(evt.target.value)}
                                 />
-                                <Input
+                                <TextField
                                     value={feilkodeSansynlighet}
                                     label="Sansynlighet for å få feilkode"
                                     disabled={lockedMode}
                                     onChange={(evt: any) => setFeilkodeSansynlighet(evt.target.value)}
                                 />
-                                <Input
+                                <TextField
                                     value={feilmelding}
                                     label="Feilmelding"
                                     disabled={lockedMode}
                                     onChange={(evt: any) => setFeilmelding(evt.target.value)}
                                 />
-                                <Input
+                                <TextField
                                     value={timeout}
                                     label="Timeout"
                                     disabled={lockedMode}
                                     onChange={(evt: any) => setTimeout(evt.target.value)}
                                 />
-                                <Input
+                                <TextField
                                     value={timeoutSansynlighet}
                                     label="Sansynlighet for å få timeout"
                                     disabled={lockedMode}
                                     onChange={(evt: any) => setTimeoutSansynlighet(evt.target.value)}
                                 />
-                            </SkjemaGruppe>
-                            <SkjemaGruppe legend="Gjelder for">
+                            </Fieldset>
+                            <Fieldset legend="Gjelder for">
                                 <Select
                                     label="Klasse"
                                     disabled={lockedMode}
@@ -274,8 +272,8 @@ export const Feilkonfigurering = () => {
                                         </>
                                     )}
                                 </Select>
-                            </SkjemaGruppe>
-                            <Knapp
+                            </Fieldset>
+                            <Button
                                 disabled={lockedMode}
                                 onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
                                     onLeggTilFeilkonfigurering(event)
@@ -283,19 +281,20 @@ export const Feilkonfigurering = () => {
                                 className="leggTilKnapp"
                             >
                                 Legg til
-                            </Knapp>
+                            </Button>
                         </ConfigPanel>
                     ) : (
                         <FeilKnappegruppe>
-                            <Knapp onClick={() => setLeggTilFeil(true)}>+ Legg til feil</Knapp>
+                            <Button onClick={() => setLeggTilFeil(true)}>+ Legg til feil</Button>
                             {feilsituasjoner.length > 0 && (
-                                <Flatknapp
+                                <Button
+                                    variant="secondary"
                                     onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
                                         resetFeil(event)
                                     }
                                 >
                                     Tøm liste
-                                </Flatknapp>
+                                </Button>
                             )}
                         </FeilKnappegruppe>
                     )}
@@ -303,17 +302,18 @@ export const Feilkonfigurering = () => {
             )}
             <Knappegruppe>
                 {!lockedMode && (
-                    <Hovedknapp
+                    <Button
+                        variant="action"
                         onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
                             onSetFeilkonfigurering(event)
                         }
                     >
                         Lagre
-                    </Hovedknapp>
+                    </Button>
                 )}
-                <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onGoBack(event)}>
+                <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onGoBack(event)}>
                     {lockedMode ? 'Tilbake' : 'Avbryt'}
-                </Knapp>
+                </Button>
             </Knappegruppe>
         </Wrapper>
     );

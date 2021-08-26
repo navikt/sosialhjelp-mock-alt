@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Collapse } from 'react-collapse';
-import { Input } from 'nav-frontend-skjema';
 import { getMockAltApiURL } from '../../../utils/restUtils';
-import { Knapp } from 'nav-frontend-knapper';
-import Panel from 'nav-frontend-paneler';
+import { Button, Fieldset, Panel, Select, TextField } from '@navikt/ds-react';
 import { Bostedsadresse, NameWrapper, PersonaliaNavn } from '../PersonMockData';
 import { DefinitionList, Knappegruppe, StyledPanel, StyledSelect } from '../../../styling/Styles';
 import { getIsoDateString } from '../../../utils/dateUtils';
-import styled from 'styled-components/macro';
 import { Adressebeskyttelse, AdressebeskyttelseType } from '../personalia/adressebeskyttelse';
 import Adresse from '../adresse/Adresse';
 import { useAdresse } from '../adresse/useAdresse';
@@ -29,12 +26,6 @@ interface Params<T> {
     isOpen: boolean;
     callback: (data?: T) => void;
 }
-
-const StyledInput = styled(Input)<{ size?: number }>`
-    input {
-        max-width: ${(props) => (props.size ? `${props.size}rem` : '10rem')};
-    }
-`;
 
 export const NyttBarn = ({ isOpen, callback }: Params<BarnObject>) => {
     let lengesiden = new Date();
@@ -98,65 +89,71 @@ export const NyttBarn = ({ isOpen, callback }: Params<BarnObject>) => {
 
     return (
         <Collapse isOpened={isOpen}>
-            <Panel className="blokk-s">
-                <StyledInput value={fnr} label="Ident" onChange={(evt: any) => setFnr(evt.target.value)} />
-                <NameWrapper>
-                    <Input label="Fornavn" value={fornavn} onChange={(evt: any) => setFornavn(evt.target.value)} />
-                    <Input
-                        label="Mellomnavn"
-                        value={mellomnavn}
-                        onChange={(evt: any) => setMellomnavn(evt.target.value)}
+            <Panel>
+                <Fieldset legend="Legg til barn">
+                    <TextField value={fnr} label="Ident" onChange={(evt: any) => setFnr(evt.target.value)} />
+                    <NameWrapper>
+                        <TextField
+                            label="Fornavn"
+                            value={fornavn}
+                            onChange={(evt: any) => setFornavn(evt.target.value)}
+                        />
+                        <TextField
+                            label="Mellomnavn"
+                            value={mellomnavn}
+                            onChange={(evt: any) => setMellomnavn(evt.target.value)}
+                        />
+                        <TextField
+                            label="Etternavn"
+                            value={etternavn}
+                            onChange={(evt: any) => setEtternavn(evt.target.value)}
+                            className="etternavn"
+                        />
+                    </NameWrapper>
+                    <TextField
+                        label="Fødselsdato (åååå-mm-dd)"
+                        value={foedselsdato}
+                        onChange={(evt: any) => setFoedselsdato(evt.target.value)}
                     />
-                    <Input
-                        label="Etternavn"
-                        value={etternavn}
-                        onChange={(evt: any) => setEtternavn(evt.target.value)}
-                        className="etternavn"
-                    />
-                </NameWrapper>
-                <StyledInput
-                    label="Fødselsdato (åååå-mm-dd)"
-                    value={foedselsdato}
-                    onChange={(evt: any) => setFoedselsdato(evt.target.value)}
-                />
-                <StyledSelect
-                    label="Adressebeskyttelse"
-                    onChange={(evt: any) => setAdressebeskyttelse(evt.target.value)}
-                    value={adressebeskyttelse}
-                >
-                    {Object.entries(Adressebeskyttelse).map(
-                        ([key, label]): JSX.Element => {
-                            return (
-                                <option key={key} value={key}>
-                                    {label}
-                                </option>
-                            );
-                        }
-                    )}
-                </StyledSelect>
-                <StyledSelect
-                    label="Folkeregisterpersonstatus"
-                    onChange={(evt: any) => setFolkeregisterpersonstatus(evt.target.value)}
-                    value={folkeregisterpersonstatus}
-                >
-                    {Object.entries(Folkeregisterpersonstatus).map(
-                        ([key, label]): JSX.Element => {
-                            return (
-                                <option key={key} value={key}>
-                                    {label}
-                                </option>
-                            );
-                        }
-                    )}
-                </StyledSelect>
+                    <StyledSelect
+                        label="Adressebeskyttelse"
+                        onChange={(evt: any) => setAdressebeskyttelse(evt.target.value)}
+                        value={adressebeskyttelse}
+                    >
+                        {Object.entries(Adressebeskyttelse).map(
+                            ([key, label]): JSX.Element => {
+                                return (
+                                    <option key={key} value={key}>
+                                        {label}
+                                    </option>
+                                );
+                            }
+                        )}
+                    </StyledSelect>
+                    <Select
+                        label="Folkeregisterpersonstatus"
+                        onChange={(evt: any) => setFolkeregisterpersonstatus(evt.target.value)}
+                        value={folkeregisterpersonstatus}
+                    >
+                        {Object.entries(Folkeregisterpersonstatus).map(
+                            ([key, label]): JSX.Element => {
+                                return (
+                                    <option key={key} value={key}>
+                                        {label}
+                                    </option>
+                                );
+                            }
+                        )}
+                    </Select>
+                </Fieldset>
                 <Adresse state={adresseState} dispatch={dispatchAdresse} />
                 <Knappegruppe>
-                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
+                    <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
                         Legg til
-                    </Knapp>
-                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
+                    </Button>
+                    <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
                         Avbryt
-                    </Knapp>
+                    </Button>
                 </Knappegruppe>
             </Panel>
         </Collapse>

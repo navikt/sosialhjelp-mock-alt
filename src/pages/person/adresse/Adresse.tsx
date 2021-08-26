@@ -1,27 +1,17 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
-import { flexWrap } from '../../../styling/Styles';
-import { Undertittel } from 'nav-frontend-typografi';
 import { AdresseAction, AdresseState } from './useAdresse';
 import { useEffect, useRef } from 'react';
+import { Fieldset, TextField, Title } from '@navikt/ds-react';
 
-export const AdresseSkjemaGruppe = styled(SkjemaGruppe)`
-    ${flexWrap};
+const AdresseBokser = styled.div`
+    display: flex;
+    flex-wrap: wrap;
 
-    input {
-        width: 5rem;
-    }
+    column-gap: 1rem;
 
-    .gateAdresse {
-        flex: 1 1 100%;
-        input {
-            width: 100%;
-        }
-    }
-
-    .skjemaelement__feilmelding {
-        width: 6rem;
+    .navds-form-field {
+        flex: 1;
     }
 `;
 
@@ -49,44 +39,51 @@ const Adresse = (props: Props) => {
         dispatch({ type: 'husnummer', value: e.target.value });
     };
     return (
-        <AdresseSkjemaGruppe legend={<Undertittel>Bostedsadresse</Undertittel>}>
-            <Input
+        <Fieldset
+            legend={
+                <Title level={2} size="l">
+                    Bostedsadresse
+                </Title>
+            }
+        >
+            <TextField
                 label="Gateadresse"
-                className="gateAdresse"
                 disabled={!!lockedMode}
                 value={state.adressenavn}
                 onChange={(e) => dispatch({ type: 'adressenavn', value: e.target.value })}
             />
-            <Input
-                label="Husnummer"
-                disabled={!!lockedMode}
-                value={state.husnummer}
-                inputRef={(ref) => {
-                    inputRef.current = ref;
-                }}
-                feil={state.validHusnummer ? null : 'Husnummer må være et heltall'}
-                onChange={onHusnummerChange}
-            />
-            <Input
-                label="Husbokstav"
-                disabled={!!lockedMode}
-                value={state.husbokstav}
-                onChange={(e) => dispatch({ type: 'husbokstav', value: e.target.value })}
-            />
-            <Input
-                label="Postnummer"
-                disabled={!!lockedMode}
-                value={state.postnummer}
-                onChange={(e) => dispatch({ type: 'postnummer', value: e.target.value })}
-            />
-            <Input
-                label="Kommunenummer"
-                disabled={!!lockedMode}
-                value={state.kommunenummer}
-                onChange={(e) => dispatch({ type: 'kommunenummer', value: e.target.value })}
-                className="kommunenr"
-            />
-        </AdresseSkjemaGruppe>
+            <AdresseBokser>
+                <TextField
+                    label="Husnummer"
+                    disabled={!!lockedMode}
+                    value={state.husnummer}
+                    ref={(ref) => {
+                        inputRef.current = ref;
+                    }}
+                    error={state.validHusnummer ? null : 'Husnummer må være et heltall'}
+                    onChange={onHusnummerChange}
+                />
+                <TextField
+                    label="Husbokstav"
+                    disabled={!!lockedMode}
+                    value={state.husbokstav}
+                    onChange={(e) => dispatch({ type: 'husbokstav', value: e.target.value })}
+                />
+                <TextField
+                    label="Postnummer"
+                    disabled={!!lockedMode}
+                    value={state.postnummer}
+                    onChange={(e) => dispatch({ type: 'postnummer', value: e.target.value })}
+                />
+                <TextField
+                    label="Kommunenummer"
+                    className="kommunenr"
+                    disabled={!!lockedMode}
+                    value={state.kommunenummer}
+                    onChange={(e) => dispatch({ type: 'kommunenummer', value: e.target.value })}
+                />
+            </AdresseBokser>
+        </Fieldset>
     );
 };
 export default Adresse;

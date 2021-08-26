@@ -1,17 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Collapse } from 'react-collapse';
-import { Input } from 'nav-frontend-skjema';
 import { getMockAltApiURL } from '../../../utils/restUtils';
-import { Knapp } from 'nav-frontend-knapper';
-import Panel from 'nav-frontend-paneler';
-import {
-    DefinitionList,
-    FlexWrapper,
-    Knappegruppe,
-    StyledInput,
-    StyledPanel,
-    StyledSelect,
-} from '../../../styling/Styles';
+import { Button, Fieldset, Panel, TextField } from '@navikt/ds-react';
+import { DefinitionList, Knappegruppe, StyledPanel, StyledSelect, SmallTextField } from '../../../styling/Styles';
 import styled from 'styled-components/macro';
 import { getIsoDateString } from '../../../utils/dateUtils';
 import SletteKnapp from '../../../components/SletteKnapp';
@@ -40,22 +31,17 @@ interface Params {
 }
 
 const ArbeidsforholdPanel = styled(Panel)`
-    input {
-        margin-right: 1rem;
-    }
     margin-bottom: 1rem;
 `;
 
-const OrganisasjonsWrapper = styled(FlexWrapper)`
-    margin-bottom: 1rem;
-`;
-const DatoWrapper = styled(FlexWrapper)`
-    input {
-        margin-right: 0.5rem;
-    }
+const InputWrapper = styled.div`
+    display: flex;
+    flex-wrap: wrap;
 
-    span {
-        font-weight: normal;
+    column-gap: 1rem;
+
+    .navds-form-field {
+        flex: 1;
     }
 `;
 
@@ -108,67 +94,62 @@ export const NyttArbeidsforhold = ({ isOpen, callback }: Params) => {
     return (
         <Collapse isOpened={isOpen}>
             <ArbeidsforholdPanel>
-                <StyledInput
-                    size={5}
-                    label="Id"
-                    value={arbeidsforholdId}
-                    onChange={(evt: any) => setArbeidsforholdId(evt.target.value)}
-                />
-                <DatoWrapper>
-                    <Input
-                        label="Startdato (åååå-mm-dd)"
-                        value={startdato}
-                        onChange={(evt: any) => setStartdato(evt.target.value)}
+                <Fieldset legend="Nytt arbeidsforhold">
+                    <SmallTextField
+                        label="Id"
+                        value={arbeidsforholdId}
+                        onChange={(evt: any) => setArbeidsforholdId(evt.target.value)}
                     />
-                    <Input
-                        label="Sluttdato (åååå-mm-dd)"
-                        value={sluttdato}
-                        onChange={(evt: any) => setSluttdato(evt.target.value)}
-                    />
-                </DatoWrapper>
-                <StyledInput
-                    size={5}
-                    label="Stillingsprosent (%)"
-                    value={stillingsprosent}
-                    onChange={(evt: any) => setStillingsprosent(evt.target.value)}
-                />
-                <StyledSelect
-                    label="Arbeidsgivertype"
-                    onChange={(evt: any) => setArbeidgivertype(evt.target.value)}
-                    value={arbeidgivertype}
-                >
-                    <option value={ArbeidsforholdType.ORGANISASJON}>Arbeidsgiver med orgnummer</option>
-                    <option value={ArbeidsforholdType.PERSON}>Person med ident</option>
-                </StyledSelect>
-                {arbeidgivertype === ArbeidsforholdType.PERSON && (
-                    <StyledInput
-                        label="Ident"
-                        value={ident}
-                        onChange={(evt: any) => setIdent(evt.target.value)}
-                        className="blokk-s"
-                    />
-                )}
-                {arbeidgivertype === ArbeidsforholdType.ORGANISASJON && (
-                    <OrganisasjonsWrapper>
-                        <StyledInput
-                            label="Organisasjonsnavn"
-                            value={organisasjonsNavn}
-                            onChange={(evt: any) => setOrganisasjonsNavn(evt.target.value)}
+                    <InputWrapper>
+                        <TextField
+                            label="Startdato (åååå-mm-dd)"
+                            value={startdato}
+                            onChange={(evt: any) => setStartdato(evt.target.value)}
                         />
-                        <StyledInput
-                            label="Orgnummer"
-                            value={orgnummer}
-                            onChange={(evt: any) => setOrgnummer(evt.target.value)}
+                        <TextField
+                            label="Sluttdato (åååå-mm-dd)"
+                            value={sluttdato}
+                            onChange={(evt: any) => setSluttdato(evt.target.value)}
                         />
-                    </OrganisasjonsWrapper>
-                )}
+                    </InputWrapper>
+                    <SmallTextField
+                        label="Stillingsprosent (%)"
+                        value={stillingsprosent}
+                        onChange={(evt: any) => setStillingsprosent(evt.target.value)}
+                    />
+                    <StyledSelect
+                        label="Arbeidsgivertype"
+                        onChange={(evt: any) => setArbeidgivertype(evt.target.value)}
+                        value={arbeidgivertype}
+                    >
+                        <option value={ArbeidsforholdType.ORGANISASJON}>Arbeidsgiver med orgnummer</option>
+                        <option value={ArbeidsforholdType.PERSON}>Person med ident</option>
+                    </StyledSelect>
+                    {arbeidgivertype === ArbeidsforholdType.PERSON && (
+                        <TextField label="Ident" value={ident} onChange={(evt: any) => setIdent(evt.target.value)} />
+                    )}
+                    {arbeidgivertype === ArbeidsforholdType.ORGANISASJON && (
+                        <InputWrapper>
+                            <TextField
+                                label="Organisasjonsnavn"
+                                value={organisasjonsNavn}
+                                onChange={(evt: any) => setOrganisasjonsNavn(evt.target.value)}
+                            />
+                            <TextField
+                                label="Orgnummer"
+                                value={orgnummer}
+                                onChange={(evt: any) => setOrgnummer(evt.target.value)}
+                            />
+                        </InputWrapper>
+                    )}
+                </Fieldset>
                 <Knappegruppe>
-                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
+                    <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
                         Legg til
-                    </Knapp>
-                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
+                    </Button>
+                    <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
                         Avbryt
-                    </Knapp>
+                    </Button>
                 </Knappegruppe>
             </ArbeidsforholdPanel>
         </Collapse>
