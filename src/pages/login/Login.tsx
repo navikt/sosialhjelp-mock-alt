@@ -4,6 +4,7 @@ import { Sidetittel } from 'nav-frontend-typografi';
 import React, { useEffect, useState } from 'react';
 import {
     addParams,
+    getDialogURL,
     getInnsynURL,
     getMockAltApiURL,
     getRedirectParams,
@@ -28,7 +29,7 @@ const StyledAlertStripe = styled(AlertStripe)`
 
 export const Login = () => {
     const [fnr, setFnr] = useState('');
-    const [redirect, setRedirect] = useState(getSoknadURL());
+    const [redirect, setRedirect] = useState(window.location.origin + '/sosialhjelp/mock-alt/login');
     const [personliste, setPersonListe] = useState<Personalia[]>([]);
 
     const params = getRedirectParams();
@@ -74,14 +75,17 @@ export const Login = () => {
                     label="Velg tjeneste"
                     value={redirect}
                 >
+                    <option key="ingen" value={window.location.origin + '/sosialhjelp/mock-alt/login'}>
+                        Bli her
+                    </option>
                     <option key="soknaden" value={getSoknadURL()}>
                         Søknaden
                     </option>
                     <option key="innsyn" value={getInnsynURL()}>
                         Innsyn
                     </option>
-                    <option key="ingen" value={window.location.origin + '/sosialhjelp/mock-alt/'}>
-                        Gå tilbake til oversikten
+                    <option key="dialog" value={getDialogURL()}>
+                        Dialog
                     </option>
                 </StyledSelect>
             )}

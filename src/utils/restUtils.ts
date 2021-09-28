@@ -39,6 +39,16 @@ export const getInnsynURL = () => {
     }
 };
 
+export const getDialogURL = () => {
+    if (erLocalhost()) {
+        return 'http://localhost:3005/sosialhjelp/dialog';
+    } else if (erDevGcp()) {
+        return 'https://digisos-gcp.dev.nav.no/sosialhjelp/dialog';
+    } else {
+        return 'https://sosialhjelp.dev.nav.no/sosialhjelp/dialog';
+    }
+};
+
 // export const getModiaURL = () => {
 //     if (erLocalhost()) {
 //         return 'http://localhost:3003/sosialhjelp/modia';
