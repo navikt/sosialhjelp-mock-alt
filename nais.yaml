@@ -20,11 +20,11 @@ spec:
     initialDelay: 5
   resources:
     limits:
-      cpu: 300m
-      memory: 256Mi
-    requests:
-      cpu: 40m
+      cpu: 100m
       memory: 128Mi
+    requests:
+      cpu: 1m
+      memory: 32Mi
   replicas:
     min: 1
     max: 1
