@@ -1,0 +1,12 @@
+{
+    "namespace": "teamdigisos",
+    "applicationName": "sosialhjelp-mock-alt-mock",
+    "ingresses": ["https://sosialhjelp-mock-alt-mock.dev.nav.no/sosialhjelp/mock-alt"],
+    "env": {
+        "HOST_ADDRESS": "https://digisos.ekstern.dev.nav.no/",
+        "COOKIE_DOMAIN": "digisos.ekstern.dev.nav.no"
+    },
+    "minReplicas": "1",
+    "maxReplicas": "1",
+    "isGcp": true
+}
