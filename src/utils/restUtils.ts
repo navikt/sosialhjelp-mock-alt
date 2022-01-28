@@ -53,13 +53,13 @@ export const getInnsynURL = () => {
 
 export const getDialogURL = () => {
     if (erLocalhost()) {
-        return 'http://localhost:3005/sosialhjelp/dialog';
+        return 'http://localhost:3000/sosialhjelp/meldinger';
     } else if (erDevGcpMock()) {
-        return 'https://digisos.ekstern.dev.nav.no/sosialhjelp/dialog';
+        return 'https://digisos.ekstern.dev.nav.no/sosialhjelp/meldinger';
     } else if (erDevGcp()) {
-        return 'https://digisos-gcp.dev.nav.no/sosialhjelp/dialog';
+        return 'https://digisos-gcp.dev.nav.no/sosialhjelp/meldinger';
     } else {
-        return 'https://sosialhjelp.dev.nav.no/sosialhjelp/dialog';
+        return 'https://sosialhjelp.dev.nav.no/sosialhjelp/meldinger';
     }
 };
 
