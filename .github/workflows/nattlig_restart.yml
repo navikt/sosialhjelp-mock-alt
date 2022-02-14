@@ -1,24 +1,7 @@
-name: Deploy til dev
+name: Daglig restart
 on:
-  workflow_dispatch:
-    inputs:
-      config-file-name:
-        description: 'Config-fil som skal deployes'
-        required: true
-        default: 'dev-gcp'
-        type: choice
-        options:
-          - 'dev-gcp'
-          - 'dev-gcp-mock'
-          - 'labs-gcp'
-      cluster:
-        description: 'Cluster å deploye til'
-        required: true
-        default: 'dev-gcp'
-        type: choice
-        options:
-          - 'dev-gcp'
-          - 'labs-gcp'
+  schedule:
+    - cron: '0 1 * * *'
 
 jobs:
   deploy:
@@ -36,13 +19,33 @@ jobs:
           echo "DOCKER_TAG=${{ env.DOCKER_IMAGE }}:${{ steps.artifact-version.outputs.version }}" >> $GITHUB_ENV
           echo "CLUSTER_NAME=${{ github.event.inputs.cluster }}" >> $GITHUB_ENV
           echo "CONFIG_FILE=${{ github.event.inputs.config-file-name }}" >> $GITHUB_ENV
-      - name: Deploy til dev
+      - name: Restart dev-gcp
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           RESOURCE: nais.yaml
-          CLUSTER: ${{ env.CLUSTER_NAME }}
-          VARS: nais/dev/${{ env.CONFIG_FILE }}.json
+          CLUSTER: dev-gcp
+          VARS: nais/dev/dev-gcp.json
+          REF: ${{ github.sha }}
+          PRINT_PAYLOAD: true
+          IMAGE: ${{ env.DOCKER_TAG }}
+      - name: Restart dev-gcp-mock
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          RESOURCE: nais.yaml
+          CLUSTER: dev-gcp
+          VARS: nais/dev/dev-gcp-mock.json
+          REF: ${{ github.sha }}
+          PRINT_PAYLOAD: true
+          IMAGE: ${{ env.DOCKER_TAG }}
+      - name: Restart labs-gcp
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          RESOURCE: nais.yaml
+          CLUSTER: labs-gcp
+          VARS: nais/dev/labs-gcp.json
           REF: ${{ github.sha }}
           PRINT_PAYLOAD: true
           IMAGE: ${{ env.DOCKER_TAG }}
