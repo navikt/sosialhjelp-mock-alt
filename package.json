@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "/sosialhjelp/mock-alt",
   "dependencies": {
-    "@navikt/ds-css": "^0.1.3",
+    "@navikt/ds-css": "^0.15.3",
     "@navikt/ds-tokens": "0.1.0-beta.6",
     "@navikt/fnrvalidator": "^1.1.3",
     "nav-frontend-alertstriper": "^3.0.38",
