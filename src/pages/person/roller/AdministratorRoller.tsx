@@ -19,7 +19,7 @@ export enum AdminRolle {
     DIALOG_VEILEDER = 'DIALOG_VEILEDER',
     DIALOG_ADMINISTRATOR = 'DIALOG_ADMINISTRATOR',
     DIALOG_TEKNISK_ARKIV = 'DIALOG_TEKNISK_ARKIV',
-    DIALOG_INNSIKKT = 'DIALOG_INNSIKKT',
+    DIALOG_INNSIKT = 'DIALOG_INNSIKT',
     MODIA_VEILEDER = 'MODIA_VEILEDER',
 }
 
@@ -30,7 +30,7 @@ const adminTekst = (rolle: AdminRolle) => {
         return 'Dialogadministrator (kan slette meldinger)';
     } else if (rolle === AdminRolle.DIALOG_TEKNISK_ARKIV) {
         return 'Dialogarkivator (kan hente ut meldinger til arkivering)';
-    } else if (rolle === AdminRolle.DIALOG_INNSIKKT) {
+    } else if (rolle === AdminRolle.DIALOG_INNSIKT) {
         return 'Dialoginnsikt (kan hente ut annonyme meldinger til innsiktsarbeide)';
     } else if (rolle === AdminRolle.MODIA_VEILEDER) {
         return 'Modiaveileder (har tilgang til Modia sosial)';
@@ -68,7 +68,7 @@ export const NyttAdministratorRoller = ({ isOpen, callback }: Params) => {
                     <option value={AdminRolle.DIALOG_TEKNISK_ARKIV}>
                         {adminTekst(AdminRolle.DIALOG_TEKNISK_ARKIV)}
                     </option>
-                    <option value={AdminRolle.DIALOG_INNSIKKT}>{adminTekst(AdminRolle.DIALOG_INNSIKKT)}</option>
+                    <option value={AdminRolle.DIALOG_INNSIKT}>{adminTekst(AdminRolle.DIALOG_INNSIKT)}</option>
                     <option value={AdminRolle.MODIA_VEILEDER}>{adminTekst(AdminRolle.MODIA_VEILEDER)}</option>
                 </StyledSelect>
                 <Knappegruppe>
