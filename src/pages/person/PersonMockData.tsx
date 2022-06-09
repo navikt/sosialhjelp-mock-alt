@@ -37,6 +37,7 @@ export interface Personalia {
     fnr: string;
     navn: PersonaliaNavn;
     adressebeskyttelse: string;
+    skjerming: string;
     sivilstand: string;
     ektefelle: string;
     barn: BarnObject[];
@@ -140,6 +141,7 @@ export const PersonMockData = () => {
     const [mellomnavn, setMellomnavn] = useState<string>('');
     const [etternavn, setEtternavn] = useState<string>('Mockperson');
     const [adressebeskyttelse, setAdressebeskyttelse] = useState<string>('UGRADERT');
+    const [skjerming, setSkjerming] = useState<string>('false');
     const [sivilstand, setSivilstand] = useState<string>('UOPPGITT');
     const [ektefelle, setEktefelle] = useState<string>('INGEN');
     const [starsborgerskap, setStatsborgerskap] = useState<string>('NOR');
@@ -200,6 +202,7 @@ export const PersonMockData = () => {
                     setMellomnavn(nedlastet.navn.mellomnavn);
                     setEtternavn(nedlastet.navn.etternavn);
                     setAdressebeskyttelse(nedlastet.adressebeskyttelse);
+                    setSkjerming(nedlastet.skjerming);
                     setEktefelle(nedlastet.ektefelle);
                     setSivilstand(nedlastet.sivilstand);
                     setBarn(nedlastet.barn);
@@ -314,6 +317,7 @@ export const PersonMockData = () => {
                 etternavn: etternavn,
             },
             adressebeskyttelse: adressebeskyttelse,
+            skjerming: skjerming,
             sivilstand: sivilstand,
             ektefelle: ektefelle,
             barn: barn,
@@ -457,6 +461,19 @@ export const PersonMockData = () => {
                                 );
                             }
                         )}
+                    </StyledSelect>
+                    <StyledSelect
+                        label="Skjerming"
+                        disabled={lockedMode}
+                        onChange={(evt: any) => setSkjerming(evt.target.value)}
+                        value={skjerming}
+                    >
+                        <option key={'ikkeSkjermet'} value={'false'}>
+                            Ikke skjermet
+                        </option>
+                        <option key={'skjermet'} value={'true'}>
+                            Skjermet
+                        </option>
                     </StyledSelect>
                     <Select
                         label="Statsborgerskap"
