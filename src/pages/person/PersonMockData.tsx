@@ -29,6 +29,7 @@ import { FlexWrapper, StyledSelect } from '../../styling/Styles';
 import Adresse from './adresse/Adresse';
 import { useAdresse } from './adresse/useAdresse';
 import { useAppStatus } from './useAppStatus';
+import { AdminRollerObject, NyttAdministratorRoller, VisAdministratorRoller } from './roller/AdministratorRoller';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -48,6 +49,7 @@ export interface Personalia {
     bostotteUtbetalinger: BostotteUtbetalingObject[];
     skattetatenUtbetalinger: SkatteutbetalingObject[];
     utbetalingerFraNav: UtbetalingFraNavObject[];
+    administratorRoller: AdminRollerObject[];
     locked: boolean;
 }
 
@@ -166,6 +168,9 @@ export const PersonMockData = () => {
     const [leggTilUtbetalingFraNav, setLeggTilUtbetalingFraNav] = useState<boolean>(false);
     const [utbetalingerFraNav, setUtbetalingerFraNav] = useState<UtbetalingFraNavObject[]>([]);
 
+    const [leggTilAdministratorRoller, setLeggTilAdministratorRoller] = useState<boolean>(false);
+    const [administratorRoller, setAdministratorRoller] = useState<AdminRollerObject[]>([]);
+
     const { adresseState, dispatchAdresse } = useAdresse();
 
     const queryFnr = useQuery().get('brukerID');
@@ -213,6 +218,7 @@ export const PersonMockData = () => {
                     setBostotteSaker(nedlastet.bostotteSaker);
                     setBostotteUtbetalinger(nedlastet.bostotteUtbetalinger);
                     setUtbetalingerFraNav(nedlastet.utbetalingerFraNav);
+                    setAdministratorRoller(nedlastet.administratorRoller);
                 });
 
             promises.push(promise);
@@ -282,6 +288,14 @@ export const PersonMockData = () => {
         setLeggTilUtbetalingFraNav(false);
     };
 
+    const leggTilAdministratorRollerCallback = (rolle: AdminRollerObject) => {
+        if (rolle) {
+            administratorRoller.push(rolle);
+            setAdministratorRoller(administratorRoller);
+        }
+        setLeggTilAdministratorRoller(false);
+    };
+
     const createPersonaliaObject = (): Personalia | null => {
         const tlf = brukTelefonnummer ? telefonnummer : '';
         const kontonr = brukKontonummer ? kontonummer : '';
@@ -318,6 +332,7 @@ export const PersonMockData = () => {
             bostotteUtbetalinger: bostotteUtbetalinger,
             skattetatenUtbetalinger: skattutbetalinger,
             utbetalingerFraNav: utbetalingerFraNav,
+            administratorRoller: administratorRoller,
             locked: false,
         };
     };
@@ -628,6 +643,25 @@ export const PersonMockData = () => {
                     />
                     {!lockedMode && !leggTilUtbetalingFraNav && (
                         <Knapp onClick={() => setLeggTilUtbetalingFraNav(true)}>Legg til utbetaling</Knapp>
+                    )}
+                </SkjemaGruppe>
+                <SkjemaGruppe legend="Administrator roller">
+                    {administratorRoller.map((rolle: AdminRollerObject, index: number) => {
+                        return (
+                            <VisAdministratorRoller
+                                adminRolle={rolle}
+                                lockedMode={lockedMode}
+                                key={'administratorRoller_' + index}
+                                onSlett={() => fjernObject(administratorRoller, setAdministratorRoller, rolle)}
+                            />
+                        );
+                    })}
+                    <NyttAdministratorRoller
+                        isOpen={leggTilAdministratorRoller}
+                        callback={leggTilAdministratorRollerCallback}
+                    />
+                    {!lockedMode && !leggTilAdministratorRoller && (
+                        <Knapp onClick={() => setLeggTilAdministratorRoller(true)}>Legg til rolle</Knapp>
                     )}
                 </SkjemaGruppe>
             </InntektGruppeStyle>
