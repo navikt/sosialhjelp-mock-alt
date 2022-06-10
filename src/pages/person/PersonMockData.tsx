@@ -44,6 +44,8 @@ export interface Personalia {
     starsborgerskap: string;
     bostedsadresse: Bostedsadresse;
     telefonnummer: string;
+    epost: string;
+    kanVarsles: boolean;
     kontonummer: string;
     arbeidsforhold: ArbeidsforholdObject[];
     bostotteSaker: BostotteSakObject[];
@@ -146,8 +148,9 @@ export const PersonMockData = () => {
     const [ektefelle, setEktefelle] = useState<string>('INGEN');
     const [starsborgerskap, setStatsborgerskap] = useState<string>('NOR');
 
-    const [brukTelefonnummer, setBrukTelefonnummer] = useState<boolean>(false);
-    const [telefonnummer, setTelefonnummer] = useState<string>('99999999');
+    const [telefonnummer, setTelefonnummer] = useState<string>('22222222');
+    const [epost, setEpost] = useState<string>('epost@adresse.no');
+    const [kanVarsles, setKanVarsles] = useState<boolean>(true);
 
     const [brukKontonummer, setBrukKontonummer] = useState<boolean>(false);
     const [kontonummer, setKontonummer] = useState<string>('11112233333');
@@ -212,8 +215,9 @@ export const PersonMockData = () => {
                     dispatchAdresse({ type: 'husbokstav', value: nedlastet.bostedsadresse.husbokstav });
                     dispatchAdresse({ type: 'postnummer', value: nedlastet.bostedsadresse.postnummer });
                     dispatchAdresse({ type: 'kommunenummer', value: nedlastet.bostedsadresse.kommunenummer });
-                    setBrukTelefonnummer(nedlastet.telefonnummer !== '');
                     setTelefonnummer(nedlastet.telefonnummer);
+                    setEpost(nedlastet.epost);
+                    setKanVarsles(nedlastet.kanVarsles);
                     setBrukKontonummer(nedlastet.kontonummer !== '');
                     setKontonummer(nedlastet.kontonummer);
                     setArbeidsforhold(nedlastet.arbeidsforhold);
@@ -300,7 +304,6 @@ export const PersonMockData = () => {
     };
 
     const createPersonaliaObject = (): Personalia | null => {
-        const tlf = brukTelefonnummer ? telefonnummer : '';
         const kontonr = brukKontonummer ? kontonummer : '';
 
         const husnummerAsNumber = Number(adresseState.husnummer);
@@ -329,7 +332,9 @@ export const PersonMockData = () => {
                 postnummer: adresseState.postnummer,
                 kommunenummer: adresseState.kommunenummer,
             },
-            telefonnummer: tlf,
+            telefonnummer: telefonnummer,
+            epost: epost,
+            kanVarsles: kanVarsles,
             kontonummer: kontonr,
             arbeidsforhold: arbeidsforhold,
             bostotteSaker: bostotteSaker,
@@ -489,23 +494,25 @@ export const PersonMockData = () => {
                         <option value="XXX">Statsløs</option>
                         <option value="XUK">Ukjent/Mangler opplysninger</option>
                     </Select>
-                    <SkjemaGruppe legend="Telefonnummer">
-                        {!lockedMode && (
-                            <Checkbox
-                                label="Sett telefonnummer"
-                                disabled={lockedMode}
-                                onChange={(evt: any) => setBrukTelefonnummer(evt.target.checked)}
-                                defaultChecked={brukTelefonnummer}
-                            />
-                        )}
-                        <Collapse isOpened={brukTelefonnummer}>
-                            <Input
-                                label="Telefonnummer"
-                                disabled={lockedMode || !brukTelefonnummer}
-                                value={telefonnummer}
-                                onChange={(evt: any) => setTelefonnummer(evt.target.value)}
-                            />
-                        </Collapse>
+                    <SkjemaGruppe legend="Kontaktinformasjon">
+                        <Input
+                            label="Telefonnummer"
+                            disabled={lockedMode}
+                            value={telefonnummer}
+                            onChange={(evt: any) => setTelefonnummer(evt.target.value)}
+                        />
+                        <Input
+                            label="Epostadresse"
+                            disabled={lockedMode}
+                            value={epost}
+                            onChange={(evt: any) => setEpost(evt.target.value)}
+                        />
+                        <Checkbox
+                            label="Kan varsles"
+                            disabled={lockedMode}
+                            onChange={(evt: any) => setKanVarsles(evt.target.checked)}
+                            defaultChecked={kanVarsles}
+                        />
                     </SkjemaGruppe>
                     <SkjemaGruppe legend="Kontonummer">
                         {!lockedMode && (
