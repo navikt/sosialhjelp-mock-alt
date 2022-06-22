@@ -244,6 +244,7 @@ export const Feilkonfigurering = () => {
                                     <option value="*">* Alle *</option>
                                     <option value="FixController">Fiks</option>
                                     <option value="PdlController">Pdl</option>
+                                    <option value="NorgController">Norg</option>
                                     <option value="HusbankenController">Husbanken</option>
                                     <option value="SkatteetatenController">Skatt</option>
                                 </Select>
