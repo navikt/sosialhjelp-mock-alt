@@ -23,7 +23,19 @@ import { FlexWrapper, StyledSelect } from '../../styling/Styles';
 import Adresse from './adresse/Adresse';
 import { useAdresse } from './adresse/useAdresse';
 import { useAppStatus } from './useAppStatus';
-import { Alert, BodyShort, Button, Checkbox, Label, Panel, Title, TextField, Fieldset, Select } from '@navikt/ds-react';
+import {
+    Alert,
+    BodyShort,
+    Button,
+    Checkbox,
+    Label,
+    Panel,
+    Heading,
+    TextField,
+    Fieldset,
+    Select,
+} from '@navikt/ds-react';
+import { AdminRollerObject, NyttAdministratorRoller, VisAdministratorRoller } from './roller/AdministratorRoller';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -31,18 +43,22 @@ export interface Personalia {
     fnr: string;
     navn: PersonaliaNavn;
     adressebeskyttelse: string;
+    skjerming: string;
     sivilstand: string;
     ektefelle: string;
     barn: BarnObject[];
     starsborgerskap: string;
     bostedsadresse: Bostedsadresse;
     telefonnummer: string;
+    epost: string;
+    kanVarsles: boolean;
     kontonummer: string;
     arbeidsforhold: ArbeidsforholdObject[];
     bostotteSaker: BostotteSakObject[];
     bostotteUtbetalinger: BostotteUtbetalingObject[];
     skattetatenUtbetalinger: SkatteutbetalingObject[];
     utbetalingerFraNav: UtbetalingFraNavObject[];
+    administratorRoller: AdminRollerObject[];
     locked: boolean;
 }
 
@@ -126,12 +142,14 @@ export const PersonMockData = () => {
     const [mellomnavn, setMellomnavn] = useState<string>('');
     const [etternavn, setEtternavn] = useState<string>('Mockperson');
     const [adressebeskyttelse, setAdressebeskyttelse] = useState<string>('UGRADERT');
+    const [skjerming, setSkjerming] = useState<string>('false');
     const [sivilstand, setSivilstand] = useState<string>('UOPPGITT');
     const [ektefelle, setEktefelle] = useState<string>('INGEN');
     const [starsborgerskap, setStatsborgerskap] = useState<string>('NOR');
 
-    const [brukTelefonnummer, setBrukTelefonnummer] = useState<boolean>(false);
-    const [telefonnummer, setTelefonnummer] = useState<string>('99999999');
+    const [telefonnummer, setTelefonnummer] = useState<string>('22222222');
+    const [epost, setEpost] = useState<string>('epost@adresse.no');
+    const [kanVarsles, setKanVarsles] = useState<boolean>(true);
 
     const [brukKontonummer, setBrukKontonummer] = useState<boolean>(false);
     const [kontonummer, setKontonummer] = useState<string>('11112233333');
@@ -153,6 +171,9 @@ export const PersonMockData = () => {
 
     const [leggTilUtbetalingFraNav, setLeggTilUtbetalingFraNav] = useState<boolean>(false);
     const [utbetalingerFraNav, setUtbetalingerFraNav] = useState<UtbetalingFraNavObject[]>([]);
+
+    const [leggTilAdministratorRoller, setLeggTilAdministratorRoller] = useState<boolean>(false);
+    const [administratorRoller, setAdministratorRoller] = useState<AdminRollerObject[]>([]);
 
     const { adresseState, dispatchAdresse } = useAdresse();
 
@@ -183,6 +204,7 @@ export const PersonMockData = () => {
                     setMellomnavn(nedlastet.navn.mellomnavn);
                     setEtternavn(nedlastet.navn.etternavn);
                     setAdressebeskyttelse(nedlastet.adressebeskyttelse);
+                    setSkjerming(nedlastet.skjerming);
                     setEktefelle(nedlastet.ektefelle);
                     setSivilstand(nedlastet.sivilstand);
                     setBarn(nedlastet.barn);
@@ -192,8 +214,9 @@ export const PersonMockData = () => {
                     dispatchAdresse({ type: 'husbokstav', value: nedlastet.bostedsadresse.husbokstav });
                     dispatchAdresse({ type: 'postnummer', value: nedlastet.bostedsadresse.postnummer });
                     dispatchAdresse({ type: 'kommunenummer', value: nedlastet.bostedsadresse.kommunenummer });
-                    setBrukTelefonnummer(nedlastet.telefonnummer !== '');
                     setTelefonnummer(nedlastet.telefonnummer);
+                    setEpost(nedlastet.epost);
+                    setKanVarsles(nedlastet.kanVarsles);
                     setBrukKontonummer(nedlastet.kontonummer !== '');
                     setKontonummer(nedlastet.kontonummer);
                     setArbeidsforhold(nedlastet.arbeidsforhold);
@@ -201,6 +224,7 @@ export const PersonMockData = () => {
                     setBostotteSaker(nedlastet.bostotteSaker);
                     setBostotteUtbetalinger(nedlastet.bostotteUtbetalinger);
                     setUtbetalingerFraNav(nedlastet.utbetalingerFraNav);
+                    setAdministratorRoller(nedlastet.administratorRoller);
                 });
 
             promises.push(promise);
@@ -270,8 +294,15 @@ export const PersonMockData = () => {
         setLeggTilUtbetalingFraNav(false);
     };
 
+    const leggTilAdministratorRollerCallback = (rolle: AdminRollerObject) => {
+        if (rolle) {
+            administratorRoller.push(rolle);
+            setAdministratorRoller(administratorRoller);
+        }
+        setLeggTilAdministratorRoller(false);
+    };
+
     const createPersonaliaObject = (): Personalia | null => {
-        const tlf = brukTelefonnummer ? telefonnummer : '';
         const kontonr = brukKontonummer ? kontonummer : '';
 
         const husnummerAsNumber = Number(adresseState.husnummer);
@@ -288,6 +319,7 @@ export const PersonMockData = () => {
                 etternavn: etternavn,
             },
             adressebeskyttelse: adressebeskyttelse,
+            skjerming: skjerming,
             sivilstand: sivilstand,
             ektefelle: ektefelle,
             barn: barn,
@@ -299,13 +331,16 @@ export const PersonMockData = () => {
                 postnummer: adresseState.postnummer,
                 kommunenummer: adresseState.kommunenummer,
             },
-            telefonnummer: tlf,
+            telefonnummer: telefonnummer,
+            epost: epost,
+            kanVarsles: kanVarsles,
             kontonummer: kontonr,
             arbeidsforhold: arbeidsforhold,
             bostotteSaker: bostotteSaker,
             bostotteUtbetalinger: bostotteUtbetalinger,
             skattetatenUtbetalinger: skattutbetalinger,
             utbetalingerFraNav: utbetalingerFraNav,
+            administratorRoller: administratorRoller,
             locked: false,
         };
     };
@@ -369,9 +404,9 @@ export const PersonMockData = () => {
     } else if (appStatus.status === 'fetchError') {
         return (
             <>
-                <Title level={1} size="2xl" spacing>
+                <Heading level="1" size="xlarge" spacing>
                     Noe gikk galt..
-                </Title>
+                </Heading>
                 <BodyShort spacing>{appStatus.errorMessage}</BodyShort>
             </>
         );
@@ -384,9 +419,9 @@ export const PersonMockData = () => {
                 informasjon!
             </Alert>
             {lockedMode && <Alert variant="info">Du kan ikke redigere standardbrukerene.</Alert>}
-            <Title level={1} size="2xl" spacing>
+            <Heading level="1" size="xlarge" spacing>
                 {overskrift()}
-            </Title>
+            </Heading>
             <TextField
                 value={fnr}
                 label="Ident / fødselsnummer"
@@ -397,9 +432,9 @@ export const PersonMockData = () => {
             <GruppeStyle>
                 <Fieldset
                     legend={
-                        <Title level={2} size="l" spacing>
+                        <Heading level="2" size="medium" spacing>
                             Personopplysninger
-                        </Title>
+                        </Heading>
                     }
                 >
                     <NameWrapper>
@@ -428,15 +463,26 @@ export const PersonMockData = () => {
                         onChange={(evt: any) => setAdressebeskyttelse(evt.target.value)}
                         value={adressebeskyttelse}
                     >
-                        {Object.entries(Adressebeskyttelse).map(
-                            ([key, label]): JSX.Element => {
-                                return (
-                                    <option key={key} value={key}>
-                                        {label}
-                                    </option>
-                                );
-                            }
-                        )}
+                        {Object.entries(Adressebeskyttelse).map(([key, label]): JSX.Element => {
+                            return (
+                                <option key={key} value={key}>
+                                    {label}
+                                </option>
+                            );
+                        })}
+                    </StyledSelect>
+                    <StyledSelect
+                        label="Skjerming"
+                        disabled={lockedMode}
+                        onChange={(evt: any) => setSkjerming(evt.target.value)}
+                        value={skjerming}
+                    >
+                        <option key={'ikkeSkjermet'} value={'false'}>
+                            Ikke skjermet
+                        </option>
+                        <option key={'skjermet'} value={'true'}>
+                            Skjermet
+                        </option>
                     </StyledSelect>
                     <Select
                         label="Statsborgerskap"
@@ -452,44 +498,46 @@ export const PersonMockData = () => {
                         <option value="XXX">Statsløs</option>
                         <option value="XUK">Ukjent/Mangler opplysninger</option>
                     </Select>
-                </Fieldset>
-                <Fieldset legend="Telefonnummer">
-                    {!lockedMode && (
-                        <Checkbox
-                            disabled={lockedMode}
-                            onChange={(evt: any) => setBrukTelefonnummer(evt.target.checked)}
-                            defaultChecked={brukTelefonnummer}
-                        >
-                            Sett telefonnummer
-                        </Checkbox>
-                    )}
-                    <Collapse isOpened={brukTelefonnummer}>
+                    <Fieldset legend="Kontaktinformasjon">
                         <TextField
                             label="Telefonnummer"
-                            disabled={lockedMode || !brukTelefonnummer}
+                            disabled={lockedMode}
                             value={telefonnummer}
                             onChange={(evt: any) => setTelefonnummer(evt.target.value)}
                         />
-                    </Collapse>
-                </Fieldset>
-                <Fieldset legend="Kontonummer">
-                    {!lockedMode && (
+                        <TextField
+                            label="Epostadresse"
+                            disabled={lockedMode}
+                            value={epost}
+                            onChange={(evt: any) => setEpost(evt.target.value)}
+                        />
                         <Checkbox
                             disabled={lockedMode}
-                            onChange={(evt: any) => setBrukKontonummer(evt.target.checked)}
-                            defaultChecked={brukKontonummer}
+                            onChange={(evt: any) => setKanVarsles(evt.target.checked)}
+                            defaultChecked={kanVarsles}
                         >
-                            Sett kontonummer
+                            Kan varsles
                         </Checkbox>
-                    )}
-                    <Collapse isOpened={brukKontonummer}>
-                        <TextField
-                            label="Kontonummer"
-                            disabled={lockedMode || !brukKontonummer}
-                            value={kontonummer}
-                            onChange={(evt: any) => setKontonummer(evt.target.value)}
-                        />
-                    </Collapse>
+                    </Fieldset>
+                    <Fieldset legend="Kontonummer">
+                        {!lockedMode && (
+                            <Checkbox
+                                disabled={lockedMode}
+                                onChange={(evt: any) => setBrukKontonummer(evt.target.checked)}
+                                defaultChecked={brukKontonummer}
+                            >
+                                Sett kontonummer
+                            </Checkbox>
+                        )}
+                        <Collapse isOpened={brukKontonummer}>
+                            <TextField
+                                label="Kontonummer"
+                                disabled={lockedMode || !brukKontonummer}
+                                value={kontonummer}
+                                onChange={(evt: any) => setKontonummer(evt.target.value)}
+                            />
+                        </Collapse>
+                    </Fieldset>
                 </Fieldset>
             </GruppeStyle>
             <GruppeStyle>
@@ -498,9 +546,9 @@ export const PersonMockData = () => {
             <GruppeStyle>
                 <Fieldset
                     legend={
-                        <Title level={2} size="l" spacing>
+                        <Heading level="2" size="medium" spacing>
                             Arbeidsforhold
-                        </Title>
+                        </Heading>
                     }
                 >
                     {arbeidsforhold.map((forhold: ArbeidsforholdObject, index: number) => {
@@ -521,9 +569,9 @@ export const PersonMockData = () => {
             <GruppeStyle>
                 <Fieldset
                     legend={
-                        <Title level={2} size="l" spacing>
+                        <Heading level="2" size="medium" spacing>
                             Familiesituasjon
-                        </Title>
+                        </Heading>
                     }
                 >
                     <StyledSelect
@@ -532,15 +580,13 @@ export const PersonMockData = () => {
                         onChange={(evt: any) => setSivilstand(evt.target.value)}
                         value={sivilstand}
                     >
-                        {Object.entries(Sivilstand).map(
-                            ([key, value]: any): JSX.Element => {
-                                return (
-                                    <option key={key} value={key}>
-                                        {value}
-                                    </option>
-                                );
-                            }
-                        )}
+                        {Object.entries(Sivilstand).map(([key, value]: any): JSX.Element => {
+                            return (
+                                <option key={key} value={key}>
+                                    {value}
+                                </option>
+                            );
+                        })}
                     </StyledSelect>
                     <StyledSelect
                         label="Ektefelle"
@@ -572,9 +618,9 @@ export const PersonMockData = () => {
                 </Fieldset>
             </GruppeStyle>
             <InntektGruppeStyle>
-                <Title level={2} size="l" spacing>
+                <Heading level="2" size="medium" spacing>
                     Inntekt og formue
-                </Title>
+                </Heading>
                 <Fieldset legend="Skattetaten">
                     {skattutbetalinger.map((utbetaling: SkatteutbetalingObject, index: number) => {
                         return (
@@ -641,6 +687,25 @@ export const PersonMockData = () => {
                         <Button onClick={() => setLeggTilUtbetalingFraNav(true)}>Legg til utbetaling</Button>
                     )}
                 </Fieldset>
+                <Fieldset legend="Administrator roller">
+                    {administratorRoller.map((rolle: AdminRollerObject, index: number) => {
+                        return (
+                            <VisAdministratorRoller
+                                adminRolle={rolle}
+                                lockedMode={lockedMode}
+                                key={'administratorRoller_' + index}
+                                onSlett={() => fjernObject(administratorRoller, setAdministratorRoller, rolle)}
+                            />
+                        );
+                    })}
+                    <NyttAdministratorRoller
+                        isOpen={leggTilAdministratorRoller}
+                        callback={leggTilAdministratorRollerCallback}
+                    />
+                    {!lockedMode && !leggTilAdministratorRoller && (
+                        <Button onClick={() => setLeggTilAdministratorRoller(true)}>Legg til rolle</Button>
+                    )}
+                </Fieldset>
             </InntektGruppeStyle>
             {
                 /*midlertidig løsning, bør ha validering på felter som kan feile*/
@@ -649,7 +714,7 @@ export const PersonMockData = () => {
             <Knappegruppe>
                 {!lockedMode && (
                     <Button
-                        variant="action"
+                        variant="primary"
                         onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCreateUser(event)}
                     >
                         {editMode ? 'Lagre endringer' : 'Opprett bruker'} {isLoginSession(params) && ' og logg inn'}

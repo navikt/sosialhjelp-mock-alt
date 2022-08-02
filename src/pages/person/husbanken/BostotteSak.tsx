@@ -68,8 +68,8 @@ export const NyBostotteSak = ({ isOpen, callback }: Params) => {
     let sistManed = new Date();
     sistManed.setMonth(sistManed.getMonth() - 1);
 
-    const [ar, setAr] = useState<number>(sistManed.getFullYear());
-    const [mnd, setMnd] = useState<number>(sistManed.getMonth() + 1);
+    const [ar, setAr] = useState(sistManed.getFullYear().toString());
+    const [mnd, setMnd] = useState((sistManed.getMonth() + 1).toString());
     const [status, setStatus] = useState<BostotteStatus>(BostotteStatus.UNDER_BEHANDLING);
     const [rolle, setRolle] = useState<BostotteRolle>(BostotteRolle.HOVEDPERSON);
     const [vedtaksKode, setVedtaksKode] = useState<VedtakKodeType>('V00');
@@ -81,8 +81,8 @@ export const NyBostotteSak = ({ isOpen, callback }: Params) => {
             const type = getVedtakstype(vedtaksKode);
             const vedtaket: VedtakObject = { kode, beskrivelse, type };
             const nyttBostotteSakObject: BostotteSakObject = {
-                ar: ar,
-                mnd: mnd,
+                ar: parseInt(ar),
+                mnd: parseInt(mnd),
                 status: status,
                 rolle: rolle,
                 vedtak: vedtaket,
@@ -90,8 +90,8 @@ export const NyBostotteSak = ({ isOpen, callback }: Params) => {
             callback(nyttBostotteSakObject);
         } else {
             const nyttBostotteSakObject: BostotteSakObject = {
-                ar: ar,
-                mnd: mnd,
+                ar: parseInt(ar),
+                mnd: parseInt(mnd),
                 status: status,
                 rolle: rolle,
                 vedtak: null,
@@ -113,12 +113,14 @@ export const NyBostotteSak = ({ isOpen, callback }: Params) => {
                         <StyledInput
                             label="År"
                             value={ar}
+                            type="number"
                             onChange={(evt: any) => setAr(evt.target.value)}
                             htmlSize={5}
                         />
                         <StyledInput
                             label="Måned"
                             value={mnd}
+                            type="number"
                             onChange={(evt: any) => setMnd(evt.target.value)}
                             htmlSize={5}
                         />
@@ -135,15 +137,13 @@ export const NyBostotteSak = ({ isOpen, callback }: Params) => {
                             onChange={(evt: any) => setVedtaksKode(evt.target.value)}
                             value={vedtaksKode}
                         >
-                            {Object.entries(Vedtakskode).map(
-                                ([key, label]): JSX.Element => {
-                                    return (
-                                        <option key={key} value={key}>
-                                            {label}
-                                        </option>
-                                    );
-                                }
-                            )}
+                            {Object.entries(Vedtakskode).map(([key, label]): JSX.Element => {
+                                return (
+                                    <option key={key} value={key}>
+                                        {label}
+                                    </option>
+                                );
+                            })}
                         </StyledSelect>
                     )}
                     <StyledSelect label="Rolle" onChange={(evt: any) => setRolle(evt.target.value)} value={rolle}>

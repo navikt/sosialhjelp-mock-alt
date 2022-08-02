@@ -54,16 +54,16 @@ export const NyttArbeidsforhold = ({ isOpen, callback }: Params) => {
     const [arbeidsforholdId, setArbeidsforholdId] = useState<string>('1');
     const [startdato, setStartdato] = useState<string>(getIsoDateString(lengesiden));
     const [sluttdato, setSluttdato] = useState<string>(getIsoDateString(forrigeMnd));
-    const [stillingsprosent, setStillingsprosent] = useState<number>(100);
+    const [stillingsprosent, setStillingsprosent] = useState('100');
     const [arbeidgivertype, setArbeidgivertype] = useState<string>(ArbeidsforholdType.ORGANISASJON);
-    const [ident, setIdent] = useState<number>(123456789);
+    const [ident, setIdent] = useState('123456789');
     const [orgnummer, setOrgnummer] = useState<string>('');
     const [organisasjonsNavn, setOrganisasjonsNavn] = useState<string>('Arbeidsgivernavn');
 
     useEffect(() => {
         fetch(`${getMockAltApiURL()}/fiks/tilfeldig/fnr`)
             .then((response) => response.text())
-            .then((text) => setIdent(parseInt(text)));
+            .then((text) => setIdent(text));
         fetch(`${getMockAltApiURL()}/fiks/tilfeldig/orgnummer`)
             .then((response) => response.text())
             .then((text) => {
@@ -126,7 +126,12 @@ export const NyttArbeidsforhold = ({ isOpen, callback }: Params) => {
                         <option value={ArbeidsforholdType.PERSON}>Person med ident</option>
                     </StyledSelect>
                     {arbeidgivertype === ArbeidsforholdType.PERSON && (
-                        <TextField label="Ident" value={ident} onChange={(evt: any) => setIdent(evt.target.value)} />
+                        <TextField
+                            label="Ident"
+                            value={ident}
+                            type="number"
+                            onChange={(evt: any) => setIdent(evt.target.value)}
+                        />
                     )}
                     {arbeidgivertype === ArbeidsforholdType.ORGANISASJON && (
                         <InputWrapper>

@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { AdresseAction, AdresseState } from './useAdresse';
 import { useEffect, useRef } from 'react';
-import { Fieldset, TextField, Title } from '@navikt/ds-react';
+import { Fieldset, TextField, Heading } from '@navikt/ds-react';
 
 const AdresseBokser = styled.div`
     display: flex;
@@ -41,9 +41,9 @@ const Adresse = (props: Props) => {
     return (
         <Fieldset
             legend={
-                <Title level={2} size="l">
+                <Heading level="2" size="medium">
                     Bostedsadresse
-                </Title>
+                </Heading>
             }
         >
             <TextField

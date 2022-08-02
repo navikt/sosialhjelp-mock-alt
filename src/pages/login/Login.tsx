@@ -1,7 +1,8 @@
-import { Alert, Panel, Button, Title } from '@navikt/ds-react';
+import { Alert, Panel, Button, Heading } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import {
     addParams,
+    getDialogURL,
     getInnsynURL,
     getMockAltApiURL,
     getRedirectParams,
@@ -19,7 +20,7 @@ const StyledAlertStripe = styled(Alert)`
 
 export const Login = () => {
     const [fnr, setFnr] = useState('');
-    const [redirect, setRedirect] = useState(getSoknadURL());
+    const [redirect, setRedirect] = useState(window.location.origin + '/sosialhjelp/mock-alt/login');
     const [personliste, setPersonListe] = useState<Personalia[]>([]);
 
     const params = getRedirectParams();
@@ -45,9 +46,9 @@ export const Login = () => {
 
     return (
         <Panel>
-            <Title level={1} size="2xl" spacing>
+            <Heading level="1" size="xlarge" spacing>
                 Mock login
-            </Title>
+            </Heading>
             <StyledAlertStripe variant="warning">
                 DETTE ER KUN FOR TESTING! Alt som gjøres i mock-miljø er tilgjengelig for alle. Ikke legg inn noe
                 sensitiv informasjon!
@@ -67,19 +68,22 @@ export const Login = () => {
                     label="Velg tjeneste"
                     value={redirect}
                 >
+                    <option key="ingen" value={window.location.origin + '/sosialhjelp/mock-alt/login'}>
+                        Bli her
+                    </option>
                     <option key="soknaden" value={getSoknadURL()}>
                         Søknaden
                     </option>
                     <option key="innsyn" value={getInnsynURL()}>
                         Innsyn
                     </option>
-                    <option key="ingen" value={window.location.origin + '/sosialhjelp/mock-alt/'}>
-                        Gå tilbake til oversikten
+                    <option key="dialog" value={getDialogURL()}>
+                        Dialog
                     </option>
                 </StyledSelect>
             )}
             <Knappegruppe>
-                <Button variant="action" onClick={() => handleOnClick()}>
+                <Button variant="primary" onClick={() => handleOnClick()}>
                     Login
                 </Button>
                 <Link

@@ -4,7 +4,7 @@ import { Personalia } from './person/PersonMockData';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { Bold } from '../styling/Styles';
-import { BodyShort, Panel, Title } from '@navikt/ds-react';
+import { BodyShort, Panel, Heading } from '@navikt/ds-react';
 
 const StyledLink = styled(Link).attrs({ className: 'navds-link' })`
     margin-right: 1rem;
@@ -77,9 +77,9 @@ export const Oversikt = () => {
 
     return (
         <StyledPanel>
-            <Title level={1} size="2xl" spacing>
+            <Heading level="1" size="xlarge" spacing>
                 Testbrukere - oversikt
-            </Title>
+            </Heading>
             {personliste?.length > 0 ? (
                 <TabellWrapper>
                     <Tabell>

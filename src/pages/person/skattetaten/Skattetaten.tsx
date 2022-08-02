@@ -66,7 +66,7 @@ export const NyttSkatteutbetaling = ({ isOpen, callback }: Params) => {
 
     const [belop, setBelop] = useState<string>('10000');
     const [trekk, setTrekk] = useState<string>('3333');
-    const [orgnummer, setOrgnummer] = useState<number>(123456785);
+    const [orgnummer, setOrgnummer] = useState('123456785');
     const [maned, setManed] = useState<string>(getMonthDateString(month_1));
     const [type, setType] = useState<SkatteutbetalingType>(SkatteutbetalingType.LOENNSINNTEKT);
 
@@ -74,7 +74,7 @@ export const NyttSkatteutbetaling = ({ isOpen, callback }: Params) => {
         const nyttSkatteutbetalingObject: SkatteutbetalingObject = {
             beloep: belop,
             trekk: trekk,
-            orgnummer: orgnummer.toString(),
+            orgnummer: orgnummer,
             maned: maned,
             type: type,
         };
@@ -95,6 +95,7 @@ export const NyttSkatteutbetaling = ({ isOpen, callback }: Params) => {
                     <StyledInput label="Trekk" value={trekk} onChange={(evt: any) => setTrekk(evt.target.value)} />
                     <StyledInput
                         label="Orgnummer"
+                        type="number"
                         value={orgnummer}
                         onChange={(evt: any) => setOrgnummer(evt.target.value)}
                     />
@@ -109,15 +110,13 @@ export const NyttSkatteutbetaling = ({ isOpen, callback }: Params) => {
                         onChange={(evt: any) => setType(evt.target.value)}
                         value={type}
                     >
-                        {Object.values(SkatteutbetalingType).map(
-                            (value: SkatteutbetalingType): JSX.Element => {
-                                return (
-                                    <option key={value} value={value}>
-                                        {getSkatteutbetalingLabel(value)}
-                                    </option>
-                                );
-                            }
-                        )}
+                        {Object.values(SkatteutbetalingType).map((value: SkatteutbetalingType): JSX.Element => {
+                            return (
+                                <option key={value} value={value}>
+                                    {getSkatteutbetalingLabel(value)}
+                                </option>
+                            );
+                        })}
                     </StyledSelect>
                 </Fieldset>
                 <Knappegruppe>

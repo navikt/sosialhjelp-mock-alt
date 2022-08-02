@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { addParams, getFagsystemmockURL, getMockAltApiURL, getRedirectParams } from '../../utils/restUtils';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { BodyShort, Button, Panel, Title } from '@navikt/ds-react';
+import { BodyShort, Button, Panel, Heading } from '@navikt/ds-react';
 
 const StyledEksternLink = styled.a.attrs({ className: 'navds-link' })`
     display: block;
@@ -99,9 +99,9 @@ export const Soknader = () => {
 
     return (
         <Panel>
-            <Title level={1} size="2xl" spacing>
+            <Heading level="1" size="xlarge" spacing>
                 Søknader
-            </Title>
+            </Heading>
             {soknadsliste?.length > 0 ? (
                 <TabellWrapper>
                     <Tabell>

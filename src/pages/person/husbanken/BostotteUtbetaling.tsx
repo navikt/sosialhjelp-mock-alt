@@ -40,7 +40,7 @@ export const NyttBostotteUtbetaling = ({ isOpen, callback }: Params) => {
     let sistManed = new Date();
     sistManed.setMonth(sistManed.getMonth() - 1);
 
-    const [belop, setBelop] = useState<number>(1337);
+    const [belop, setBelop] = useState('1337');
     const [utbetalingsdato, setUtbetalingsdato] = useState<string>(getIsoDateString(sistManed));
     const [mottaker, setMottaker] = useState<BostotteMottaker>(BostotteMottaker.HUSSTAND);
     const [rolle, setRolle] = useState<BostotteRolle>(BostotteRolle.HOVEDPERSON);
@@ -65,7 +65,12 @@ export const NyttBostotteUtbetaling = ({ isOpen, callback }: Params) => {
         <Collapse isOpened={isOpen}>
             <StyledPanel>
                 <Fieldset legend="Legg til utbetaling fra Husbanken">
-                    <StyledInput label="Beløp" value={belop} onChange={(evt: any) => setBelop(evt.target.value)} />
+                    <StyledInput
+                        label="Beløp"
+                        type="number"
+                        value={belop}
+                        onChange={(evt: any) => setBelop(evt.target.value)}
+                    />
                     <StyledInput
                         label="Utbetalingsdato (åååå-mm-dd)"
                         value={utbetalingsdato}

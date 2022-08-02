@@ -4,7 +4,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { Personalia } from '../person/PersonMockData';
 import styled from 'styled-components/macro';
 import { Bold, Knappegruppe } from '../../styling/Styles';
-import { Alert, Button, BodyShort, Fieldset, Panel, Select, TextField, Title } from '@navikt/ds-react';
+import { Alert, Button, BodyShort, Fieldset, Panel, Select, TextField, Heading } from '@navikt/ds-react';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -58,11 +58,11 @@ export const Feilkonfigurering = () => {
     const [editMode, setEditMode] = useState<boolean>(false);
     const [lockedMode, setLockedMode] = useState<boolean>(false);
     const [klasse, setKlasse] = useState<string>('*');
-    const [feilkode, setFeilkode] = useState<number>(0);
-    const [feilkodeSansynlighet, setFeilkodeSansynlighet] = useState<number>(100);
+    const [feilkode, setFeilkode] = useState('0');
+    const [feilkodeSansynlighet, setFeilkodeSansynlighet] = useState('100');
     const [feilmelding, setFeilmelding] = useState<string>('Manuelt konfigurert feil!');
-    const [timeout, setTimeout] = useState<number>(0);
-    const [timeoutSansynlighet, setTimeoutSansynlighet] = useState<number>(100);
+    const [timeout, setTimeout] = useState('0');
+    const [timeoutSansynlighet, setTimeoutSansynlighet] = useState('100');
     const [funksjon, setFunksjon] = useState<string>('*');
     const [navn, setNavn] = useState<string>('');
 
@@ -109,11 +109,11 @@ export const Feilkonfigurering = () => {
     const onLeggTilFeilkonfigurering = (event: ClickEvent): void => {
         const feilkonfigurerasjon: Feilkonfigurerasjon = {
             fnr: fnr,
-            timeout: timeout,
-            timeoutSansynlighet: timeoutSansynlighet,
-            feilkode: feilkode,
+            timeout: parseInt(timeout),
+            timeoutSansynlighet: parseInt(timeoutSansynlighet),
+            feilkode: parseInt(feilkode),
             feilmelding: feilmelding,
-            feilkodeSansynlighet: feilkodeSansynlighet,
+            feilkodeSansynlighet: parseInt(feilkodeSansynlighet),
             className: klasse,
             functionName: funksjon,
         };
@@ -159,9 +159,9 @@ export const Feilkonfigurering = () => {
 
     return (
         <Wrapper>
-            <Title level={1} size="2xl" spacing>
+            <Heading level="1" size="xlarge" spacing>
                 Feilsituasjoner
-            </Title>
+            </Heading>
             <TextField
                 value={fnr}
                 label="Ident / Fødselsnummer"
@@ -203,12 +203,14 @@ export const Feilkonfigurering = () => {
                             <Fieldset legend="Feilsituasjon" className="feilsituasjon">
                                 <TextField
                                     value={feilkode}
+                                    type="number"
                                     label="Feilkode"
                                     disabled={lockedMode}
                                     onChange={(evt: any) => setFeilkode(evt.target.value)}
                                 />
                                 <TextField
                                     value={feilkodeSansynlighet}
+                                    type="number"
                                     label="Sansynlighet for å få feilkode"
                                     disabled={lockedMode}
                                     onChange={(evt: any) => setFeilkodeSansynlighet(evt.target.value)}
@@ -221,12 +223,14 @@ export const Feilkonfigurering = () => {
                                 />
                                 <TextField
                                     value={timeout}
+                                    type="number"
                                     label="Timeout"
                                     disabled={lockedMode}
                                     onChange={(evt: any) => setTimeout(evt.target.value)}
                                 />
                                 <TextField
                                     value={timeoutSansynlighet}
+                                    type="number"
                                     label="Sansynlighet for å få timeout"
                                     disabled={lockedMode}
                                     onChange={(evt: any) => setTimeoutSansynlighet(evt.target.value)}
@@ -242,6 +246,7 @@ export const Feilkonfigurering = () => {
                                     <option value="*">* Alle *</option>
                                     <option value="FixController">Fiks</option>
                                     <option value="PdlController">Pdl</option>
+                                    <option value="NorgController">Norg</option>
                                     <option value="HusbankenController">Husbanken</option>
                                     <option value="SkatteetatenController">Skatt</option>
                                 </Select>
@@ -303,7 +308,7 @@ export const Feilkonfigurering = () => {
             <Knappegruppe>
                 {!lockedMode && (
                     <Button
-                        variant="action"
+                        variant="primary"
                         onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
                             onSetFeilkonfigurering(event)
                         }
