@@ -20,6 +20,9 @@ const StyledPanel = styled(Panel)`
     flex-direction: column;
 `;
 
+const StyledLoginButton = styled(Button)`
+    min-width: 7rem;
+`;
 export const Login = () => {
     const [fnr, setFnr] = useState('');
     const [redirect, setRedirect] = useState(window.location.origin + '/sosialhjelp/mock-alt/login');
@@ -87,9 +90,9 @@ export const Login = () => {
                 </StyledSelect>
             )}
             <Knappegruppe>
-                <Button variant="primary" onClick={() => handleOnClick()}>
-                    Login
-                </Button>
+                <StyledLoginButton variant="primary" onClick={() => handleOnClick()}>
+                    Logg inn
+                </StyledLoginButton>
                 <Link
                     className="navds-button navds-button--secondary navds-button--medium"
                     to={'/person' + addParams(params)}
