@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Collapse } from 'react-collapse';
 import { getMockAltApiURL } from '../../../utils/restUtils';
 import { Button, Fieldset, Panel, TextField } from '@navikt/ds-react';
-import { DefinitionList, Knappegruppe, StyledPanel, StyledSelect, SmallTextField } from '../../../styling/Styles';
+import {
+    DefinitionList,
+    Knappegruppe,
+    StyledPanel,
+    StyledSelect,
+    SmallTextField,
+    AvbrytKnapp,
+} from '../../../styling/Styles';
 import styled from 'styled-components/macro';
 import { getIsoDateString } from '../../../utils/dateUtils';
 import SletteKnapp from '../../../components/SletteKnapp';
@@ -152,9 +159,9 @@ export const NyttArbeidsforhold = ({ isOpen, callback }: Params) => {
                     <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
                         Legg til
                     </Button>
-                    <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
+                    <AvbrytKnapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
                         Avbryt
-                    </Button>
+                    </AvbrytKnapp>
                 </Knappegruppe>
             </ArbeidsforholdPanel>
         </Collapse>

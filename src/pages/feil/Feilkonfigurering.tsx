@@ -3,8 +3,8 @@ import { addParams, getMockAltApiURL, getRedirectParams } from '../../utils/rest
 import { useHistory, useLocation } from 'react-router-dom';
 import { Personalia } from '../person/PersonMockData';
 import styled from 'styled-components/macro';
-import { Bold, Knappegruppe } from '../../styling/Styles';
-import { Alert, Button, BodyShort, Fieldset, Panel, Select, TextField, Heading } from '@navikt/ds-react';
+import { AvbrytKnapp, Bold, Knappegruppe } from '../../styling/Styles';
+import { Alert, Button, BodyShort, Fieldset, Panel, Select, TextField, Heading, Label } from '@navikt/ds-react';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -29,15 +29,9 @@ function useQuery() {
 }
 
 const Wrapper = styled(Panel)`
-    .navds-alert {
-        margin-bottom: 1rem;
-    }
-    .navds-alert {
-        margin-bottom: 1rem;
-    }
-    .navds-fieldset {
-        margin-bottom: 1rem;
-    }
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
 `;
 
 const ConfigPanel = styled(Panel)`
@@ -48,10 +42,7 @@ const ConfigPanel = styled(Panel)`
     }
 `;
 
-const FeilKnappegruppe = styled(Knappegruppe)`
-    margin: 1rem 0 2rem;
-    align-items: flex-end;
-`;
+const FeilKnappegruppe = styled.div``;
 
 export const Feilkonfigurering = () => {
     const [leggTilFeil, setLeggTilFeil] = useState<boolean>(false);
@@ -169,8 +160,8 @@ export const Feilkonfigurering = () => {
                 onChange={(evt: any) => setFnr(evt.target.value)}
             />
             {navn?.length > 0 && (
-                <BodyShort spacing>
-                    <Bold>Navn:</Bold> {navn}
+                <BodyShort>
+                    <Label as="span">Navn:</Label> {navn}
                 </BodyShort>
             )}
             {feilsituasjoner.map((feil: Feilkonfigurerasjon, index: number) => {
@@ -290,10 +281,12 @@ export const Feilkonfigurering = () => {
                         </ConfigPanel>
                     ) : (
                         <FeilKnappegruppe>
-                            <Button onClick={() => setLeggTilFeil(true)}>+ Legg til feil</Button>
+                            <Button variant="secondary" onClick={() => setLeggTilFeil(true)}>
+                                + Legg til feil
+                            </Button>
                             {feilsituasjoner.length > 0 && (
                                 <Button
-                                    variant="secondary"
+                                    variant="tertiary"
                                     onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
                                         resetFeil(event)
                                     }
@@ -316,9 +309,9 @@ export const Feilkonfigurering = () => {
                         Lagre
                     </Button>
                 )}
-                <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onGoBack(event)}>
+                <AvbrytKnapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onGoBack(event)}>
                     {lockedMode ? 'Tilbake' : 'Avbryt'}
-                </Button>
+                </AvbrytKnapp>
             </Knappegruppe>
         </Wrapper>
     );

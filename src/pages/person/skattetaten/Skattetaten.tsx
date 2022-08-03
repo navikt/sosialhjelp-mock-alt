@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
 import { Button, Fieldset } from '@navikt/ds-react';
-import { DefinitionList, Knappegruppe, StyledInput, StyledPanel, StyledSelect } from '../../../styling/Styles';
+import {
+    AvbrytKnapp,
+    DefinitionList,
+    Knappegruppe,
+    StyledInput,
+    StyledPanel,
+    StyledSelect,
+} from '../../../styling/Styles';
 import SletteKnapp from '../../../components/SletteKnapp';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
@@ -123,9 +130,9 @@ export const NyttSkatteutbetaling = ({ isOpen, callback }: Params) => {
                     <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
                         Legg til
                     </Button>
-                    <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
+                    <AvbrytKnapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
                         Avbryt
-                    </Button>
+                    </AvbrytKnapp>
                 </Knappegruppe>
             </StyledPanel>
         </Collapse>

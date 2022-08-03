@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components/macro';
-import { Panel, TextField, Select } from '@navikt/ds-react';
+import { Button, Panel, TextField, Select } from '@navikt/ds-react';
 
 export const theme = {
     mobileMaxWidth: 'only screen and (max-width: 30em)',
@@ -17,6 +17,8 @@ export const StyledPanel = styled(Panel)`
 export const StyledSelect = styled(Select)`
     width: fit-content;
 `;
+
+export const AvbrytKnapp = styled(Button).attrs({ variant: 'secondary' })``;
 
 export const StyledInput = styled(TextField)<{ htmlSize?: number }>`
     input {

@@ -31,8 +31,8 @@ const SletteKnapp = (props: Props) => {
 
     return (
         <Wrap>
-            <StyledKnapp variant="secondary" title="slett" onClick={props.onClick}>
-                <span className="sr-only">Normal</span>
+            <StyledKnapp variant="tertiary" title="slett" onClick={props.onClick}>
+                <span className="sr-only">Slett</span>
                 <Trash />
             </StyledKnapp>
         </Wrap>

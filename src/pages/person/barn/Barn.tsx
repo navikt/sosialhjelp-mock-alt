@@ -3,7 +3,7 @@ import { Collapse } from 'react-collapse';
 import { getMockAltApiURL } from '../../../utils/restUtils';
 import { Button, Fieldset, Panel, Select, TextField } from '@navikt/ds-react';
 import { Bostedsadresse, NameWrapper, PersonaliaNavn } from '../PersonMockData';
-import { DefinitionList, Knappegruppe, StyledPanel, StyledSelect } from '../../../styling/Styles';
+import { AvbrytKnapp, DefinitionList, Knappegruppe, StyledPanel, StyledSelect } from '../../../styling/Styles';
 import { getIsoDateString } from '../../../utils/dateUtils';
 import { Adressebeskyttelse, AdressebeskyttelseType } from '../personalia/adressebeskyttelse';
 import Adresse from '../adresse/Adresse';
@@ -28,6 +28,7 @@ interface Params<T> {
 }
 
 export const NyttBarn = ({ isOpen, callback }: Params<BarnObject>) => {
+    console.log('nyttbarn');
     let lengesiden = new Date();
     lengesiden.setFullYear(lengesiden.getFullYear() - 10);
 
@@ -120,40 +121,32 @@ export const NyttBarn = ({ isOpen, callback }: Params<BarnObject>) => {
                         onChange={(evt: any) => setAdressebeskyttelse(evt.target.value)}
                         value={adressebeskyttelse}
                     >
-                        {Object.entries(Adressebeskyttelse).map(
-                            ([key, label]): JSX.Element => {
-                                return (
-                                    <option key={key} value={key}>
-                                        {label}
-                                    </option>
-                                );
-                            }
-                        )}
+                        {Object.entries(Adressebeskyttelse).map(([key, label]): JSX.Element => {
+                            return (
+                                <option key={key} value={key}>
+                                    {label}
+                                </option>
+                            );
+                        })}
                     </StyledSelect>
                     <Select
                         label="Folkeregisterpersonstatus"
                         onChange={(evt: any) => setFolkeregisterpersonstatus(evt.target.value)}
                         value={folkeregisterpersonstatus}
                     >
-                        {Object.entries(Folkeregisterpersonstatus).map(
-                            ([key, label]): JSX.Element => {
-                                return (
-                                    <option key={key} value={key}>
-                                        {label}
-                                    </option>
-                                );
-                            }
-                        )}
+                        {Object.entries(Folkeregisterpersonstatus).map(([key, label]): JSX.Element => {
+                            return (
+                                <option key={key} value={key}>
+                                    {label}
+                                </option>
+                            );
+                        })}
                     </Select>
                 </Fieldset>
                 <Adresse state={adresseState} dispatch={dispatchAdresse} />
                 <Knappegruppe>
-                    <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
-                        Legg til
-                    </Button>
-                    <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
-                        Avbryt
-                    </Button>
+                    <Button onClick={onLagre}>Legg til</Button>
+                    <AvbrytKnapp onClick={onCancel}>Avbryt</AvbrytKnapp>
                 </Knappegruppe>
             </Panel>
         </Collapse>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
 import { Button, Fieldset } from '@navikt/ds-react';
 import {
+    AvbrytKnapp,
     DefinitionList,
     FlexWrapper,
     Knappegruppe,
@@ -157,9 +158,9 @@ export const NyBostotteSak = ({ isOpen, callback }: Params) => {
                     <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
                         Legg til
                     </Button>
-                    <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
+                    <AvbrytKnapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
                         Avbryt
-                    </Button>
+                    </AvbrytKnapp>
                 </Knappegruppe>
             </StyledPanel>
         </Collapse>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
 import { Button, Fieldset } from '@navikt/ds-react';
-import { DefinitionList, Knappegruppe, StyledInput, StyledPanel } from '../../../styling/Styles';
+import { AvbrytKnapp, DefinitionList, Knappegruppe, StyledInput, StyledPanel } from '../../../styling/Styles';
 import { getIsoDateString } from '../../../utils/dateUtils';
 import SletteKnapp from '../../../components/SletteKnapp';
 
@@ -79,12 +79,12 @@ export const NyttUtbetalingerFraNav = ({ isOpen, callback }: Params) => {
                     <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
                         Legg til
                     </Button>
-                    <Button
+                    <AvbrytKnapp
                         onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}
                         className="leftPadding"
                     >
                         Avbryt
-                    </Button>
+                    </AvbrytKnapp>
                 </Knappegruppe>
             </StyledPanel>
         </Collapse>

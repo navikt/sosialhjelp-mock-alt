@@ -13,9 +13,12 @@ const StyledLink = styled(Link).attrs({ className: 'navds-link' })`
 const SoknaderLink = styled(Link).attrs({ className: 'navds-link' })`
     display: block;
     margin-top: 2rem;
+    width: fit-content;
 `;
 
-const LinkWithButtonStyle = styled(Link).attrs({ className: 'navds-button navds-button--m navds-body-short' })`
+const LinkWithButtonStyle = styled(Link).attrs({
+    className: 'navds-button navds-button--secondary navds-button--medium',
+})`
     margin: 0 0.5rem 0 0;
 `;
 

@@ -33,7 +33,7 @@ import {
     Heading,
     TextField,
     Fieldset,
-    Select,
+    Ingress,
 } from '@navikt/ds-react';
 import { AdminRollerObject, NyttAdministratorRoller, VisAdministratorRoller } from './roller/AdministratorRoller';
 
@@ -87,6 +87,7 @@ const StyledPanel = styled(Panel)`
 
     .brukerIdent {
         margin-bottom: 2rem;
+        max-width: 15rem;
     }
 `;
 
@@ -134,6 +135,7 @@ const InntektGruppeStyle = styled(GruppeStyle)`
 `;
 
 export const PersonMockData = () => {
+    console.log('masse');
     const [editMode, setEditMode] = useState<boolean>(false);
     const [lockedMode, setLockedMode] = useState<boolean>(false);
     const { appStatus, dispatchAppStatus } = useAppStatus();
@@ -415,8 +417,10 @@ export const PersonMockData = () => {
     return (
         <StyledPanel>
             <Alert variant="warning">
-                DETTE ER KUN FOR TESTING! Data du legger inn her er tilgjengelig for alle. Ikke legg inn noe sensitiv
-                informasjon!
+                <Heading spacing size="xsmall" level="2">
+                    DETTE ER KUN FOR TESTING!
+                </Heading>
+                Data du legger inn her er tilgjengelig for alle. Ikke legg inn noe sensitiv informasjon!
             </Alert>
             {lockedMode && <Alert variant="info">Du kan ikke redigere standardbrukerene.</Alert>}
             <Heading level="1" size="xlarge" spacing>
@@ -484,7 +488,7 @@ export const PersonMockData = () => {
                             Skjermet
                         </option>
                     </StyledSelect>
-                    <Select
+                    <StyledSelect
                         label="Statsborgerskap"
                         disabled={lockedMode}
                         onChange={(evt: any) => setStatsborgerskap(evt.target.value)}
@@ -497,16 +501,18 @@ export const PersonMockData = () => {
                         <option value="USA">Amerikansk</option>
                         <option value="XXX">Statsløs</option>
                         <option value="XUK">Ukjent/Mangler opplysninger</option>
-                    </Select>
-                    <Fieldset legend="Kontaktinformasjon">
+                    </StyledSelect>
+                    <Fieldset legend={<Ingress>Kontaktinformasjon</Ingress>}>
                         <TextField
                             label="Telefonnummer"
+                            htmlSize={15}
                             disabled={lockedMode}
                             value={telefonnummer}
                             onChange={(evt: any) => setTelefonnummer(evt.target.value)}
                         />
                         <TextField
                             label="Epostadresse"
+                            htmlSize={35}
                             disabled={lockedMode}
                             value={epost}
                             onChange={(evt: any) => setEpost(evt.target.value)}
@@ -562,7 +568,9 @@ export const PersonMockData = () => {
                     })}
                     <NyttArbeidsforhold isOpen={leggTilArbeidsforhold} callback={leggTilArbeidsforholdCallback} />
                     {!lockedMode && !leggTilArbeidsforhold && (
-                        <Button onClick={() => setLeggTilArbeidsforhold(true)}>Legg til arbeidsforhold</Button>
+                        <Button variant="secondary" onClick={() => setLeggTilArbeidsforhold(true)}>
+                            Legg til arbeidsforhold
+                        </Button>
                     )}
                 </Fieldset>
             </GruppeStyle>
@@ -600,7 +608,7 @@ export const PersonMockData = () => {
                         <option value="EKTEFELLE_MED_ADRESSEBESKYTTELSE">Med adressebeskyttelse</option>
                     </StyledSelect>
                     <BarnWrapper>
-                        <Label>Barn</Label>
+                        <Label spacing>Barn</Label>
                         {barn.map((obj: BarnObject, index: number) => {
                             return (
                                 <VisBarn
@@ -612,7 +620,9 @@ export const PersonMockData = () => {
                         })}
                         <NyttBarn isOpen={visNyttBarnSkjema} callback={leggTilBarnCallback} />
                         {!lockedMode && !visNyttBarnSkjema && (
-                            <Button onClick={() => setVisNyttBarnSkjema(true)}>Legg til barn</Button>
+                            <Button variant="secondary" onClick={() => setVisNyttBarnSkjema(true)}>
+                                Legg til barn
+                            </Button>
                         )}
                     </BarnWrapper>
                 </Fieldset>
@@ -633,7 +643,9 @@ export const PersonMockData = () => {
                     })}
                     <NyttSkatteutbetaling isOpen={leggTilSkatt} callback={leggTilSkattCallback} />
                     {!lockedMode && !leggTilSkatt && (
-                        <Button onClick={() => setLeggTilSkatt(true)}>Legg til utbetaling</Button>
+                        <Button variant="secondary" onClick={() => setLeggTilSkatt(true)}>
+                            Legg til utbetaling
+                        </Button>
                     )}
                 </Fieldset>
                 <Fieldset legend="Husbanken">
@@ -648,7 +660,11 @@ export const PersonMockData = () => {
                     })}
                     <NyBostotteSak isOpen={leggTilBostotteSak} callback={leggTilBostotteSakCallback} />
                     {!lockedMode && !leggTilBostotteSak && (
-                        <Button className="leggTilBostotte" onClick={() => setLeggTilBostotteSak(true)}>
+                        <Button
+                            variant="secondary"
+                            className="leggTilBostotte"
+                            onClick={() => setLeggTilBostotteSak(true)}
+                        >
                             Legg til sak
                         </Button>
                     )}
@@ -666,7 +682,9 @@ export const PersonMockData = () => {
                         callback={leggTilBostotteUtbetalingCallback}
                     />
                     {!lockedMode && !leggTilBostotteUtbetaling && (
-                        <Button onClick={() => setLeggTilBostotteUtbetaling(true)}>Legg til utbetaling</Button>
+                        <Button variant="secondary" onClick={() => setLeggTilBostotteUtbetaling(true)}>
+                            Legg til utbetaling
+                        </Button>
                     )}
                 </Fieldset>
                 <Fieldset legend="Nav utbetalinger">
@@ -684,7 +702,9 @@ export const PersonMockData = () => {
                         callback={leggTilUtbetalingFraNavCallback}
                     />
                     {!lockedMode && !leggTilUtbetalingFraNav && (
-                        <Button onClick={() => setLeggTilUtbetalingFraNav(true)}>Legg til utbetaling</Button>
+                        <Button variant="secondary" onClick={() => setLeggTilUtbetalingFraNav(true)}>
+                            Legg til utbetaling
+                        </Button>
                     )}
                 </Fieldset>
                 <Fieldset legend="Administrator roller">
@@ -703,7 +723,9 @@ export const PersonMockData = () => {
                         callback={leggTilAdministratorRollerCallback}
                     />
                     {!lockedMode && !leggTilAdministratorRoller && (
-                        <Button onClick={() => setLeggTilAdministratorRoller(true)}>Legg til rolle</Button>
+                        <Button variant="secondary" onClick={() => setLeggTilAdministratorRoller(true)}>
+                            Legg til rolle
+                        </Button>
                     )}
                 </Fieldset>
             </InntektGruppeStyle>
@@ -720,7 +742,10 @@ export const PersonMockData = () => {
                         {editMode ? 'Lagre endringer' : 'Opprett bruker'} {isLoginSession(params) && ' og logg inn'}
                     </Button>
                 )}
-                <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onGoBack(event)}>
+                <Button
+                    variant="secondary"
+                    onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onGoBack(event)}
+                >
                     {lockedMode ? 'Tilbake' : 'Avbryt'}
                 </Button>
             </Knappegruppe>

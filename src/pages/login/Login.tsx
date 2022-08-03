@@ -14,8 +14,10 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { Knappegruppe, StyledSelect } from '../../styling/Styles';
 
-const StyledAlertStripe = styled(Alert)`
-    margin-bottom: 1rem;
+const StyledPanel = styled(Panel)`
+    row-gap: 1rem;
+    display: flex;
+    flex-direction: column;
 `;
 
 export const Login = () => {
@@ -45,14 +47,16 @@ export const Login = () => {
     };
 
     return (
-        <Panel>
-            <Heading level="1" size="xlarge" spacing>
+        <StyledPanel>
+            <Heading level="1" size="xlarge">
                 Mock login
             </Heading>
-            <StyledAlertStripe variant="warning">
-                DETTE ER KUN FOR TESTING! Alt som gjøres i mock-miljø er tilgjengelig for alle. Ikke legg inn noe
-                sensitiv informasjon!
-            </StyledAlertStripe>
+            <Alert variant="warning">
+                <Heading spacing size="xsmall" level="2">
+                    DETTE ER KUN FOR TESTING!
+                </Heading>
+                Alt som gjøres i mock-miljø er tilgjengelig for alle. Ikke legg inn noe sensitiv informasjon!
+            </Alert>
             <StyledSelect onChange={(event) => setFnr(event.target.value)} label="Velg bruker" value={fnr}>
                 {personliste.map((bruker) => {
                     return (
@@ -87,16 +91,19 @@ export const Login = () => {
                     Login
                 </Button>
                 <Link
-                    className="navds-button navds-button--m navds-body-short"
+                    className="navds-button navds-button--secondary navds-button--medium"
                     to={'/person' + addParams(params)}
                     type="knapp"
                 >
                     Opprett bruker
                 </Link>
-                <Link className="navds-button navds-button--m navds-body-short" to={'/' + addParams(params)}>
+                <Link
+                    className="navds-button navds-button--secondary navds-button--medium"
+                    to={'/' + addParams(params)}
+                >
                     Gå til oversikten
                 </Link>
             </Knappegruppe>
-        </Panel>
+        </StyledPanel>
     );
 };
