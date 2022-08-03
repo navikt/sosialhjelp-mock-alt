@@ -3,7 +3,7 @@ import { addParams, getMockAltApiURL, getRedirectParams } from '../../utils/rest
 import { useHistory, useLocation } from 'react-router-dom';
 import { Personalia } from '../person/PersonMockData';
 import styled from 'styled-components/macro';
-import { AvbrytKnapp, Bold, Knappegruppe } from '../../styling/Styles';
+import { AvbrytKnapp, Knappegruppe } from '../../styling/Styles';
 import { Alert, Button, BodyShort, Fieldset, Panel, Select, TextField, Heading, Label } from '@navikt/ds-react';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
