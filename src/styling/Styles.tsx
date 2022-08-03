@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components/macro';
-import Panel from 'nav-frontend-paneler';
-import { Input, Select } from 'nav-frontend-skjema';
+import { Button, Panel, TextField, Select } from '@navikt/ds-react';
 
 export const theme = {
     mobileMaxWidth: 'only screen and (max-width: 30em)',
@@ -16,16 +15,14 @@ export const StyledPanel = styled(Panel)`
 `;
 
 export const StyledSelect = styled(Select)`
-    margin-bottom: 1rem;
     width: fit-content;
-    .selectContainer {
-        margin-right: 1rem;
-    }
 `;
 
-export const StyledInput = styled(Input)<{ size?: number }>`
+export const AvbrytKnapp = styled(Button).attrs({ variant: 'secondary' })``;
+
+export const StyledInput = styled(TextField)<{ htmlSize?: number }>`
     input {
-        max-width: ${(props) => (props.size ? `${props.size}rem` : '10rem')};
+        max-width: ${(props) => (props.htmlSize ? `${props.htmlSize}rem` : 'inherit')};
     }
 `;
 
@@ -51,6 +48,10 @@ export const Knappegruppe = styled.div`
     ${flexWrap};
 
     margin-top: 2rem;
+`;
+
+export const SmallTextField = styled(TextField)`
+    max-width: 7rem;
 `;
 
 export const DefinitionList = styled.dl<{ labelWidth?: number }>`

@@ -1,24 +1,16 @@
-import Panel from 'nav-frontend-paneler';
-import { Normaltekst, Sidetittel } from 'nav-frontend-typografi';
 import React, { useEffect, useState } from 'react';
 import { addParams, getFagsystemmockURL, getMockAltApiURL, getRedirectParams } from '../../utils/restUtils';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { Knapp } from 'nav-frontend-knapper';
+import { BodyShort, Button, Panel, Heading } from '@navikt/ds-react';
 
-const StyledEksternLink = styled.a.attrs({ className: 'lenke' })`
+const StyledEksternLink = styled.a.attrs({ className: 'navds-link' })`
     display: block;
 `;
 
-const StyledLink = styled(Link).attrs({ className: 'lenke' })`
+const StyledLink = styled(Link).attrs({ className: 'navds-link' })`
     margin: 2rem 0.5rem 0 0;
     display: block;
-`;
-
-const StyledPanel = styled(Panel)`
-    h1 {
-        margin-bottom: 1rem;
-    }
 `;
 
 const TabellWrapper = styled.div`
@@ -56,7 +48,7 @@ const MerInfo = styled.td`
     }
 `;
 
-const SeMerKnap = styled(Knapp)`
+const SeMerKnap = styled(Button)`
     margin: 0 auto;
     display: block;
 `;
@@ -106,8 +98,10 @@ export const Soknader = () => {
     }, []);
 
     return (
-        <StyledPanel>
-            <Sidetittel>Søknader</Sidetittel>
+        <Panel>
+            <Heading level="1" size="xlarge" spacing>
+                Søknader
+            </Heading>
             {soknadsliste?.length > 0 ? (
                 <TabellWrapper>
                     <Tabell>
@@ -162,14 +156,14 @@ export const Soknader = () => {
                     </Tabell>
                 </TabellWrapper>
             ) : (
-                <Normaltekst>Fant ingen søknader</Normaltekst>
+                <BodyShort>Fant ingen søknader</BodyShort>
             )}
             {soknadsliste?.length > antallVist && (
-                <SeMerKnap mini onClick={onSeMerClicked}>
+                <SeMerKnap size="s" onClick={onSeMerClicked}>
                     Se flere
                 </SeMerKnap>
             )}
             <StyledLink to={'/' + addParams(params)}>Til oversikten</StyledLink>
-        </StyledPanel>
+        </Panel>
     );
 };

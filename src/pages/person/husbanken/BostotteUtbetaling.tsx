@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
-import { Knapp } from 'nav-frontend-knapper';
+import { Button, Fieldset } from '@navikt/ds-react';
 import { BostotteRolle, getBostotteRolleLabel } from './BostotteSak';
-import { DefinitionList, Knappegruppe, StyledInput, StyledPanel, StyledSelect } from '../../../styling/Styles';
+import {
+    AvbrytKnapp,
+    DefinitionList,
+    Knappegruppe,
+    StyledInput,
+    StyledPanel,
+    StyledSelect,
+} from '../../../styling/Styles';
 import { getIsoDateString } from '../../../utils/dateUtils';
 import SletteKnapp from '../../../components/SletteKnapp';
 
@@ -40,7 +47,7 @@ export const NyttBostotteUtbetaling = ({ isOpen, callback }: Params) => {
     let sistManed = new Date();
     sistManed.setMonth(sistManed.getMonth() - 1);
 
-    const [belop, setBelop] = useState<number>(1337);
+    const [belop, setBelop] = useState('1337');
     const [utbetalingsdato, setUtbetalingsdato] = useState<string>(getIsoDateString(sistManed));
     const [mottaker, setMottaker] = useState<BostotteMottaker>(BostotteMottaker.HUSSTAND);
     const [rolle, setRolle] = useState<BostotteRolle>(BostotteRolle.HOVEDPERSON);
@@ -64,33 +71,44 @@ export const NyttBostotteUtbetaling = ({ isOpen, callback }: Params) => {
     return (
         <Collapse isOpened={isOpen}>
             <StyledPanel>
-                <StyledInput label="Beløp" value={belop} onChange={(evt: any) => setBelop(evt.target.value)} />
-                <StyledInput
-                    label="Utbetalingsdato (åååå-mm-dd)"
-                    value={utbetalingsdato}
-                    onChange={(evt: any) => setUtbetalingsdato(evt.target.value)}
-                />
-                <StyledSelect label="Mottaker" onChange={(evt: any) => setMottaker(evt.target.value)} value={mottaker}>
-                    <option value={BostotteMottaker.HUSSTAND}>
-                        {getBostotteMottakerLabel(BostotteMottaker.HUSSTAND)}
-                    </option>
-                    <option value={BostotteMottaker.KOMMUNE}>
-                        {getBostotteMottakerLabel(BostotteMottaker.KOMMUNE)}
-                    </option>
-                </StyledSelect>
-                <StyledSelect label="Rolle" onChange={(evt: any) => setRolle(evt.target.value)} value={rolle}>
-                    <option value={BostotteRolle.HOVEDPERSON}>
-                        {getBostotteRolleLabel(BostotteRolle.HOVEDPERSON)}
-                    </option>
-                    <option value={BostotteRolle.BIPERSON}>{getBostotteRolleLabel(BostotteRolle.BIPERSON)}</option>
-                </StyledSelect>
+                <Fieldset legend="Legg til utbetaling fra Husbanken">
+                    <StyledInput
+                        label="Beløp"
+                        type="number"
+                        value={belop}
+                        onChange={(evt: any) => setBelop(evt.target.value)}
+                    />
+                    <StyledInput
+                        label="Utbetalingsdato (åååå-mm-dd)"
+                        value={utbetalingsdato}
+                        onChange={(evt: any) => setUtbetalingsdato(evt.target.value)}
+                    />
+                    <StyledSelect
+                        label="Mottaker"
+                        onChange={(evt: any) => setMottaker(evt.target.value)}
+                        value={mottaker}
+                    >
+                        <option value={BostotteMottaker.HUSSTAND}>
+                            {getBostotteMottakerLabel(BostotteMottaker.HUSSTAND)}
+                        </option>
+                        <option value={BostotteMottaker.KOMMUNE}>
+                            {getBostotteMottakerLabel(BostotteMottaker.KOMMUNE)}
+                        </option>
+                    </StyledSelect>
+                    <StyledSelect label="Rolle" onChange={(evt: any) => setRolle(evt.target.value)} value={rolle}>
+                        <option value={BostotteRolle.HOVEDPERSON}>
+                            {getBostotteRolleLabel(BostotteRolle.HOVEDPERSON)}
+                        </option>
+                        <option value={BostotteRolle.BIPERSON}>{getBostotteRolleLabel(BostotteRolle.BIPERSON)}</option>
+                    </StyledSelect>
+                </Fieldset>
                 <Knappegruppe>
-                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
+                    <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
                         Legg til
-                    </Knapp>
-                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
+                    </Button>
+                    <AvbrytKnapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
                         Avbryt
-                    </Knapp>
+                    </AvbrytKnapp>
                 </Knappegruppe>
             </StyledPanel>
         </Collapse>

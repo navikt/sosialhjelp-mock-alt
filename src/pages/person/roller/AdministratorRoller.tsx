@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
-import { Knapp } from 'nav-frontend-knapper';
 import { DefinitionList, Knappegruppe, StyledPanel, StyledSelect } from '../../../styling/Styles';
 import SletteKnapp from '../../../components/SletteKnapp';
+import { Button } from '@navikt/ds-react';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -72,15 +72,19 @@ export const NyttAdministratorRoller = ({ isOpen, callback }: Params) => {
                     <option value={AdminRolle.MODIA_VEILEDER}>{adminTekst(AdminRolle.MODIA_VEILEDER)}</option>
                 </StyledSelect>
                 <Knappegruppe>
-                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
+                    <Button
+                        variant="secondary"
+                        onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}
+                    >
                         Legg til
-                    </Knapp>
-                    <Knapp
+                    </Button>
+                    <Button
+                        variant="secondary"
                         onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}
                         className="leftPadding"
                     >
                         Avbryt
-                    </Knapp>
+                    </Button>
                 </Knappegruppe>
             </StyledPanel>
         </Collapse>

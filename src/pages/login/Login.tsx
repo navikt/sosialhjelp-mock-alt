@@ -1,6 +1,4 @@
-import { Hovedknapp } from 'nav-frontend-knapper';
-import Panel from 'nav-frontend-paneler';
-import { Sidetittel } from 'nav-frontend-typografi';
+import { Alert, Panel, Button, Heading } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import {
     addParams,
@@ -15,16 +13,11 @@ import { Personalia } from '../person/PersonMockData';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { Knappegruppe, StyledSelect } from '../../styling/Styles';
-import AlertStripe from 'nav-frontend-alertstriper';
 
 const StyledPanel = styled(Panel)`
-    h1 {
-        margin-bottom: 1rem;
-    }
-`;
-
-const StyledAlertStripe = styled(AlertStripe)`
-    margin-bottom: 1rem;
+    row-gap: 1rem;
+    display: flex;
+    flex-direction: column;
 `;
 
 export const Login = () => {
@@ -55,11 +48,15 @@ export const Login = () => {
 
     return (
         <StyledPanel>
-            <Sidetittel>Mock login</Sidetittel>
-            <StyledAlertStripe type="advarsel">
-                DETTE ER KUN FOR TESTING! Alt som gjøres i mock-miljø er tilgjengelig for alle. Ikke legg inn noe
-                sensitiv informasjon!
-            </StyledAlertStripe>
+            <Heading level="1" size="xlarge">
+                Mock login
+            </Heading>
+            <Alert variant="warning">
+                <Heading spacing size="xsmall" level="2">
+                    DETTE ER KUN FOR TESTING!
+                </Heading>
+                Alt som gjøres i mock-miljø er tilgjengelig for alle. Ikke legg inn noe sensitiv informasjon!
+            </Alert>
             <StyledSelect onChange={(event) => setFnr(event.target.value)} label="Velg bruker" value={fnr}>
                 {personliste.map((bruker) => {
                     return (
@@ -90,11 +87,20 @@ export const Login = () => {
                 </StyledSelect>
             )}
             <Knappegruppe>
-                <Hovedknapp onClick={() => handleOnClick()}>Login</Hovedknapp>
-                <Link className="knapp" to={'/person' + addParams(params)} type="knapp">
+                <Button variant="primary" onClick={() => handleOnClick()}>
+                    Login
+                </Button>
+                <Link
+                    className="navds-button navds-button--secondary navds-button--medium"
+                    to={'/person' + addParams(params)}
+                    type="knapp"
+                >
                     Opprett bruker
                 </Link>
-                <Link className="knapp" to={'/' + addParams(params)}>
+                <Link
+                    className="navds-button navds-button--secondary navds-button--medium"
+                    to={'/' + addParams(params)}
+                >
                     Gå til oversikten
                 </Link>
             </Knappegruppe>

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components/macro';
-import { Flatknapp } from 'nav-frontend-knapper';
+import { Button } from '@navikt/ds-react';
 
-export const StyledKnapp = styled(Flatknapp)`
+export const StyledKnapp = styled(Button)`
     float: right;
     svg {
         width: 1.3rem;
@@ -31,8 +31,8 @@ const SletteKnapp = (props: Props) => {
 
     return (
         <Wrap>
-            <StyledKnapp kompakt title="slett" onClick={props.onClick}>
-                <span className="sr-only">Normal</span>
+            <StyledKnapp variant="tertiary" title="slett" onClick={props.onClick}>
+                <span className="sr-only">Slett</span>
                 <Trash />
             </StyledKnapp>
         </Wrap>

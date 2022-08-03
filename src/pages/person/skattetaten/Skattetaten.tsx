@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
-import { Knapp } from 'nav-frontend-knapper';
-import { DefinitionList, Knappegruppe, StyledInput, StyledPanel, StyledSelect } from '../../../styling/Styles';
+import { Button, Fieldset } from '@navikt/ds-react';
+import {
+    AvbrytKnapp,
+    DefinitionList,
+    Knappegruppe,
+    StyledInput,
+    StyledPanel,
+    StyledSelect,
+} from '../../../styling/Styles';
 import SletteKnapp from '../../../components/SletteKnapp';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
@@ -66,7 +73,7 @@ export const NyttSkatteutbetaling = ({ isOpen, callback }: Params) => {
 
     const [belop, setBelop] = useState<string>('10000');
     const [trekk, setTrekk] = useState<string>('3333');
-    const [orgnummer, setOrgnummer] = useState<number>(123456785);
+    const [orgnummer, setOrgnummer] = useState('123456785');
     const [maned, setManed] = useState<string>(getMonthDateString(month_1));
     const [type, setType] = useState<SkatteutbetalingType>(SkatteutbetalingType.LOENNSINNTEKT);
 
@@ -74,7 +81,7 @@ export const NyttSkatteutbetaling = ({ isOpen, callback }: Params) => {
         const nyttSkatteutbetalingObject: SkatteutbetalingObject = {
             beloep: belop,
             trekk: trekk,
-            orgnummer: orgnummer.toString(),
+            orgnummer: orgnummer,
             maned: maned,
             type: type,
         };
@@ -90,41 +97,42 @@ export const NyttSkatteutbetaling = ({ isOpen, callback }: Params) => {
     return (
         <Collapse isOpened={isOpen}>
             <StyledPanel>
-                <StyledInput label="Beløp" value={belop} onChange={(evt: any) => setBelop(evt.target.value)} />
-                <StyledInput label="Trekk" value={trekk} onChange={(evt: any) => setTrekk(evt.target.value)} />
-                <StyledInput
-                    label="Orgnummer"
-                    value={orgnummer}
-                    onChange={(evt: any) => setOrgnummer(evt.target.value)}
-                />
-                <StyledSelect label="Måned" onChange={(evt: any) => setManed(evt.target.value)} value={maned}>
-                    <option value={getMonthDateString(month_1)}>{getMonthDateString(month_1)}</option>
-                    <option value={getMonthDateString(month_2)}>{getMonthDateString(month_2)}</option>
-                    <option value={getMonthDateString(month_3)}>{getMonthDateString(month_3)}</option>
-                    <option value={getMonthDateString(month_4)}>{getMonthDateString(month_4)}</option>
-                </StyledSelect>
-                <StyledSelect
-                    label="Velg arbeidsgivertype"
-                    onChange={(evt: any) => setType(evt.target.value)}
-                    value={type}
-                >
-                    {Object.values(SkatteutbetalingType).map(
-                        (value: SkatteutbetalingType): JSX.Element => {
+                <Fieldset legend="Legg til utbetaling (Data fra Skatteetaten)">
+                    <StyledInput label="Beløp" value={belop} onChange={(evt: any) => setBelop(evt.target.value)} />
+                    <StyledInput label="Trekk" value={trekk} onChange={(evt: any) => setTrekk(evt.target.value)} />
+                    <StyledInput
+                        label="Orgnummer"
+                        type="number"
+                        value={orgnummer}
+                        onChange={(evt: any) => setOrgnummer(evt.target.value)}
+                    />
+                    <StyledSelect label="Måned" onChange={(evt: any) => setManed(evt.target.value)} value={maned}>
+                        <option value={getMonthDateString(month_1)}>{getMonthDateString(month_1)}</option>
+                        <option value={getMonthDateString(month_2)}>{getMonthDateString(month_2)}</option>
+                        <option value={getMonthDateString(month_3)}>{getMonthDateString(month_3)}</option>
+                        <option value={getMonthDateString(month_4)}>{getMonthDateString(month_4)}</option>
+                    </StyledSelect>
+                    <StyledSelect
+                        label="Velg arbeidsgivertype"
+                        onChange={(evt: any) => setType(evt.target.value)}
+                        value={type}
+                    >
+                        {Object.values(SkatteutbetalingType).map((value: SkatteutbetalingType): JSX.Element => {
                             return (
                                 <option key={value} value={value}>
                                     {getSkatteutbetalingLabel(value)}
                                 </option>
                             );
-                        }
-                    )}
-                </StyledSelect>
+                        })}
+                    </StyledSelect>
+                </Fieldset>
                 <Knappegruppe>
-                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
+                    <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
                         Legg til
-                    </Knapp>
-                    <Knapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
+                    </Button>
+                    <AvbrytKnapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
                         Avbryt
-                    </Knapp>
+                    </AvbrytKnapp>
                 </Knappegruppe>
             </StyledPanel>
         </Collapse>
