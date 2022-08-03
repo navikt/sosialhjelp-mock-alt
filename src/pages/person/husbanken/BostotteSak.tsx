@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
-import { Button, Fieldset } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
 import {
     AvbrytKnapp,
     DefinitionList,
     FlexWrapper,
     Knappegruppe,
+    StyledFieldset,
     StyledInput,
     StyledPanel,
     StyledSelect,
@@ -109,7 +110,7 @@ export const NyBostotteSak = ({ isOpen, callback }: Params) => {
     return (
         <Collapse isOpened={isOpen}>
             <StyledPanel>
-                <Fieldset legend="Legg til sak fra Husbanken">
+                <StyledFieldset legend="Legg til sak fra Husbanken">
                     <FlexWrapper>
                         <StyledInput
                             label="År"
@@ -153,7 +154,7 @@ export const NyBostotteSak = ({ isOpen, callback }: Params) => {
                         </option>
                         <option value={BostotteRolle.BIPERSON}>{getBostotteRolleLabel(BostotteRolle.BIPERSON)}</option>
                     </StyledSelect>
-                </Fieldset>
+                </StyledFieldset>
                 <Knappegruppe>
                     <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
                         Legg til

@@ -19,6 +19,7 @@ interface Props {
     lockedMode?: boolean;
     state: AdresseState;
     dispatch: React.Dispatch<AdresseAction>;
+    heading?: React.ReactNode;
 }
 
 const Adresse = (props: Props) => {
@@ -41,9 +42,11 @@ const Adresse = (props: Props) => {
     return (
         <Fieldset
             legend={
-                <Heading level="2" size="medium">
-                    Bostedsadresse
-                </Heading>
+                props.heading ?? (
+                    <Heading level="2" size="medium">
+                        Bostedsadresse
+                    </Heading>
+                )
             }
         >
             <TextField

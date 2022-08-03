@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Collapse } from 'react-collapse';
 import { getMockAltApiURL } from '../../../utils/restUtils';
-import { Button, Fieldset, Panel, TextField } from '@navikt/ds-react';
+import { Button, Panel, TextField } from '@navikt/ds-react';
 import {
     DefinitionList,
     Knappegruppe,
@@ -9,6 +9,7 @@ import {
     StyledSelect,
     SmallTextField,
     AvbrytKnapp,
+    StyledFieldset,
 } from '../../../styling/Styles';
 import styled from 'styled-components/macro';
 import { getIsoDateString } from '../../../utils/dateUtils';
@@ -101,7 +102,7 @@ export const NyttArbeidsforhold = ({ isOpen, callback }: Params) => {
     return (
         <Collapse isOpened={isOpen}>
             <ArbeidsforholdPanel>
-                <Fieldset legend="Nytt arbeidsforhold">
+                <StyledFieldset legend="Nytt arbeidsforhold">
                     <SmallTextField
                         label="Id"
                         value={arbeidsforholdId}
@@ -154,7 +155,7 @@ export const NyttArbeidsforhold = ({ isOpen, callback }: Params) => {
                             />
                         </InputWrapper>
                     )}
-                </Fieldset>
+                </StyledFieldset>
                 <Knappegruppe>
                     <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
                         Legg til

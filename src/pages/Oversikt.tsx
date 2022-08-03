@@ -4,7 +4,7 @@ import { Personalia } from './person/PersonMockData';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { Bold } from '../styling/Styles';
-import { BodyShort, Panel, Heading } from '@navikt/ds-react';
+import { BodyLong, Panel, Heading } from '@navikt/ds-react';
 
 const StyledLink = styled(Link).attrs({ className: 'navds-link' })`
     margin-right: 1rem;
@@ -115,7 +115,7 @@ export const Oversikt = () => {
                     </Tabell>
                 </TabellWrapper>
             ) : (
-                <BodyShort>Fant ingen eksisterende testbrukere</BodyShort>
+                <BodyLong spacing>Fant ingen eksisterende testbrukere</BodyLong>
             )}
             <LinkWithButtonStyle to={'/person' + addParams(params)}>Opprett bruker</LinkWithButtonStyle>
             <LinkWithButtonStyle to={'/login' + addParams(params)}>Logg inn</LinkWithButtonStyle>

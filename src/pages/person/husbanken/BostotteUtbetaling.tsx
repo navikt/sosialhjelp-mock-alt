@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
-import { Button, Fieldset } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
 import { BostotteRolle, getBostotteRolleLabel } from './BostotteSak';
 import {
     AvbrytKnapp,
@@ -9,6 +9,7 @@ import {
     StyledInput,
     StyledPanel,
     StyledSelect,
+    StyledFieldset,
 } from '../../../styling/Styles';
 import { getIsoDateString } from '../../../utils/dateUtils';
 import SletteKnapp from '../../../components/SletteKnapp';
@@ -71,17 +72,19 @@ export const NyttBostotteUtbetaling = ({ isOpen, callback }: Params) => {
     return (
         <Collapse isOpened={isOpen}>
             <StyledPanel>
-                <Fieldset legend="Legg til utbetaling fra Husbanken">
+                <StyledFieldset legend="Legg til utbetaling fra Husbanken">
                     <StyledInput
                         label="Beløp"
                         type="number"
                         value={belop}
                         onChange={(evt: any) => setBelop(evt.target.value)}
+                        htmlSize={20}
                     />
                     <StyledInput
                         label="Utbetalingsdato (åååå-mm-dd)"
                         value={utbetalingsdato}
                         onChange={(evt: any) => setUtbetalingsdato(evt.target.value)}
+                        htmlSize={20}
                     />
                     <StyledSelect
                         label="Mottaker"
@@ -101,7 +104,7 @@ export const NyttBostotteUtbetaling = ({ isOpen, callback }: Params) => {
                         </option>
                         <option value={BostotteRolle.BIPERSON}>{getBostotteRolleLabel(BostotteRolle.BIPERSON)}</option>
                     </StyledSelect>
-                </Fieldset>
+                </StyledFieldset>
                 <Knappegruppe>
                     <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
                         Legg til
