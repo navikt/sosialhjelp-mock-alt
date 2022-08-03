@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
-import { Button, Fieldset } from '@navikt/ds-react';
-import { AvbrytKnapp, DefinitionList, Knappegruppe, StyledInput, StyledPanel } from '../../../styling/Styles';
+import { Button } from '@navikt/ds-react';
+import {
+    AvbrytKnapp,
+    DefinitionList,
+    Knappegruppe,
+    StyledFieldset,
+    StyledInput,
+    StyledPanel,
+} from '../../../styling/Styles';
 import { getIsoDateString } from '../../../utils/dateUtils';
 import SletteKnapp from '../../../components/SletteKnapp';
 
@@ -52,29 +59,37 @@ export const NyttUtbetalingerFraNav = ({ isOpen, callback }: Params) => {
     return (
         <Collapse isOpened={isOpen}>
             <StyledPanel>
-                <Fieldset legend="Legg til utbetaling fra Nav">
-                    <StyledInput label="Beløp" value={belop} onChange={(evt: any) => setBelop(evt.target.value)} />
+                <StyledFieldset legend="Legg til utbetaling fra Nav">
+                    <StyledInput
+                        label="Beløp"
+                        value={belop}
+                        onChange={(evt: any) => setBelop(evt.target.value)}
+                        htmlSize={20}
+                    />
                     <StyledInput
                         label="Utbetalingsdato (åååå-mm-dd)"
                         value={dato}
                         onChange={(evt: any) => setDato(evt.target.value)}
+                        htmlSize={20}
                     />
                     <StyledInput
                         label="Ytelsestype"
                         value={ytelsestype}
                         onChange={(evt: any) => setYtelsestype(evt.target.value)}
+                        htmlSize={30}
                     />
                     <StyledInput
                         label="Skattebeløp"
                         value={skattebelop}
                         onChange={(evt: any) => setSkattebelop(evt.target.value)}
+                        htmlSize={20}
                     />
                     <StyledInput
                         label="Ytelseskomponenttype"
                         value={ytelseskomponenttype}
                         onChange={(evt: any) => setYtelseskomponenttype(evt.target.value)}
                     />
-                </Fieldset>
+                </StyledFieldset>
                 <Knappegruppe>
                     <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
                         Legg til

@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components/macro';
-import { Button, Panel, TextField, Select } from '@navikt/ds-react';
+import { Fieldset, Button, Panel, TextField, Select } from '@navikt/ds-react';
 
 export const theme = {
     mobileMaxWidth: 'only screen and (max-width: 30em)',
@@ -50,8 +50,25 @@ export const Knappegruppe = styled.div`
     margin-top: 2rem;
 `;
 
+export const StyledFieldset = styled(Fieldset)`
+    legend {
+        // same as .navds-ingress
+        font-size: var(--navds-font-size-xlarge);
+        font-weight: var(--navds-font-weight-regular);
+        letter-spacing: -0.001em;
+        line-height: var(--navds-font-line-height-xlarge);
+        margin: 0;
+    }
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5rem;
+`;
+
 export const SmallTextField = styled(TextField)`
-    max-width: 7rem;
+    input {
+        max-width: 7rem;
+    }
 `;
 
 export const DefinitionList = styled.dl<{ labelWidth?: number }>`

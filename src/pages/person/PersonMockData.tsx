@@ -134,8 +134,13 @@ const InntektGruppeStyle = styled(GruppeStyle)`
     }
 `;
 
+const PersonOpplysningerFieldset = styled(Fieldset)`
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5rem;
+`;
+
 export const PersonMockData = () => {
-    console.log('masse');
     const [editMode, setEditMode] = useState<boolean>(false);
     const [lockedMode, setLockedMode] = useState<boolean>(false);
     const { appStatus, dispatchAppStatus } = useAppStatus();
@@ -434,7 +439,7 @@ export const PersonMockData = () => {
                 className="brukerIdent"
             />
             <GruppeStyle>
-                <Fieldset
+                <PersonOpplysningerFieldset
                     legend={
                         <Heading level="2" size="medium" spacing>
                             Personopplysninger
@@ -525,7 +530,7 @@ export const PersonMockData = () => {
                             Kan varsles
                         </Checkbox>
                     </Fieldset>
-                    <Fieldset legend="Kontonummer">
+                    <Fieldset legend={<Ingress>Kontonummer</Ingress>}>
                         {!lockedMode && (
                             <Checkbox
                                 disabled={lockedMode}
@@ -544,7 +549,7 @@ export const PersonMockData = () => {
                             />
                         </Collapse>
                     </Fieldset>
-                </Fieldset>
+                </PersonOpplysningerFieldset>
             </GruppeStyle>
             <GruppeStyle>
                 <Adresse lockedMode={lockedMode} state={adresseState} dispatch={dispatchAdresse} />
@@ -618,7 +623,7 @@ export const PersonMockData = () => {
                                 />
                             );
                         })}
-                        <NyttBarn isOpen={visNyttBarnSkjema} callback={leggTilBarnCallback} />
+                        {visNyttBarnSkjema && <NyttBarn isOpen={visNyttBarnSkjema} callback={leggTilBarnCallback} />}
                         {!lockedMode && !visNyttBarnSkjema && (
                             <Button variant="secondary" onClick={() => setVisNyttBarnSkjema(true)}>
                                 Legg til barn

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
-import { Button, Fieldset } from '@navikt/ds-react';
+import { Button, TextField } from '@navikt/ds-react';
 import {
     AvbrytKnapp,
     DefinitionList,
     Knappegruppe,
+    StyledFieldset,
     StyledInput,
     StyledPanel,
     StyledSelect,
@@ -97,14 +98,25 @@ export const NyttSkatteutbetaling = ({ isOpen, callback }: Params) => {
     return (
         <Collapse isOpened={isOpen}>
             <StyledPanel>
-                <Fieldset legend="Legg til utbetaling (Data fra Skatteetaten)">
-                    <StyledInput label="Beløp" value={belop} onChange={(evt: any) => setBelop(evt.target.value)} />
-                    <StyledInput label="Trekk" value={trekk} onChange={(evt: any) => setTrekk(evt.target.value)} />
+                <StyledFieldset legend="Legg til utbetaling (Data fra Skatteetaten)">
+                    <TextField
+                        label="Beløp"
+                        value={belop}
+                        onChange={(evt: any) => setBelop(evt.target.value)}
+                        htmlSize={20}
+                    />
+                    <StyledInput
+                        label="Trekk"
+                        value={trekk}
+                        onChange={(evt: any) => setTrekk(evt.target.value)}
+                        htmlSize={20}
+                    />
                     <StyledInput
                         label="Orgnummer"
                         type="number"
                         value={orgnummer}
                         onChange={(evt: any) => setOrgnummer(evt.target.value)}
+                        htmlSize={20}
                     />
                     <StyledSelect label="Måned" onChange={(evt: any) => setManed(evt.target.value)} value={maned}>
                         <option value={getMonthDateString(month_1)}>{getMonthDateString(month_1)}</option>
@@ -125,7 +137,7 @@ export const NyttSkatteutbetaling = ({ isOpen, callback }: Params) => {
                             );
                         })}
                     </StyledSelect>
-                </Fieldset>
+                </StyledFieldset>
                 <Knappegruppe>
                     <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
                         Legg til

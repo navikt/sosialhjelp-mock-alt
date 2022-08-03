@@ -1,4 +1,4 @@
-FROM navikt/node-express:12.2.0-alpine
+FROM node:16-alpine
 
 ENV NODE_ENV production
 

@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Collapse } from 'react-collapse';
 import { getMockAltApiURL } from '../../../utils/restUtils';
-import { Button, Fieldset, Panel, Select, TextField } from '@navikt/ds-react';
+import { Button, Ingress, Panel, TextField } from '@navikt/ds-react';
 import { Bostedsadresse, NameWrapper, PersonaliaNavn } from '../PersonMockData';
-import { AvbrytKnapp, DefinitionList, Knappegruppe, StyledPanel, StyledSelect } from '../../../styling/Styles';
+import {
+    AvbrytKnapp,
+    DefinitionList,
+    Knappegruppe,
+    StyledFieldset,
+    StyledPanel,
+    StyledSelect,
+} from '../../../styling/Styles';
 import { getIsoDateString } from '../../../utils/dateUtils';
 import { Adressebeskyttelse, AdressebeskyttelseType } from '../personalia/adressebeskyttelse';
 import Adresse from '../adresse/Adresse';
@@ -91,8 +98,13 @@ export const NyttBarn = ({ isOpen, callback }: Params<BarnObject>) => {
     return (
         <Collapse isOpened={isOpen}>
             <Panel>
-                <Fieldset legend="Legg til barn">
-                    <TextField value={fnr} label="Ident" onChange={(evt: any) => setFnr(evt.target.value)} />
+                <StyledFieldset legend="Nytt barn">
+                    <TextField
+                        value={fnr}
+                        label="Ident"
+                        onChange={(evt: any) => setFnr(evt.target.value)}
+                        htmlSize={20}
+                    />
                     <NameWrapper>
                         <TextField
                             label="Fornavn"
@@ -115,6 +127,7 @@ export const NyttBarn = ({ isOpen, callback }: Params<BarnObject>) => {
                         label="Fødselsdato (åååå-mm-dd)"
                         value={foedselsdato}
                         onChange={(evt: any) => setFoedselsdato(evt.target.value)}
+                        htmlSize={20}
                     />
                     <StyledSelect
                         label="Adressebeskyttelse"
@@ -129,7 +142,7 @@ export const NyttBarn = ({ isOpen, callback }: Params<BarnObject>) => {
                             );
                         })}
                     </StyledSelect>
-                    <Select
+                    <StyledSelect
                         label="Folkeregisterpersonstatus"
                         onChange={(evt: any) => setFolkeregisterpersonstatus(evt.target.value)}
                         value={folkeregisterpersonstatus}
@@ -141,9 +154,13 @@ export const NyttBarn = ({ isOpen, callback }: Params<BarnObject>) => {
                                 </option>
                             );
                         })}
-                    </Select>
-                </Fieldset>
-                <Adresse state={adresseState} dispatch={dispatchAdresse} />
+                    </StyledSelect>
+                    <Adresse
+                        state={adresseState}
+                        dispatch={dispatchAdresse}
+                        heading={<Ingress>Bostedsadresse</Ingress>}
+                    />
+                </StyledFieldset>
                 <Knappegruppe>
                     <Button onClick={onLagre}>Legg til</Button>
                     <AvbrytKnapp onClick={onCancel}>Avbryt</AvbrytKnapp>
