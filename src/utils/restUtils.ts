@@ -66,6 +66,9 @@ export const getRedirectParams = (): string => {
     if (!redirect) {
         redirect = query.get('redirect_uri');
     }
+    if (!redirect) {
+        redirect = query.get('goto');
+    }
     const expiry = query.get('expiry');
     return cookiename
         ? '&cookiename=' + cookiename
