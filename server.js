@@ -4,7 +4,7 @@ const path = require('path');
 const basePath = '/sosialhjelp/mock-alt';
 
 const app = express(); // create express app
-
+app.disable('x-powered-by');
 //app.use(basePath, express.static('public'));
 app.use(basePath, express.static(path.join(__dirname, './', 'build'), { index: false }));
 
