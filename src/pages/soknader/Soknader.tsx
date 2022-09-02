@@ -130,7 +130,11 @@ export const Soknader = () => {
                                                 <b>* noen av vedleggene mangler ({soknad.vedleggSomMangler} stk)</b>
                                             )}
                                             <StyledEksternLink
-                                                href={getMockAltApiURL() + '/mock-alt/soknad/' + soknad.fiksDigisosId}
+                                                href={
+                                                    getMockAltApiURL() +
+                                                    '/mock-alt/soknad/' +
+                                                    encodeURIComponent(soknad.fiksDigisosId)
+                                                }
                                             >
                                                 Last ned soknad-zip
                                             </StyledEksternLink>
@@ -138,13 +142,17 @@ export const Soknader = () => {
                                                 href={
                                                     getMockAltApiURL() +
                                                     '/mock-alt/ettersendelse/' +
-                                                    soknad.fiksDigisosId
+                                                    encodeURIComponent(soknad.fiksDigisosId)
                                                 }
                                             >
                                                 Last ned ettersendelse-zip
                                             </StyledEksternLink>
                                             <StyledEksternLink
-                                                href={getFagsystemmockURL() + '/?fiksDigisosId=' + soknad.fiksDigisosId}
+                                                href={encodeURI(
+                                                    getFagsystemmockURL() +
+                                                        '/?fiksDigisosId=' +
+                                                        encodeURIComponent(soknad.fiksDigisosId)
+                                                )}
                                             >
                                                 Åpne i "fagsystem"
                                             </StyledEksternLink>
