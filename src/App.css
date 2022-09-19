@@ -6,7 +6,7 @@ body {
     width: 100%;
     display: flex;
     justify-content: center;
-    position: relative;
+    position: relative; /* nødvendig for at lenke til testveiledning skal kunne ha posistion aboslute */
 }
 
 button,
