@@ -1,10 +1,3 @@
-const erDevGcpMock = () => {
-    return (
-        window.location.origin === 'https://digisos.ekstern.dev.nav.no' ||
-        window.location.origin.indexOf('https://sosialhjelp-mock-alt-mock.dev.nav.no') > -1
-    );
-};
-
 const erLocalhost = () => {
     return window.location.origin.indexOf('localhost:') > -1 || window.location.origin.indexOf('127.0.0.1:') > -1;
 };
@@ -12,50 +5,40 @@ const erLocalhost = () => {
 export const getMockAltApiURL = () => {
     if (erLocalhost()) {
         return 'http://localhost:8989/sosialhjelp/mock-alt-api';
-    } else if (erDevGcpMock()) {
-        return 'https://digisos.ekstern.dev.nav.no/sosialhjelp/mock-alt-api';
     } else {
-        return 'https://digisos.labs.nais.io/sosialhjelp/mock-alt-api';
+        return 'https://digisos.ekstern.dev.nav.no/sosialhjelp/mock-alt-api';
     }
 };
 
 export const getSoknadURL = () => {
     if (erLocalhost()) {
         return 'http://localhost:3000/sosialhjelp/soknad/informasjon';
-    } else if (erDevGcpMock()) {
-        return 'https://digisos.ekstern.dev.nav.no/sosialhjelp/soknad/informasjon';
     } else {
-        return 'https://digisos.labs.nais.io/sosialhjelp/soknad/informasjon';
+        return 'https://digisos.ekstern.dev.nav.no/sosialhjelp/soknad/informasjon';
     }
 };
 
 export const getInnsynURL = () => {
     if (erLocalhost()) {
         return 'http://localhost:3000/sosialhjelp/innsyn';
-    } else if (erDevGcpMock()) {
-        return 'https://digisos.ekstern.dev.nav.no/sosialhjelp/innsyn';
     } else {
-        return 'https://digisos.labs.nais.io/sosialhjelp/innsyn';
+        return 'https://digisos.ekstern.dev.nav.no/sosialhjelp/innsyn';
     }
 };
 
 export const getDialogURL = () => {
     if (erLocalhost()) {
         return 'http://localhost:3000/sosialhjelp/meldinger';
-    } else if (erDevGcpMock()) {
-        return 'https://digisos.ekstern.dev.nav.no/sosialhjelp/meldinger';
     } else {
-        return 'https://sosialhjelp.dev.nav.no/sosialhjelp/meldinger';
+        return 'https://digisos.ekstern.dev.nav.no/sosialhjelp/meldinger';
     }
 };
 
 export const getFagsystemmockURL = () => {
     if (erLocalhost()) {
         return 'http://localhost:3000/sosialhjelp/fagsystem-mock';
-    } else if (erDevGcpMock()) {
-        return 'https://digisos.ekstern.dev.nav.no/sosialhjelp/fagsystem-mock';
     } else {
-        return 'https://digisos.labs.nais.io/sosialhjelp/fagsystem-mock';
+        return 'https://digisos.ekstern.dev.nav.no/sosialhjelp/fagsystem-mock';
     }
 };
 
