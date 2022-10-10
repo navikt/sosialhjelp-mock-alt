@@ -31,6 +31,7 @@ const LinkWithButtonStyle = styled(Link).attrs({
 
 const StyledPanel = styled(Panel)`
     margin-bottom: 3rem;
+    min-height: 85vh;
 `;
 
 const TabellWrapper = styled.div`

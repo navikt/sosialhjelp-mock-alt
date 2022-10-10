@@ -2,7 +2,6 @@ import { Alert, Panel, Button, Heading } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import {
     addParams,
-    getDialogURL,
     getInnsynURL,
     getMockAltApiURL,
     getRedirectParams,
@@ -83,9 +82,6 @@ export const Login = () => {
                     </option>
                     <option key="innsyn" value={getInnsynURL()}>
                         Innsyn
-                    </option>
-                    <option key="dialog" value={getDialogURL()}>
-                        Dialog
                     </option>
                 </StyledSelect>
             )}
