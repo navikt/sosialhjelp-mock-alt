@@ -1,88 +1,59 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
-import { DefinitionList, Knappegruppe, StyledPanel, StyledSelect } from '../../../styling/Styles';
+import { Knappegruppe, StyledPanel } from '../../../styling/Styles';
+import { Button, Checkbox, CheckboxGroup } from '@navikt/ds-react';
+import styled from 'styled-components/macro';
 import SletteKnapp from '../../../components/SletteKnapp';
-import { Button } from '@navikt/ds-react';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
-export interface AdminRollerObject {
-    rolle: AdminRolle;
-}
-
-interface Params {
-    isOpen: boolean;
-    callback: (data: any) => void;
+interface Props {
+    initialRoller: AdminRolle[];
+    setRoller: (data: any) => void;
 }
 
 export enum AdminRolle {
-    DIALOG_VEILEDER = 'DIALOG_VEILEDER',
-    DIALOG_ADMINISTRATOR = 'DIALOG_ADMINISTRATOR',
-    DIALOG_TEKNISK_ARKIV = 'DIALOG_TEKNISK_ARKIV',
-    DIALOG_INNSIKT = 'DIALOG_INNSIKT',
     MODIA_VEILEDER = 'MODIA_VEILEDER',
 }
 
 const adminTekst = (rolle: AdminRolle) => {
-    if (rolle === AdminRolle.DIALOG_VEILEDER) {
-        return 'Dialogveileder (kan se og svare på meldinger)';
-    } else if (rolle === AdminRolle.DIALOG_ADMINISTRATOR) {
-        return 'Dialogadministrator (kan slette meldinger)';
-    } else if (rolle === AdminRolle.DIALOG_TEKNISK_ARKIV) {
-        return 'Dialogarkivator (kan hente ut meldinger til arkivering)';
-    } else if (rolle === AdminRolle.DIALOG_INNSIKT) {
-        return 'Dialoginnsikt (kan hente ut annonyme meldinger til innsiktsarbeide)';
-    } else if (rolle === AdminRolle.MODIA_VEILEDER) {
+    if (rolle === AdminRolle.MODIA_VEILEDER) {
         return 'Modiaveileder (har tilgang til Modia sosial)';
     }
     return rolle;
 };
-export const NyttAdministratorRoller = ({ isOpen, callback }: Params) => {
-    const [rolle, setRolle] = useState<AdminRolle>(AdminRolle.DIALOG_VEILEDER);
+export const AdministratorRollerPanel = (props: Props) => {
+    const { setRoller, initialRoller } = props;
+    const [checkboxState, setCheckboxState] = useState<AdminRolle[]>(initialRoller);
 
     const onLagre = (event: ClickEvent) => {
-        const nyttAdministratorRollerObject: AdminRollerObject = {
-            rolle: rolle,
-        };
-
-        callback(nyttAdministratorRollerObject);
+        setRoller(checkboxState);
         event.preventDefault();
     };
-    const onCancel = (event: ClickEvent) => {
-        callback(null);
-        event.preventDefault();
+
+    const onCancel = () => {
+        setCheckboxState(initialRoller);
+        setRoller(initialRoller);
     };
 
     return (
-        <Collapse isOpened={isOpen}>
+        <Collapse isOpened>
             <StyledPanel>
-                <StyledSelect
-                    label="Administratorrolle"
-                    onChange={(evt: any) => setRolle(evt.target.value)}
-                    value={rolle}
+                <CheckboxGroup
+                    legend="Administratorrolle"
+                    onChange={(value: AdminRolle[]) => setCheckboxState(value)}
+                    value={checkboxState}
                 >
-                    <option value={AdminRolle.DIALOG_VEILEDER}>{adminTekst(AdminRolle.DIALOG_VEILEDER)}</option>
-                    <option value={AdminRolle.DIALOG_ADMINISTRATOR}>
-                        {adminTekst(AdminRolle.DIALOG_ADMINISTRATOR)}
-                    </option>
-                    <option value={AdminRolle.DIALOG_TEKNISK_ARKIV}>
-                        {adminTekst(AdminRolle.DIALOG_TEKNISK_ARKIV)}
-                    </option>
-                    <option value={AdminRolle.DIALOG_INNSIKT}>{adminTekst(AdminRolle.DIALOG_INNSIKT)}</option>
-                    <option value={AdminRolle.MODIA_VEILEDER}>{adminTekst(AdminRolle.MODIA_VEILEDER)}</option>
-                </StyledSelect>
+                    <Checkbox value={AdminRolle.MODIA_VEILEDER}>{adminTekst(AdminRolle.MODIA_VEILEDER)}</Checkbox>
+                </CheckboxGroup>
                 <Knappegruppe>
                     <Button
                         variant="secondary"
                         onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}
                     >
-                        Legg til
+                        Lagre
                     </Button>
-                    <Button
-                        variant="secondary"
-                        onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}
-                        className="leftPadding"
-                    >
+                    <Button variant="secondary" onClick={onCancel} className="leftPadding">
                         Avbryt
                     </Button>
                 </Knappegruppe>
@@ -91,20 +62,47 @@ export const NyttAdministratorRoller = ({ isOpen, callback }: Params) => {
     );
 };
 
-interface ViseParams {
-    adminRolle: AdminRollerObject;
+interface ViseProps {
+    roller: AdminRolle[];
     lockedMode: boolean;
+    setIsEditing: () => void;
     onSlett: () => void;
 }
 
-export const VisAdministratorRoller = ({ adminRolle, lockedMode, onSlett }: ViseParams) => {
+export const VisAdministratorRoller = ({ roller, lockedMode, setIsEditing, onSlett }: ViseProps) => {
+    if (roller.length === 0 && !lockedMode) {
+        return (
+            <Button variant="secondary" onClick={setIsEditing}>
+                Legg til rolle
+            </Button>
+        );
+    }
     return (
         <StyledPanel>
-            <DefinitionList labelWidth={30}>
-                <dt>Rolle</dt>
-                <dd>{adminTekst(adminRolle.rolle)}</dd>
-            </DefinitionList>
-            {!lockedMode && <SletteKnapp onClick={onSlett} />}
+            <StyledList>
+                {roller.map((rolle: AdminRolle) => {
+                    return <li key={rolle}>{adminTekst(rolle)}</li>;
+                })}
+            </StyledList>
+            {!lockedMode && (
+                <ButtonGroup>
+                    <Button variant="secondary" onClick={setIsEditing}>
+                        Endre
+                    </Button>
+                    <SletteKnapp onClick={onSlett} />
+                </ButtonGroup>
+            )}
         </StyledPanel>
     );
 };
+
+const StyledList = styled.ul`
+    margin-top: 0;
+    padding-inline-start: var(--navds-spacing-4);
+`;
+
+const ButtonGroup = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+`;

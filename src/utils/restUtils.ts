@@ -26,14 +26,6 @@ export const getInnsynURL = () => {
     }
 };
 
-export const getDialogURL = () => {
-    if (erLocalhost()) {
-        return 'http://localhost:3000/sosialhjelp/meldinger';
-    } else {
-        return 'https://digisos.ekstern.dev.nav.no/sosialhjelp/meldinger';
-    }
-};
-
 export const getFagsystemmockURL = () => {
     if (erLocalhost()) {
         return 'http://localhost:3000/sosialhjelp/fagsystem-mock';
