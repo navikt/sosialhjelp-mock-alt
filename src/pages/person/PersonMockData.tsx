@@ -498,8 +498,8 @@ export const PersonMockData = () => {
                     >
                         <option value="NOR">Norsk</option>
                         <option value="SWE">Svensk</option>
-                        <option value="DEN">Dansk</option>
-                        <option value="GER">Tysk</option>
+                        <option value="DNK">Dansk</option>
+                        <option value="DEU">Tysk</option>
                         <option value="USA">Amerikansk</option>
                         <option value="XXX">Statsløs</option>
                         <option value="XUK">Ukjent/Mangler opplysninger</option>
