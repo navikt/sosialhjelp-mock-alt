@@ -18,7 +18,6 @@ export interface UtbetalingFraNavObject {
     belop: string;
     dato: string;
     ytelsestype: string;
-    melding: string;
     skattebelop: string;
     ytelseskomponenttype: string;
 }
@@ -43,7 +42,6 @@ export const NyttUtbetalingerFraNav = ({ isOpen, callback }: Params) => {
             belop: belop,
             dato: dato,
             ytelsestype: ytelsestype,
-            melding: 'melding',
             skattebelop: skattebelop,
             ytelseskomponenttype: ytelseskomponenttype,
         };
