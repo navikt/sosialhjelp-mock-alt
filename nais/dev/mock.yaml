@@ -1,17 +1,15 @@
 apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
-  name: {{applicationName}}
-  namespace: {{namespace}}
+  name: sosialhjelp-mock-alt-mock
+  namespace: teamdigisos
   labels:
     team: teamdigisos
 spec:
   image: {{image}}
   port: 5000
   ingresses:
-{{#each ingresses}}
-   - "{{this}}"
-{{/each}}
+   - "https://sosialhjelp-mock-alt-mock.dev.nav.no/sosialhjelp/mock-alt"
   liveness:
     path: /sosialhjelp/mock-alt/internal/isAlive
     initialDelay: 5
@@ -30,7 +28,7 @@ spec:
     max: 1
     cpuThresholdPercentage: 70
   env:
-{{#each env}}
-    - name: {{@key}}
-      value: "{{this}}"
-{{/each}}
+    - name: HOST_ADDRESS
+      value: "https://digisos.ekstern.dev.nav.no/"
+    - name: COOKIE_DOMAIN
+      value: "digisos.ekstern.dev.nav.no"
