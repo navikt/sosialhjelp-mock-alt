@@ -68,5 +68,10 @@
   "lint-staged": {
     "*.{ts,tsx,css,md}": "prettier --write",
     "*.{js,jsx,ts,tsx}": "eslint src --max-warnings=0"
+  },
+  "overrides": {
+    "react-scripts": {
+      "@svgr/webpack": "6.5.1"
+    }
   }
 }
