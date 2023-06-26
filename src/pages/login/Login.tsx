@@ -43,7 +43,7 @@ export const Login = () => {
     const handleOnClick = () => {
         var queryString = addParams(params, '&');
         if (!isLoginSession(params)) {
-            queryString = '&redirect=' + redirect;
+            queryString = '&redirect=' + encodeURIComponent(redirect);
         }
         window.location.href = `${getMockAltApiURL()}/login/cookie?subject=${encodeURIComponent(
             fnr
