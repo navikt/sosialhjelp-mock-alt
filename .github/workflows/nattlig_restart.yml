@@ -3,6 +3,10 @@ on:
   schedule:
     - cron: '0 1 * * *'
 
+permissions:
+  contents: write
+  packages: write
+  actions: write
 jobs:
   deploy:
     name: Deploy to dev
