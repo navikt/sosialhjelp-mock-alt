@@ -2,6 +2,10 @@ name: Deploy til dev
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+  packages: write
+  actions: write
 jobs:
   deploy:
     name: Deploy to dev

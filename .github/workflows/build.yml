@@ -7,6 +7,9 @@ on:
       - '**'      # Don't build any tags
   workflow_dispatch:
 
+permissions:
+  contents: write
+  packages: write
 # FIXME: Legg til docker layer caching, f.eks. https://github.com/marketplace/actions/build-docker-images-using-cache
 jobs:
   build:
