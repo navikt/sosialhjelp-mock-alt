@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { addParams, getMockAltApiURL, getRedirectParams, isLoginSession } from '../../utils/restUtils';
 import { ArbeidsforholdObject, NyttArbeidsforhold, VisArbeidsforhold } from './arbeidsforhold/Arbeidsfohold';
 import { BostotteSakObject, NyBostotteSak, VisBostotteSak } from './husbanken/BostotteSak';
@@ -186,7 +186,7 @@ export const PersonMockData = () => {
 
     const queryFnr = useQuery().get('brukerID');
     const params = getRedirectParams();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     useEffect(() => {
         let promises = [];
@@ -372,7 +372,7 @@ export const PersonMockData = () => {
                             '&'
                         )}`;
                     } else {
-                        history.push('/' + addParams(params));
+                        navigate('/' + addParams(params));
                     }
                 } else if (response.status === 500) {
                     throw new Error(
@@ -389,7 +389,7 @@ export const PersonMockData = () => {
     };
 
     const onGoBack = (event: ClickEvent): void => {
-        history.push('/' + addParams(params));
+        navigate('/' + addParams(params));
         event.preventDefault();
     };
 
@@ -610,7 +610,9 @@ export const PersonMockData = () => {
                         <option value="EKTEFELLE_MED_ADRESSEBESKYTTELSE">Med adressebeskyttelse</option>
                     </StyledSelect>
                     <BarnWrapper>
-                        <Label spacing>Barn</Label>
+                        <Label as="p" spacing>
+                            Barn
+                        </Label>
                         {barn.map((obj: BarnObject, index: number) => {
                             return (
                                 <VisBarn

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { addParams, getMockAltApiURL, getRedirectParams } from '../../utils/restUtils';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Personalia } from '../person/PersonMockData';
 import styled from 'styled-components/macro';
 import { AvbrytKnapp, Knappegruppe } from '../../styling/Styles';
@@ -62,8 +62,7 @@ export const Feilkonfigurering = () => {
 
     const queryFnr = useQuery().get('brukerID');
     const params = getRedirectParams();
-    const history = useHistory();
-
+    const navigate = useNavigate();
     useEffect(() => {
         if (queryFnr !== null && queryFnr.length > 1) {
             setFnr(queryFnr);
@@ -135,7 +134,7 @@ export const Feilkonfigurering = () => {
         })
             .then((response) => {
                 console.log(response);
-                history.push('/' + addParams(params));
+                navigate('/' + addParams(params));
             })
             .catch((error) => {
                 console.log(error);
@@ -144,7 +143,7 @@ export const Feilkonfigurering = () => {
     };
 
     const onGoBack = (event: ClickEvent): void => {
-        history.push('/' + addParams(params));
+        navigate('/' + addParams(params));
         event.preventDefault();
     };
 

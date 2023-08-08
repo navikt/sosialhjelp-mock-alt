@@ -1,16 +1,7 @@
-name: Build image
+name: Build and deploy to dev
 on:
-  push:
-    branches:
-      - "master"
-    tags-ignore:
-      - '**'      # Don't build any tags
   workflow_dispatch:
 
-permissions:
-  contents: write
-  packages: write
-# FIXME: Legg til docker layer caching, f.eks. https://github.com/marketplace/actions/build-docker-images-using-cache
 jobs:
   build:
     name: Build and push docker image
@@ -58,3 +49,12 @@ jobs:
         with:
           tag: ${{ steps.artifact-version.outputs.version }}
           commit: ${{ github.sha }}
+      - name: Deploy til dev
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          RESOURCE: nais/dev/mock.yaml
+          CLUSTER: dev-gcp
+          REF: ${{ github.sha }}
+          PRINT_PAYLOAD: true
+          IMAGE: ${{ env.DOCKER_TAG }}

@@ -5,8 +5,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { Bold } from '../styling/Styles';
 import { BodyLong, Panel, Heading, Link as NavDsLink } from '@navikt/ds-react';
-import { Helptext } from '@navikt/ds-icons';
-
+import { QuestionmarkDiamondIcon } from '@navikt/aksel-icons';
 const VeiledningLenke = styled(NavDsLink)`
     position: absolute;
     right: 1.5rem;
@@ -129,7 +128,7 @@ export const Oversikt = () => {
             <LinkWithButtonStyle to={'/login' + addParams(params)}>Logg inn</LinkWithButtonStyle>
             <SoknaderLink to={'/soknader' + addParams(params)}>Søknader</SoknaderLink>
             <VeiledningLenke href="https://www.nav.no/_/attachment/download/ea62eacf-78a1-4a7a-baed-796f5617c36f:e246ea09b53b232abedb4e2acd96c28572d3c023/Veiledning%20for%20testmilj%C3%B8et%20for%20digital%20s%C3%B8knad%20og%20innsyn.pdf">
-                <Helptext /> Veiledning for testmiljøet (pdf)
+                <QuestionmarkDiamondIcon fontSize="1.5rem" /> Veiledning for testmiljøet (pdf)
             </VeiledningLenke>
         </StyledPanel>
     );
