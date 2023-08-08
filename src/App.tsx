@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import { PersonMockData } from './pages/person/PersonMockData';
 import { Login } from './pages/login/Login';
@@ -11,25 +11,15 @@ function App() {
     return (
         <div id="app" className="app">
             <div className="container">
-                <Router basename="sosialhjelp/mock-alt">
-                    <Switch>
-                        <Route path="/login">
-                            <Login />
-                        </Route>
-                        <Route path="/person">
-                            <PersonMockData />
-                        </Route>
-                        <Route path="/feil">
-                            <Feilkonfigurering />
-                        </Route>
-                        <Route path="/soknader">
-                            <Soknader />
-                        </Route>
-                        <Route path="/">
-                            <Oversikt />
-                        </Route>
-                    </Switch>
-                </Router>
+                <BrowserRouter basename="sosialhjelp/mock-alt">
+                    <Routes>
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/person" element={<PersonMockData />} />
+                        <Route path="/feil" element={<Feilkonfigurering />} />
+                        <Route path="/soknader" element={<Soknader />} />
+                        <Route path="/" element={<Oversikt />} />
+                    </Routes>
+                </BrowserRouter>
             </div>
         </div>
     );

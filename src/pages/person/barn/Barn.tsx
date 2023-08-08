@@ -35,7 +35,6 @@ interface Params<T> {
 }
 
 export const NyttBarn = ({ isOpen, callback }: Params<BarnObject>) => {
-    console.log('nyttbarn');
     let lengesiden = new Date();
     lengesiden.setFullYear(lengesiden.getFullYear() - 10);
 
