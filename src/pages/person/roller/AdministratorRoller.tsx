@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
 import { Knappegruppe, StyledPanel } from '../../../styling/Styles';
 import { Button, Checkbox, CheckboxGroup } from '@navikt/ds-react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import SletteKnapp from '../../../components/SletteKnapp';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;

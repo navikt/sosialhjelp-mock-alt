@@ -11,7 +11,7 @@ import {
 import { NyttSkatteutbetaling, SkatteutbetalingObject, VisSkatteutbetaling } from './skattetaten/Skattetaten';
 import { Collapse } from 'react-collapse';
 import { BarnObject, NyttBarn, VisBarn } from './barn/Barn';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
     NyttUtbetalingerFraNav,
     UtbetalingFraNavObject,

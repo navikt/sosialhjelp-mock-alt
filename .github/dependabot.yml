@@ -6,6 +6,17 @@ updates:
       interval: daily
     commit-message:
       prefix: "npm"
+    groups:
+      aksel-dependencies:
+        patterns:
+          - "@navikt/ds-*"
+          - "@navikt/aksel-*"
+      react-dependencies:
+        patterns:
+          - 'react'
+          - 'react-dom'
+          - '@types/react'
+          - '@types/react-dom'
 
   - package-ecosystem: "github-actions"
     directory: "/"

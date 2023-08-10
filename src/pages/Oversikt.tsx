@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { addParams, getMockAltApiURL, getRedirectParams } from '../utils/restUtils';
 import { Personalia } from './person/PersonMockData';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { Bold } from '../styling/Styles';
 import { BodyLong, Panel, Heading, Link as NavDsLink } from '@navikt/ds-react';
 import { QuestionmarkDiamondIcon } from '@navikt/aksel-icons';

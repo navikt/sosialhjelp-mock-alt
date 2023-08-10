@@ -11,7 +11,7 @@ import {
     AvbrytKnapp,
     StyledFieldset,
 } from '../../../styling/Styles';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { getIsoDateString } from '../../../utils/dateUtils';
 import SletteKnapp from '../../../components/SletteKnapp';
 
