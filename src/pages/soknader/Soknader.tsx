@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { addParams, getFagsystemmockURL, getMockAltApiURL, getRedirectParams } from '../../utils/restUtils';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { BodyShort, Button, Panel, Heading } from '@navikt/ds-react';
 
 const StyledEksternLink = styled.a.attrs({ className: 'navds-link' })`
@@ -167,7 +167,7 @@ export const Soknader = () => {
                 <BodyShort>Fant ingen søknader</BodyShort>
             )}
             {soknadsliste?.length > antallVist && (
-                <SeMerKnap size="s" onClick={onSeMerClicked}>
+                <SeMerKnap size="small" onClick={onSeMerClicked}>
                     Se flere
                 </SeMerKnap>
             )}

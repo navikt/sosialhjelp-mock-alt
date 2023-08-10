@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { addParams, getMockAltApiURL, getRedirectParams } from '../../utils/restUtils';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Personalia } from '../person/PersonMockData';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { AvbrytKnapp, Knappegruppe } from '../../styling/Styles';
 import { Alert, Button, BodyShort, Fieldset, Panel, Select, TextField, Heading, Label } from '@navikt/ds-react';
 
