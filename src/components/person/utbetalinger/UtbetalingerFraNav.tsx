@@ -112,7 +112,7 @@ interface ViseParams {
 export const VisUtbetalingerFraNav = ({ utbetalingFraNav, onSlett }: ViseParams) => {
     return (
         <StyledPanel>
-            <DefinitionList labelWidth={30}>
+            <DefinitionList $labelWidth={30}>
                 <dt>Beløp</dt>
                 <dd>{utbetalingFraNav.belop}</dd>
                 <dt>Utbetalingsdato</dt>

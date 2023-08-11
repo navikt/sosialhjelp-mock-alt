@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { addParams, getMockAltApiURL, getRedirectParams } from '../../utils/restUtils';
-import { useNavigate, useLocation } from 'react-router-dom';
 import { Personalia } from '../person/PersonMockData';
 import styled from 'styled-components';
 import { AvbrytKnapp, Knappegruppe } from '../../styling/Styles';
 import { Alert, Button, BodyShort, Fieldset, Panel, Select, TextField, Heading, Label } from '@navikt/ds-react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -22,10 +22,6 @@ interface Feilkonfigurerasjon {
     feilkodeSansynlighet: number;
     className: string;
     functionName: string;
-}
-
-function useQuery() {
-    return new URLSearchParams(useLocation().search);
 }
 
 const Wrapper = styled(Panel)`
@@ -60,9 +56,12 @@ export const Feilkonfigurering = () => {
     const [fnr, setFnr] = useState<string>('');
     const [feilsituasjoner, setFeilsituasjoner] = useState<Feilkonfigurerasjon[]>([]);
 
-    const queryFnr = useQuery().get('brukerID');
-    const params = getRedirectParams();
-    const navigate = useNavigate();
+    const searchParams = useSearchParams();
+    const queryFnr = searchParams.get('brukerID') ?? '';
+
+    const params = getRedirectParams(searchParams);
+    const router = useRouter();
+
     useEffect(() => {
         if (queryFnr !== null && queryFnr.length > 1) {
             setFnr(queryFnr);
@@ -134,7 +133,7 @@ export const Feilkonfigurering = () => {
         })
             .then((response) => {
                 console.log(response);
-                navigate('/' + addParams(params));
+                router.push('/' + addParams(params));
             })
             .catch((error) => {
                 console.log(error);
@@ -143,7 +142,7 @@ export const Feilkonfigurering = () => {
     };
 
     const onGoBack = (event: ClickEvent): void => {
-        navigate('/' + addParams(params));
+        router.push('/' + addParams(params));
         event.preventDefault();
     };
 

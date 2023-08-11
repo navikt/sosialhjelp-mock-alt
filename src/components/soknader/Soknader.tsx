@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import { addParams, getFagsystemmockURL, getMockAltApiURL, getRedirectParams } from '../../utils/restUtils';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { BodyShort, Button, Panel, Heading } from '@navikt/ds-react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 const StyledEksternLink = styled.a.attrs({ className: 'navds-link' })`
     display: block;
@@ -71,38 +74,25 @@ interface SoknadsInfo {
 
 const DEFAULT_ANTALL_VIST = 10;
 
-export const Soknader = () => {
-    const [soknadsliste, setSoknadsliste] = useState<SoknadsInfo[]>([]);
-    const params = getRedirectParams();
+interface Props {
+    soknadsliste: SoknadsInfo[];
+}
+export const Soknader = (props: Props) => {
+    const searchParams = useSearchParams();
+
+    const params = getRedirectParams(searchParams);
     const [antallVist, setAntallVist] = useState(DEFAULT_ANTALL_VIST);
 
     const onSeMerClicked = () => {
         setAntallVist(antallVist + DEFAULT_ANTALL_VIST);
     };
 
-    useEffect(() => {
-        fetch(`${getMockAltApiURL()}/mock-alt/soknad/liste`)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('HTTP error ' + response.status);
-                }
-                return response;
-            })
-            .then((response) => response.json())
-            .then((json) => {
-                setSoknadsliste(json);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }, []);
-
     return (
         <Panel>
             <Heading level="1" size="xlarge" spacing>
                 Søknader
             </Heading>
-            {soknadsliste?.length > 0 ? (
+            {props.soknadsliste?.length > 0 ? (
                 <TabellWrapper>
                     <Tabell>
                         <thead>
@@ -113,7 +103,7 @@ export const Soknader = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {soknadsliste.slice(0, antallVist).map((soknad: SoknadsInfo) => {
+                            {props.soknadsliste.slice(0, antallVist).map((soknad: SoknadsInfo) => {
                                 return (
                                     <tr key={soknad.fiksDigisosId}>
                                         <td>
@@ -154,7 +144,7 @@ export const Soknader = () => {
                                                         encodeURIComponent(soknad.fiksDigisosId)
                                                 )}
                                             >
-                                                Åpne i "fagsystem"
+                                                {`Åpne i "fagsystem"`}
                                             </StyledEksternLink>
                                         </MerInfo>
                                     </tr>
@@ -166,12 +156,12 @@ export const Soknader = () => {
             ) : (
                 <BodyShort>Fant ingen søknader</BodyShort>
             )}
-            {soknadsliste?.length > antallVist && (
+            {props.soknadsliste?.length > antallVist && (
                 <SeMerKnap size="small" onClick={onSeMerClicked}>
                     Se flere
                 </SeMerKnap>
             )}
-            <StyledLink to={'/' + addParams(params)}>Til oversikten</StyledLink>
+            <StyledLink href={'/' + addParams(params)}>Til oversikten</StyledLink>
         </Panel>
     );
 };

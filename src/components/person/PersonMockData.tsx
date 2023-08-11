@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+'use client';
+
+import React, { startTransition, useEffect, useState } from 'react';
 import { addParams, getMockAltApiURL, getRedirectParams, isLoginSession } from '../../utils/restUtils';
 import { ArbeidsforholdObject, NyttArbeidsforhold, VisArbeidsforhold } from './arbeidsforhold/Arbeidsfohold';
 import { BostotteSakObject, NyBostotteSak, VisBostotteSak } from './husbanken/BostotteSak';
@@ -36,6 +37,8 @@ import {
     Ingress,
 } from '@navikt/ds-react';
 import { AdminRolle, AdministratorRollerPanel, VisAdministratorRoller } from './roller/AdministratorRoller';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { revalidatePersonliste } from '../../app/actions';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -74,10 +77,6 @@ export interface Bostedsadresse {
     husbokstav: string;
     postnummer: string;
     kommunenummer: string;
-}
-
-export function useQuery() {
-    return new URLSearchParams(useLocation().search);
 }
 
 const StyledPanel = styled(Panel)`
@@ -184,9 +183,11 @@ export const PersonMockData = () => {
 
     const { adresseState, dispatchAdresse } = useAdresse();
 
-    const queryFnr = useQuery().get('brukerID');
-    const params = getRedirectParams();
-    const navigate = useNavigate();
+    const searchParams = useSearchParams();
+    const queryFnr = searchParams.get('brukerID') ?? '';
+
+    const params = getRedirectParams(searchParams);
+    const router = useRouter();
 
     useEffect(() => {
         let promises = [];
@@ -348,7 +349,7 @@ export const PersonMockData = () => {
             locked: false,
         };
     };
-    const onCreateUser = (event: ClickEvent): void => {
+    const onCreateUser = async (event: ClickEvent) => {
         const personalia = createPersonaliaObject();
         if (!personalia) {
             event.preventDefault();
@@ -367,12 +368,14 @@ export const PersonMockData = () => {
                     dispatchAppStatus({ type: 'success' });
 
                     if (isLoginSession(params)) {
-                        window.location.href = `${getMockAltApiURL()}/login/cookie?subject=${fnr}&issuerId=selvbetjening&audience=someaudience${addParams(
-                            params,
-                            '&'
-                        )}`;
+                        router.push(
+                            `${getMockAltApiURL()}/login/cookie?subject=${fnr}&issuerId=selvbetjening&audience=someaudience${addParams(
+                                params,
+                                '&'
+                            )}`
+                        );
                     } else {
-                        navigate('/' + addParams(params));
+                        router.push('/' + addParams(params));
                     }
                 } else if (response.status === 500) {
                     throw new Error(
@@ -385,11 +388,12 @@ export const PersonMockData = () => {
             .catch((error) => {
                 dispatchAppStatus({ type: 'postError', msg: error.toString() });
             });
+        await revalidatePersonliste();
         event.preventDefault();
     };
 
     const onGoBack = (event: ClickEvent): void => {
-        navigate('/' + addParams(params));
+        router.push('/' + addParams(params));
         event.preventDefault();
     };
 

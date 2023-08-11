@@ -177,7 +177,7 @@ interface Props {
 export const VisBarn = ({ barn, onSlett }: Props) => {
     return (
         <StyledPanel>
-            <DefinitionList labelWidth={35}>
+            <DefinitionList $labelWidth={35}>
                 <dt>Ident</dt>
                 <dd>{barn.fnr}</dd>
                 <dt>Navn</dt>
