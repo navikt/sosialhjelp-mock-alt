@@ -7,7 +7,7 @@ metadata:
     team: teamdigisos
 spec:
   image: {{image}}
-  port: 5000
+  port: 3000
   ingresses:
    - "https://sosialhjelp-mock-alt-mock.ekstern.dev.nav.no/sosialhjelp/mock-alt"
   liveness:
