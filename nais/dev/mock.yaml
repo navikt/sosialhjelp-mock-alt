@@ -11,10 +11,10 @@ spec:
   ingresses:
    - "https://sosialhjelp-mock-alt-mock.ekstern.dev.nav.no/sosialhjelp/mock-alt"
   liveness:
-    path: /sosialhjelp/mock-alt/api/internal/isAlive
+    path: /api/internal/isAlive
     initialDelay: 5
   readiness:
-    path: /sosialhjelp/mock-alt/api/internal/isReady
+    path: sosialhjelp/mock-alt/api/internal/isReady
     initialDelay: 5
   resources:
     limits:
