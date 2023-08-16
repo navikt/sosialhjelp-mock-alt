@@ -3,11 +3,11 @@ FROM gcr.io/distroless/nodejs:18 as runtime
 
 WORKDIR /app
 
-COPY package.json ./
-COPY public ./public
-COPY .next/standalone ./
-COPY .next/static ./.next/static
+COPY package.json /app/
 COPY .env /app/
+COPY .next/standalone /app/
+COPY .next/static /app/.next/static
+COPY public /app/public/
 
 EXPOSE 3000
 
