@@ -14,10 +14,7 @@ async function getPersoner() {
 }
 
 export default async function Page() {
-    return <div>Test</div>;
-    {
-        /*
-        const defaultFnr = await getFnr();
+    const defaultFnr = await getFnr();
     const personliste = await getPersoner();
 
     return (
@@ -25,7 +22,4 @@ export default async function Page() {
             <Oversikt mockAltDefaultFnr={defaultFnr} personliste={personliste} />
         </Suspense>
     );
-
-    */
-    }
 }
