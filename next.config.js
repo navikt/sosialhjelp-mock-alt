@@ -12,6 +12,7 @@ const nextConfig = {
         serverActions: true,
     },
     output: 'standalone',
+    trailingSlash: true,
 };
 
 module.exports = nextConfig;
