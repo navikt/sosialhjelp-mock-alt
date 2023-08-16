@@ -1,7 +1,5 @@
-'use client';
-
-import React from 'react';
-import { addParams, getRedirectParams } from '../utils/restUtils';
+import React, { useEffect, useState } from 'react';
+import { addParams, getMockAltApiURL, getRedirectParams } from '../utils/restUtils';
 import { Personalia } from './person/PersonMockData';
 import styled from 'styled-components';
 import { Bold } from '../styling/Styles';
@@ -72,21 +70,30 @@ const MerInfo = styled.td`
     }
 `;
 
-interface Props {
-    mockAltDefaultFnr: string;
-    personliste: Personalia[];
-}
-export const Oversikt = (props: Props) => {
+export const Oversikt = () => {
+    const [personliste, setPersonListe] = useState([]);
+    const [mockAltDefaultFnr, setMockAltDefaultFnr] = useState<string | undefined>(undefined);
     const checkmark = '✔';
     const searchParams = useSearchParams();
     const params = getRedirectParams(searchParams);
+
+    useEffect(() => {
+        fetch(`${getMockAltApiURL()}/fiks/fast/fnr`)
+            .then((response) => response.text())
+            .then((text) => {
+                setMockAltDefaultFnr(text);
+            });
+        fetch(`${getMockAltApiURL()}/mock-alt/personalia/liste`)
+            .then((response) => response.json())
+            .then((json) => setPersonListe(json));
+    }, []);
 
     return (
         <StyledPanel>
             <Heading level="1" size="xlarge" spacing>
                 Testbrukere - oversikt
             </Heading>
-            {props.personliste?.length > 0 ? (
+            {personliste?.length > 0 ? (
                 <TabellWrapper>
                     <Tabell>
                         <thead>
@@ -97,7 +104,7 @@ export const Oversikt = (props: Props) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {props.personliste.map((bruker: Personalia) => {
+                            {personliste.map((bruker: Personalia) => {
                                 return (
                                     <tr key={bruker.fnr}>
                                         <td>{`${bruker.navn.fornavn} ${bruker.navn.mellomnavn} ${bruker.navn.etternavn}`}</td>
@@ -111,7 +118,7 @@ export const Oversikt = (props: Props) => {
                                             <StyledLink href={'/feil?brukerID=' + bruker.fnr + addParams(params, '&')}>
                                                 Feilsituasjoner
                                             </StyledLink>
-                                            {props.mockAltDefaultFnr === bruker.fnr && <Bold>{checkmark} Default</Bold>}
+                                            {mockAltDefaultFnr === bruker.fnr && <Bold>{checkmark} Default</Bold>}
                                         </MerInfo>
                                     </tr>
                                 );

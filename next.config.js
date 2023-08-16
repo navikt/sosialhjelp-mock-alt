@@ -8,9 +8,6 @@ const nextConfig = {
     },
     basePath: '/sosialhjelp/mock-alt',
     assetPrefix: process.env.NEXT_PUBLIC_ASSET_PREFIX,
-    experimental: {
-        serverActions: true,
-    },
     output: 'standalone',
     trailingSlash: true,
 };

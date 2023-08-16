@@ -38,7 +38,6 @@ import {
 } from '@navikt/ds-react';
 import { AdminRolle, AdministratorRollerPanel, VisAdministratorRoller } from './roller/AdministratorRoller';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { revalidatePersonliste } from '../../app/actions';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -349,7 +348,7 @@ export const PersonMockData = () => {
             locked: false,
         };
     };
-    const onCreateUser = async (event: ClickEvent) => {
+    const onCreateUser = (event: ClickEvent) => {
         const personalia = createPersonaliaObject();
         if (!personalia) {
             event.preventDefault();
@@ -388,7 +387,6 @@ export const PersonMockData = () => {
             .catch((error) => {
                 dispatchAppStatus({ type: 'postError', msg: error.toString() });
             });
-        await revalidatePersonliste();
         event.preventDefault();
     };
 
