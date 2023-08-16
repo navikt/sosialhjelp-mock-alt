@@ -12,10 +12,14 @@ spec:
    - "https://sosialhjelp-mock-alt-mock.ekstern.dev.nav.no/sosialhjelp/mock-alt"
   liveness:
     path: /sosialhjelp/mock-alt/api/internal/isAlive
-    initialDelay: 5
+    initialDelay: 20
+    timeout: 1
+    periodSeconds: 5
+    failureThreshold: 10
   readiness:
     path: /sosialhjelp/mock-alt/api/internal/isReady
-    initialDelay: 5
+    initialDelay: 20
+    timeout: 1
   resources:
     limits:
       cpu: 100m
