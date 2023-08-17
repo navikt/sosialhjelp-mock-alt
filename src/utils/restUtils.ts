@@ -1,7 +1,6 @@
 import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation';
 
 const erLocalhost = () => {
-    console.log('localhost', process.env.NEXT_PUBLIC_RUNTIME_ENVIRONMENT === 'local');
     return process.env.NEXT_PUBLIC_RUNTIME_ENVIRONMENT === 'local';
 };
 
