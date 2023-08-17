@@ -8,6 +8,7 @@ Lag `.env.local` på rot for miljøvariabler. Eksempel:
 
 ```
 NEXT_PUBLIC_RUNTIME_ENVIRONMENT=local
+NEXT_PUBLIC_TELEMETRY_URL=http://localhost:12347/collect
 ```
 
 #### Lokal server
