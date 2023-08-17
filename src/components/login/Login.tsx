@@ -1,5 +1,3 @@
-'use client';
-
 import { Alert, Panel, Button, Heading } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import {
@@ -26,12 +24,10 @@ const StyledLoginButton = styled(Button)`
     min-width: 7rem;
 `;
 
-interface Props {
-    defaultFnr: string;
-    personliste: Personalia[];
-}
-export const Login = (props: Props) => {
-    const [fnr, setFnr] = useState(props.defaultFnr);
+export const Login = () => {
+    const [fnr, setFnr] = useState('');
+    const [personliste, setPersonListe] = useState<Personalia[]>([]);
+
     const [siteUrl, setSiteUrl] = useState('');
     const [redirect, setRedirect] = useState('');
     const searchParams = useSearchParams();
@@ -41,6 +37,17 @@ export const Login = (props: Props) => {
     useEffect(() => {
         setSiteUrl(window.location.origin);
         setRedirect(window.location.origin + '/sosialhjelp/mock-alt/login');
+    }, []);
+
+    useEffect(() => {
+        fetch(`${getMockAltApiURL()}/fiks/fast/fnr`)
+            .then((response) => response.text())
+            .then((text) => {
+                setFnr(text);
+            });
+        fetch(`${getMockAltApiURL()}/mock-alt/personalia/liste`)
+            .then((response) => response.json())
+            .then((json) => setPersonListe(json));
     }, []);
 
     const handleOnClick = () => {
@@ -67,7 +74,7 @@ export const Login = (props: Props) => {
                 Alt som gjøres i mock-miljø er tilgjengelig for alle. Ikke legg inn noe sensitiv informasjon!
             </Alert>
             <StyledSelect onChange={(event) => setFnr(event.target.value)} label="Velg bruker" value={fnr}>
-                {props.personliste.map((bruker) => {
+                {personliste.map((bruker) => {
                     return (
                         <option key={bruker.fnr} value={bruker.fnr}>
                             {`${bruker.navn.fornavn} ${bruker.navn.mellomnavn} ${bruker.navn.etternavn} (${bruker.fnr})`}

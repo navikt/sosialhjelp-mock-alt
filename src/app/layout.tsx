@@ -3,6 +3,8 @@ import '../App.css';
 import StyledComponentsRegistry from './lib/registry';
 import React from 'react';
 import { WebVitals } from './_components/reportWebVitals';
+import Instrumentation from '../faro/Instrumentation';
+
 export const metadata: Metadata = {
     title: 'MockAlt - Oversikt',
     description: 'Mocking av Digisos-apper',
@@ -29,6 +31,7 @@ export default function RootLayout({
             <body>
                 {/* @ts-expect-error Server Component */}
                 <WebVitals />
+                <Instrumentation />
                 <StyledComponentsRegistry>
                     <div className="app">
                         <div className="container">{children}</div>
