@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "/sosialhjelp/mock-alt",
   "dependencies": {
+    "@grafana/faro-web-sdk": "^1.1.3",
     "@navikt/aksel-icons": "^4.10.2",
     "@navikt/ds-css": "^4.10.2",
     "@navikt/ds-react": "^4.10.2",

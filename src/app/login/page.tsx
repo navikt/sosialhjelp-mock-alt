@@ -4,7 +4,7 @@ import React, { Suspense } from 'react';
 import { Login } from '../../components/login/Login';
 import Loading from '../loading';
 
-export default async function Page() {
+export default function Page() {
     return (
         <Suspense fallback={<Loading />}>
             <Login />
