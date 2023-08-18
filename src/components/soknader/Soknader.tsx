@@ -1,6 +1,4 @@
-'use client';
-
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { addParams, getFagsystemmockURL, getMockAltApiURL, getRedirectParams } from '../../utils/restUtils';
 import styled from 'styled-components';
 import { BodyShort, Button, Panel, Heading } from '@navikt/ds-react';
@@ -74,10 +72,9 @@ interface SoknadsInfo {
 
 const DEFAULT_ANTALL_VIST = 10;
 
-interface Props {
-    soknadsliste: SoknadsInfo[];
-}
-export const Soknader = (props: Props) => {
+export const Soknader = () => {
+    const [soknadsliste, setSoknadsliste] = useState<SoknadsInfo[]>([]);
+
     const searchParams = useSearchParams();
 
     const params = getRedirectParams(searchParams);
@@ -87,12 +84,29 @@ export const Soknader = (props: Props) => {
         setAntallVist(antallVist + DEFAULT_ANTALL_VIST);
     };
 
+    useEffect(() => {
+        fetch(`${getMockAltApiURL()}/mock-alt/soknad/liste`)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('HTTP error ' + response.status);
+                }
+                return response;
+            })
+            .then((response) => response.json())
+            .then((json) => {
+                setSoknadsliste(json);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, []);
+
     return (
         <Panel>
             <Heading level="1" size="xlarge" spacing>
                 Søknader
             </Heading>
-            {props.soknadsliste?.length > 0 ? (
+            {soknadsliste?.length > 0 ? (
                 <TabellWrapper>
                     <Tabell>
                         <thead>
@@ -103,7 +117,7 @@ export const Soknader = (props: Props) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {props.soknadsliste.slice(0, antallVist).map((soknad: SoknadsInfo) => {
+                            {soknadsliste.slice(0, antallVist).map((soknad: SoknadsInfo) => {
                                 return (
                                     <tr key={soknad.fiksDigisosId}>
                                         <td>
@@ -156,7 +170,7 @@ export const Soknader = (props: Props) => {
             ) : (
                 <BodyShort>Fant ingen søknader</BodyShort>
             )}
-            {props.soknadsliste?.length > antallVist && (
+            {soknadsliste?.length > antallVist && (
                 <SeMerKnap size="small" onClick={onSeMerClicked}>
                     Se flere
                 </SeMerKnap>
