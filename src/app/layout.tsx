@@ -2,7 +2,6 @@ import { Metadata } from 'next';
 import '../App.css';
 import StyledComponentsRegistry from './lib/registry';
 import React from 'react';
-import { WebVitals } from './_components/reportWebVitals';
 import Instrumentation from '../faro/Instrumentation';
 
 export const metadata: Metadata = {
@@ -29,8 +28,6 @@ export default function RootLayout({
                 />
             </head>
             <body>
-                {/* @ts-expect-error Server Component */}
-                <WebVitals />
                 <Instrumentation />
                 <StyledComponentsRegistry>
                     <div className="app">
