@@ -7,26 +7,34 @@ metadata:
     team: teamdigisos
 spec:
   image: {{image}}
-  port: 5000
+  port: 3000
   ingresses:
    - "https://sosialhjelp-mock-alt-mock.ekstern.dev.nav.no/sosialhjelp/mock-alt"
   liveness:
-    path: /sosialhjelp/mock-alt/internal/isAlive
-    initialDelay: 5
+    path: /sosialhjelp/mock-alt/api/internal/isAlive
+    initialDelay: 20
+    timeout: 1
+    periodSeconds: 5
+    failureThreshold: 10
   readiness:
-    path: /sosialhjelp/mock-alt/internal/isReady
-    initialDelay: 5
+    path: /sosialhjelp/mock-alt/api/internal/isReady
+    initialDelay: 20
+    timeout: 1
   resources:
     limits:
-      cpu: 100m
-      memory: 128Mi
+      cpu: 200m
+      memory: 256Mi
     requests:
       cpu: 1m
       memory: 32Mi
   replicas:
     min: 1
-    max: 1
+    max: 2
     cpuThresholdPercentage: 70
+  accessPolicy:
+    outbound:
+      external:
+        - host: digisos.ekstern.dev.nav.no
   env:
     - name: HOST_ADDRESS
       value: "https://digisos.ekstern.dev.nav.no/"

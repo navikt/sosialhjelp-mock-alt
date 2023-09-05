@@ -71,7 +71,7 @@ export const SmallTextField = styled(TextField)`
     }
 `;
 
-export const DefinitionList = styled.dl<{ labelWidth?: number }>`
+export const DefinitionList = styled.dl<{ $labelWidth?: number }>`
     margin: 0;
     overflow: auto;
     line-height: 1.5;
@@ -80,8 +80,8 @@ export const DefinitionList = styled.dl<{ labelWidth?: number }>`
         clear: both;
     }
 
-    --dtWidth: ${(props) => (props.labelWidth ? `${props.labelWidth}%` : '22%')};
-    --ddWidth: ${(props) => (props.labelWidth ? `${90 - props.labelWidth}%` : '68%')};
+    --dtWidth: ${(props) => (props.$labelWidth ? `${props.$labelWidth}%` : '22%')};
+    --ddWidth: ${(props) => (props.$labelWidth ? `${90 - props.$labelWidth}%` : '68%')};
 
     dt {
         float: left;
