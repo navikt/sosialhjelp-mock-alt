@@ -1,7 +1,5 @@
-import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation';
-
 const erLocalhost = () => {
-    return process.env.NEXT_PUBLIC_RUNTIME_ENVIRONMENT === 'local';
+    return window.location.origin.indexOf('localhost:') > -1 || window.location.origin.indexOf('127.0.0.1:') > -1;
 };
 
 export const getMockAltApiURL = () => {
@@ -36,25 +34,34 @@ export const getFagsystemmockURL = () => {
     }
 };
 
-export const getRedirectParams = (searchParams: ReadonlyURLSearchParams): string => {
-    const cookiename = searchParams.get('cookiename');
-    let redirect = searchParams.get('redirect');
+export const getRedirectParams = (): string => {
+    const query = new URLSearchParams(window.location.search);
+    const cookiename = query.get('cookiename');
+    let redirect = query.get('redirect');
     if (!redirect) {
-        redirect = searchParams.get('redirect_uri');
+        redirect = query.get('redirect_uri');
     }
     if (!redirect) {
-        redirect = searchParams.get('goto');
+        redirect = query.get('goto');
     }
-    const expiry = searchParams.get('expiry');
+    const expiry = query.get('expiry');
     return cookiename
         ? '&cookiename=' + cookiename
         : '' + (redirect ? '&redirect=' + redirect : '') + (expiry ? '&expiry=' + expiry : '');
 };
 
-export const addParams = (params: string, firstChar: string = '?'): string => {
-    return params.length > 0 ? firstChar + params : '';
+export const addParams = (params: string | null = null, firstChar: string = '?'): string => {
+    let returnParams = params;
+    if (!returnParams) {
+        returnParams = getRedirectParams();
+    }
+    return returnParams.length > 0 ? firstChar + returnParams : '';
 };
 
-export const isLoginSession = (params: string): boolean => {
-    return params.indexOf('redirect=') > -1;
+export const isLoginSession = (params: string | null = null): boolean => {
+    let returnParams = params;
+    if (!returnParams) {
+        returnParams = getRedirectParams();
+    }
+    return returnParams.indexOf('redirect=') > -1;
 };

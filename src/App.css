@@ -1,15 +1,8 @@
-@import '@navikt/ds-css';
-
-html,
 body {
-    height: 100%;
-}
-body {
-    background-color: var(--a-surface-default);
+    background-color: var(--navds-semantic-color-component-background-light);
 }
 
 .app {
-    min-height: 100%;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -24,8 +17,4 @@ a {
 .container {
     margin-top: 2rem;
     max-width: 56rem;
-}
-
-.loading {
-    margin-top: 2rem;
 }

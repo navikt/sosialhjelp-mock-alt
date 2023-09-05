@@ -1,16 +1,12 @@
-FROM gcr.io/distroless/nodejs:18 as runtime
+FROM node:20-alpine
 
+ENV NODE_ENV production
 
 WORKDIR /app
+COPY package.json .
+COPY package-lock.json .
+COPY node_modules/ node_modules/
+COPY server.js server.js
+COPY build build/
 
-COPY package.json /app/
-COPY .env /app/
-COPY .next/standalone /app/
-COPY .next/static /app/.next/static
-COPY public /app/public/
-
-EXPOSE 3000
-
-ENV NODE_ENV=production
-
-CMD ["server.js"]
+CMD ["node", "./server.js"]
