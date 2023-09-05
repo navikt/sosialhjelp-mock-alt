@@ -2,18 +2,9 @@
 
 Frontend for mock-alt-api
 
-#### Miljøvariabler
+### Lokal kjøring
 
-Lag `.env.local` på rot for miljøvariabler. Eksempel:
+`npm install`  
+`npm run start`
 
-```
-NEXT_PUBLIC_RUNTIME_ENVIRONMENT=local
-NEXT_PUBLIC_TELEMETRY_URL=http://localhost:12347/collect
-```
-
-#### Lokal server
-
-```shell
-npm install # Hent avhengigheter
-npm run dev #  starter dev-server
-```
+Ønsker du en annen port enn 3000? Legg til en `.env`-fil med `PORT=<ønsket_portnummer>`
