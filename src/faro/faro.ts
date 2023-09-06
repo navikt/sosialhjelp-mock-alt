@@ -7,14 +7,16 @@ export function initInstrumentation(): void {
     getFaro();
 }
 
-export function getFaro(): Faro {
-    if (faro != null) return faro;
+export function getFaro(): Faro | null {
+    if (process.env.NEXT_PUBLIC_TELEMETRY_URL == null) return null;
 
+    if (faro != null) return faro;
     faro = initializeFaro({
         url: process.env.NEXT_PUBLIC_TELEMETRY_URL,
         app: {
             name: 'sosialhjelp-mock-alt',
         },
+        paused: process.env.NODE_ENV !== 'production',
         instrumentations: [
             ...getWebInstrumentations({
                 captureConsole: false,

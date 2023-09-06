@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import '../App.css';
 import StyledComponentsRegistry from './lib/registry';
 import React from 'react';
-import Instrumentation from '../faro/Instrumentation';
+import { initInstrumentation } from '../faro/faro';
 
 export const metadata: Metadata = {
     title: 'MockAlt - Oversikt',
@@ -16,6 +16,7 @@ export default function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
+    initInstrumentation();
     return (
         <html lang="nb">
             <head>
@@ -28,7 +29,6 @@ export default function RootLayout({
                 />
             </head>
             <body>
-                <Instrumentation />
                 <StyledComponentsRegistry>
                     <div className="app">
                         <div className="container">{children}</div>
