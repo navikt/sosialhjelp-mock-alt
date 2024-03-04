@@ -21,6 +21,8 @@ root.render(
             </Heading>
             <BrowserRouter basename="sosialhjelp/mock-alt">
                 <Routes>
+                    <Route path="/internal/isAlive" element={<div>isAlive</div>} />
+                    <Route path="/internal/isReady" element={<div>isAlive</div>} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/person" element={<PersonMockData />} />
                     <Route path="/feil" element={<Feilkonfigurering />} />
