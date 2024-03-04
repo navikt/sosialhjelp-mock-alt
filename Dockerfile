@@ -1,12 +1,15 @@
-FROM node:20-alpine
+FROM node:20-alpine AS builder
 
 ENV NODE_ENV production
 
-WORKDIR /app
 COPY package.json .
 COPY package-lock.json .
-COPY node_modules/ node_modules/
-COPY server.js server.js
-COPY build build/
+RUN npm install --include=dev
 
-CMD ["node", "./server.js"]
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine AS server
+
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder dist /usr/share/nginx/html

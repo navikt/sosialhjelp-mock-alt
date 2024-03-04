@@ -1,52 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { addParams, getFagsystemmockURL, getMockAltApiURL, getRedirectParams } from '../../utils/restUtils';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { BodyShort, Button, Panel, Heading } from '@navikt/ds-react';
-
-const StyledEksternLink = styled.a.attrs({ className: 'navds-link' })`
-    display: block;
-`;
-
-const StyledLink = styled(Link).attrs({ className: 'navds-link' })`
-    margin: 2rem 0.5rem 0 0;
-    display: block;
-`;
-
-const TabellWrapper = styled.div`
-    overflow: auto;
-`;
-
-const Tabell = styled.table`
-    border-collapse: collapse;
-    display: block;
-    overflow-x: auto;
-    text-align: left;
-    margin-bottom: 2rem;
-    max-width: 90vw;
-
-    tr:nth-child(odd) td {
-        background: rgba(0, 0, 0, 0.03);
-    }
-    thead th {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.55);
-    }
-    tbody td {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-    }
-    th,
-    td {
-        padding: 1rem;
-    }
-`;
-
-const MerInfo = styled.td`
-    display: flex;
-    flex-direction: column;
-    > *:not(:last-child) {
-        margin-bottom: 0.5rem;
-    }
-`;
+import { BodyShort, Button, Panel, Heading, Table, Alert } from '@navikt/ds-react';
+import { Link } from 'react-router-dom';
 
 const SeMerKnap = styled(Button)`
     margin: 0 auto;
@@ -70,6 +26,57 @@ interface SoknadsInfo {
 }
 
 const DEFAULT_ANTALL_VIST = 10;
+const soknadZipUrl = (behandlingsId: string) =>
+    `${getMockAltApiURL()}/mock-alt/soknad/${encodeURIComponent(behandlingsId)}`;
+
+const ettersendelseZipUrl = (behandlingsId: string) =>
+    `${getMockAltApiURL()}/mock-alt/ettersendelse/${encodeURIComponent(behandlingsId)}`;
+
+const fagsystemUrl = (behandlingsId: string) =>
+    `${getFagsystemmockURL()}/?fiksDigisosId=${encodeURIComponent(behandlingsId)}`;
+
+const SoknadTabell = ({ soknadsliste, antallVist }: { soknadsliste: SoknadsInfo[]; antallVist: number }) => {
+    if (!soknadsliste?.length) return <BodyShort>Fant ingen søknader</BodyShort>;
+
+    return (
+        <Table zebraStripes>
+            <Table.Header>
+                <Table.Row>
+                    <Table.HeaderCell scope={'col'}>Søknad-ID</Table.HeaderCell>
+                    <Table.HeaderCell scope={'col'}>Navn</Table.HeaderCell>
+                    <Table.HeaderCell scope={'col'}>Ident</Table.HeaderCell>
+                    <Table.HeaderCell scope={'col'}>Tittel</Table.HeaderCell>
+                    <Table.HeaderCell scope={'col'}>Mer info</Table.HeaderCell>
+                </Table.Row>
+            </Table.Header>
+            <Table.Body>
+                {soknadsliste
+                    .slice(0, antallVist)
+                    .map(({ fiksDigisosId, sokerFnr, sokerNavn, tittel, vedlegg, vedleggSomMangler }: SoknadsInfo) => (
+                        <Table.Row key={fiksDigisosId}>
+                            <Table.DataCell>{fiksDigisosId}</Table.DataCell>
+                            <Table.DataCell className={'whitespace-nowrap hidden'}>{sokerNavn}</Table.DataCell>
+                            <Table.DataCell>{sokerFnr}</Table.DataCell>
+                            <Table.DataCell>{tittel}</Table.DataCell>
+                            <Table.DataCell className={'whitespace-pre'}>
+                                <BodyShort>Antall vedlegg: {vedlegg.length}</BodyShort>
+                                {!!vedleggSomMangler && (
+                                    <Alert variant={'warning'} inline>
+                                        {vedleggSomMangler} vedlegg mangler
+                                    </Alert>
+                                )}
+                                <Link to={soknadZipUrl(fiksDigisosId)}>Last ned soknad-zip</Link>
+                                <br />
+                                <Link to={ettersendelseZipUrl(fiksDigisosId)}>Last ned ettersendelse-zip</Link>
+                                <br />
+                                <Link to={fagsystemUrl(fiksDigisosId)}>Åpne i "fagsystem"</Link>
+                            </Table.DataCell>
+                        </Table.Row>
+                    ))}
+            </Table.Body>
+        </Table>
+    );
+};
 
 export const Soknader = () => {
     const [soknadsliste, setSoknadsliste] = useState<SoknadsInfo[]>([]);
@@ -99,79 +106,16 @@ export const Soknader = () => {
 
     return (
         <Panel>
-            <Heading level="1" size="xlarge" spacing>
+            <Heading level="2" size="large" spacing>
                 Søknader
             </Heading>
-            {soknadsliste?.length > 0 ? (
-                <TabellWrapper>
-                    <Tabell>
-                        <thead>
-                            <tr>
-                                <th>Bruker</th>
-                                <th>Tittel</th>
-                                <th>Mer info</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {soknadsliste.slice(0, antallVist).map((soknad: SoknadsInfo) => {
-                                return (
-                                    <tr key={soknad.fiksDigisosId}>
-                                        <td>
-                                            <div>{soknad.sokerNavn}</div>
-                                            <div>Fnr: {soknad.sokerFnr}</div>
-                                        </td>
-                                        <td>
-                                            <div>{soknad.tittel}</div>
-                                            <div>Id: {soknad.fiksDigisosId}</div>
-                                        </td>
-                                        <MerInfo>
-                                            <div>Antal vedlegg: {soknad.vedlegg.length}</div>
-                                            {soknad.vedleggSomMangler > 0 && (
-                                                <b>* noen av vedleggene mangler ({soknad.vedleggSomMangler} stk)</b>
-                                            )}
-                                            <StyledEksternLink
-                                                href={
-                                                    getMockAltApiURL() +
-                                                    '/mock-alt/soknad/' +
-                                                    encodeURIComponent(soknad.fiksDigisosId)
-                                                }
-                                            >
-                                                Last ned soknad-zip
-                                            </StyledEksternLink>
-                                            <StyledEksternLink
-                                                href={
-                                                    getMockAltApiURL() +
-                                                    '/mock-alt/ettersendelse/' +
-                                                    encodeURIComponent(soknad.fiksDigisosId)
-                                                }
-                                            >
-                                                Last ned ettersendelse-zip
-                                            </StyledEksternLink>
-                                            <StyledEksternLink
-                                                href={encodeURI(
-                                                    getFagsystemmockURL() +
-                                                        '/?fiksDigisosId=' +
-                                                        encodeURIComponent(soknad.fiksDigisosId)
-                                                )}
-                                            >
-                                                Åpne i "fagsystem"
-                                            </StyledEksternLink>
-                                        </MerInfo>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </Tabell>
-                </TabellWrapper>
-            ) : (
-                <BodyShort>Fant ingen søknader</BodyShort>
-            )}
+            <SoknadTabell soknadsliste={soknadsliste} antallVist={antallVist} />
             {soknadsliste?.length > antallVist && (
                 <SeMerKnap size="small" onClick={onSeMerClicked}>
                     Se flere
                 </SeMerKnap>
             )}
-            <StyledLink to={'/' + addParams(params)}>Til oversikten</StyledLink>
+            <Link to={'/' + addParams(params)}>Til oversikten</Link>
         </Panel>
     );
 };
