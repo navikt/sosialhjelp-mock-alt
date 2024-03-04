@@ -6,7 +6,7 @@ metadata:
   labels:
     team: teamdigisos
 spec:
-  image: {{image}}
+  image: "{{image}}"
   port: 3008
   ingresses:
    - "https://digisos.ekstern.dev.nav.no/sosialhjelp/mock-alt"
@@ -27,3 +27,10 @@ spec:
     min: 1
     max: 1
     cpuThresholdPercentage: 70
+  filesFrom:
+    - emptyDir:
+        medium: Disk
+      mountPath: /var/cache/nginx/
+    - emptyDir:
+        medium: Disk
+      mountPath: /var/run/
