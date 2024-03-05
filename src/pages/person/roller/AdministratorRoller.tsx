@@ -16,12 +16,9 @@ export enum AdminRolle {
     MODIA_VEILEDER = 'MODIA_VEILEDER',
 }
 
-const adminTekst = (rolle: AdminRolle) => {
-    if (rolle === AdminRolle.MODIA_VEILEDER) {
-        return 'Modiaveileder (har tilgang til Modia sosial)';
-    }
-    return rolle;
-};
+const adminTekst = (rolle: AdminRolle) =>
+    rolle === AdminRolle.MODIA_VEILEDER ? 'Modiaveileder (har tilgang til Modia sosial)' : rolle;
+
 export const AdministratorRollerPanel = (props: Props) => {
     const { setRoller, initialRoller } = props;
     const [checkboxState, setCheckboxState] = useState<AdminRolle[]>(initialRoller);

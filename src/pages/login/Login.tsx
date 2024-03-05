@@ -1,4 +1,4 @@
-import { Alert, Panel, Button, Heading } from '@navikt/ds-react';
+import { Alert, Button, Heading } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import {
     addParams,
@@ -10,18 +10,8 @@ import {
 } from '../../utils/restUtils';
 import { Personalia } from '../person/PersonMockData';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
 import { Knappegruppe, StyledSelect } from '../../styling/Styles';
 
-const StyledPanel = styled(Panel)`
-    row-gap: 1rem;
-    display: flex;
-    flex-direction: column;
-`;
-
-const StyledLoginButton = styled(Button)`
-    min-width: 7rem;
-`;
 export const Login = () => {
     const [fnr, setFnr] = useState('');
     const [redirect, setRedirect] = useState(window.location.origin + '/sosialhjelp/mock-alt/login');
@@ -51,24 +41,22 @@ export const Login = () => {
     };
 
     return (
-        <StyledPanel>
-            <Heading level="1" size="xlarge">
-                Mock login
+        <div className={'flex flex-col gap-4'}>
+            <Heading level="2" size="large">
+                Logg inn
             </Heading>
-            <Alert variant="warning">
-                <Heading spacing size="xsmall" level="2">
+            <Alert variant="warning" className={'dark:text-gray-900 mb-2'}>
+                <Heading spacing size="small" level="3">
                     DETTE ER KUN FOR TESTING!
                 </Heading>
                 Alt som gjøres i mock-miljø er tilgjengelig for alle. Ikke legg inn noe sensitiv informasjon!
             </Alert>
             <StyledSelect onChange={(event) => setFnr(event.target.value)} label="Velg bruker" value={fnr}>
-                {personliste.map((bruker) => {
-                    return (
-                        <option key={bruker.fnr} value={bruker.fnr}>
-                            {`${bruker.navn.fornavn} ${bruker.navn.mellomnavn} ${bruker.navn.etternavn} (${bruker.fnr})`}
-                        </option>
-                    );
-                })}
+                {personliste.map((bruker) => (
+                    <option key={bruker.fnr} value={bruker.fnr}>
+                        {`${bruker.navn.fornavn} ${bruker.navn.mellomnavn} ${bruker.navn.etternavn} (${bruker.fnr})`}
+                    </option>
+                ))}
             </StyledSelect>
             {!isLoginSession(params) && (
                 <StyledSelect
@@ -88,9 +76,9 @@ export const Login = () => {
                 </StyledSelect>
             )}
             <Knappegruppe>
-                <StyledLoginButton variant="primary" onClick={() => handleOnClick()}>
+                <Button variant="primary" onClick={() => handleOnClick()}>
                     Logg inn
-                </StyledLoginButton>
+                </Button>
                 <Link
                     className="navds-button navds-button--secondary navds-button--medium"
                     to={'/person' + addParams(params)}
@@ -105,6 +93,6 @@ export const Login = () => {
                     Gå til oversikten
                 </Link>
             </Knappegruppe>
-        </StyledPanel>
+        </div>
     );
 };

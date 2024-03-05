@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { addParams, getFagsystemmockURL, getMockAltApiURL, getRedirectParams } from '../../utils/restUtils';
+import { getFagsystemmockURL, getMockAltApiURL } from '../../utils/restUtils';
 import styled from 'styled-components';
-import { BodyShort, Button, Panel, Heading, Table, Alert } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, Table, Alert } from '@navikt/ds-react';
 import { Link } from 'react-router-dom';
 
 const SeMerKnap = styled(Button)`
@@ -80,7 +80,6 @@ const SoknadTabell = ({ soknadsliste, antallVist }: { soknadsliste: SoknadsInfo[
 
 export const Soknader = () => {
     const [soknadsliste, setSoknadsliste] = useState<SoknadsInfo[]>([]);
-    const params = getRedirectParams();
     const [antallVist, setAntallVist] = useState(DEFAULT_ANTALL_VIST);
 
     const onSeMerClicked = () => {
@@ -105,7 +104,7 @@ export const Soknader = () => {
     }, []);
 
     return (
-        <Panel>
+        <div>
             <Heading level="2" size="large" spacing>
                 Søknader
             </Heading>
@@ -115,7 +114,6 @@ export const Soknader = () => {
                     Se flere
                 </SeMerKnap>
             )}
-            <Link to={'/' + addParams(params)}>Til oversikten</Link>
-        </Panel>
+        </div>
     );
 };
