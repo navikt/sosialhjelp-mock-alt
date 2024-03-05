@@ -18,7 +18,7 @@ root.render(
         <div className={'bg-white dark:bg-gray-800 dark:text-bg-subtle min-h-[100dvh]'}>
             <div className={''}>
                 <BrowserRouter basename="sosialhjelp/mock-alt">
-                    <header className={'bg-blue-50'}>
+                    <header className={'bg-blue-50 dark:bg-blue-800'}>
                         <div className={'w-full max-w-5xl mx-auto p-8 '}>
                             <Heading level={'1'} size={'xlarge'} spacing>
                                 Sosialhjelp mock

@@ -2,3 +2,30 @@
 @import '@navikt/ds-css';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+/* links are bright blue in dark mode */
+@media (prefers-color-scheme: dark) {
+    a {
+        color: var(--a-blue-200) !important;
+    }
+
+    td {
+        color: black;
+    }
+
+    .navds-table--zebra-stripes
+        .navds-table__body
+        :where(.navds-table__row:nth-child(even):not(.navds-table__row--selected)) {
+        background-color: var(--a-gray-800) !important;
+    }
+
+    .navds-table--zebra-stripes
+        .navds-table__body
+        :where(.navds-table__row:nth-child(odd):not(.navds-table__row--selected)) {
+        background-color: var(--a-gray-600) !important;
+    }
+
+    .navds-table__data-cell {
+        color: var(--a-gray-50);
+    }
+}
