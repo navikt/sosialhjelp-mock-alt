@@ -24,6 +24,8 @@ jobs:
         run: npm ci
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+      - name: Build Orval
+        run: npm run orval
       - name: Build application
         run: npm run build
       - name: Login to GitHub Docker Registry

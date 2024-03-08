@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { getMockAltApiURL } from '../utils/restUtils';
+import React from 'react';
 import styled from 'styled-components';
 import { Heading, Link as NavDsLink } from '@navikt/ds-react';
 import { QuestionmarkDiamondIcon } from '@navikt/aksel-icons';
 import { Personliste } from './Personliste';
+import { usePersonListe } from '../generated/frontend-controller/frontend-controller';
 
 const VeiledningLenke = styled(NavDsLink)`
     position: absolute;
@@ -13,13 +13,9 @@ const VeiledningLenke = styled(NavDsLink)`
 `;
 
 export const Oversikt = () => {
-    const [personliste, setPersonListe] = useState([]);
+    const { data: personliste } = usePersonListe();
 
-    useEffect(() => {
-        fetch(`${getMockAltApiURL()}/mock-alt/personalia/liste`)
-            .then((response) => response.json())
-            .then((json) => setPersonListe(json));
-    }, []);
+    if (!personliste) return <div>Laster...</div>;
 
     return (
         <div>

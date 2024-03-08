@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Collapse } from 'react-collapse';
 import { getMockAltApiURL } from '../../../utils/restUtils';
 import { Button, Ingress, Panel, TextField } from '@navikt/ds-react';
-import { Bostedsadresse, NameWrapper, PersonaliaNavn } from '../PersonMockData';
+import { Bostedsadresse, NameWrapper } from '../PersonMockData';
 import {
     AvbrytKnapp,
     DefinitionList,
@@ -17,6 +17,7 @@ import Adresse from '../adresse/Adresse';
 import { useAdresse } from '../adresse/useAdresse';
 import { Folkeregisterpersonstatus, FolkeregisterpersonstatusType } from './folkeregisterpersonstatus';
 import SletteKnapp from '../../../components/SletteKnapp';
+import { PdlPersonNavn } from '../../../generated/model';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -26,7 +27,7 @@ export interface BarnObject {
     bostedsadresse: Bostedsadresse;
     folkeregisterpersonstatus: FolkeregisterpersonstatusType;
     foedsel: string;
-    navn: PersonaliaNavn;
+    navn: PdlPersonNavn;
 }
 
 interface Params<T> {

@@ -5,39 +5,37 @@ import {
     getInnsynURL,
     getMockAltApiURL,
     getRedirectParams,
+    getRedirectParamsAsObject,
     getSoknadURL,
-    isLoginSession,
 } from '../../utils/restUtils';
-import { Personalia } from '../person/PersonMockData';
 import { Link } from 'react-router-dom';
 import { Knappegruppe, StyledSelect } from '../../styling/Styles';
+import { usePersonListe } from '../../generated/frontend-controller/frontend-controller';
 
 export const Login = () => {
-    const [fnr, setFnr] = useState('');
+    const [valgtFnr, setValgtFnr] = useState<string>();
+    const { data: personliste } = usePersonListe();
+    useEffect(() => setValgtFnr(personliste?.[0].fnr), [personliste]);
+
     const [redirect, setRedirect] = useState(window.location.origin + '/sosialhjelp/mock-alt/login');
-    const [personliste, setPersonListe] = useState<Personalia[]>([]);
+
+    const hasRedirect = window.location.search.includes('redirect');
+    if (!valgtFnr || !personliste) return;
 
     const params = getRedirectParams();
 
-    useEffect(() => {
-        fetch(`${getMockAltApiURL()}/fiks/fast/fnr`)
-            .then((response) => response.text())
-            .then((text) => {
-                setFnr(text);
-            });
-        fetch(`${getMockAltApiURL()}/mock-alt/personalia/liste`)
-            .then((response) => response.json())
-            .then((json) => setPersonListe(json));
-    }, []);
-
     const handleOnClick = () => {
-        var queryString = addParams(params, '&');
-        if (!isLoginSession(params)) {
-            queryString = '&redirect=' + encodeURIComponent(redirect);
+        const nextPage = new URL(`${getMockAltApiURL()}/login/cookie`);
+
+        nextPage.searchParams.append('subject', valgtFnr);
+        nextPage.searchParams.append('issuerId', 'selvbetjening');
+        nextPage.searchParams.append('audience', 'someaudience');
+        for (const [key, value] of Object.entries(getRedirectParamsAsObject())) {
+            if (value) nextPage.searchParams.append(key, value);
         }
-        window.location.href = `${getMockAltApiURL()}/login/cookie?subject=${encodeURIComponent(
-            fnr
-        )}&issuerId=selvbetjening&audience=someaudience${queryString}`;
+        if (!hasRedirect) nextPage.searchParams.set('redirect', redirect);
+
+        window.location.href = nextPage.href;
     };
 
     return (
@@ -51,14 +49,14 @@ export const Login = () => {
                 </Heading>
                 Alt som gjøres i mock-miljø er tilgjengelig for alle. Ikke legg inn noe sensitiv informasjon!
             </Alert>
-            <StyledSelect onChange={(event) => setFnr(event.target.value)} label="Velg bruker" value={fnr}>
-                {personliste.map((bruker) => (
-                    <option key={bruker.fnr} value={bruker.fnr}>
-                        {`${bruker.navn.fornavn} ${bruker.navn.mellomnavn} ${bruker.navn.etternavn} (${bruker.fnr})`}
+            <StyledSelect onChange={(event) => setValgtFnr(event.target.value)} label="Velg bruker" value={valgtFnr}>
+                {personliste.map(({ fnr, navn }) => (
+                    <option key={fnr} value={fnr}>
+                        {`${navn.fornavn} ${navn.mellomnavn} ${navn.etternavn} (${fnr})`}
                     </option>
                 ))}
             </StyledSelect>
-            {!isLoginSession(params) && (
+            {!hasRedirect && (
                 <StyledSelect
                     onChange={(event) => setRedirect(event.target.value)}
                     label="Velg tjeneste"
@@ -79,12 +77,8 @@ export const Login = () => {
                 <Button variant="primary" onClick={() => handleOnClick()}>
                     Logg inn
                 </Button>
-                <Link
-                    className="navds-button navds-button--secondary navds-button--medium"
-                    to={'/person' + addParams(params)}
-                    type="knapp"
-                >
-                    Opprett bruker
+                <Link to={'/person' + addParams(params)}>
+                    <Button variant={'secondary'}>Opprett bruker</Button>
                 </Link>
                 <Link
                     className="navds-button navds-button--secondary navds-button--medium"

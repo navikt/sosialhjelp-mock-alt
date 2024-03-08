@@ -36,36 +36,31 @@ import {
     Ingress,
 } from '@navikt/ds-react';
 import { AdminRolle, AdministratorRollerPanel, VisAdministratorRoller } from './roller/AdministratorRoller';
+import { PdlPersonNavn } from '../../generated/model';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
 export interface Personalia {
-    fnr: string;
-    navn: PersonaliaNavn;
+    administratorRoller: AdminRolle[];
     adressebeskyttelse: string;
-    skjerming: string;
-    sivilstand: string;
-    ektefelle: string;
-    barn: BarnObject[];
-    starsborgerskap: string;
-    bostedsadresse: Bostedsadresse;
-    telefonnummer: string;
-    epost: string;
-    kanVarsles: boolean;
-    kontonummer: string;
     arbeidsforhold: ArbeidsforholdObject[];
+    barn: BarnObject[];
+    bostedsadresse: Bostedsadresse;
     bostotteSaker: BostotteSakObject[];
     bostotteUtbetalinger: BostotteUtbetalingObject[];
-    skattetatenUtbetalinger: SkatteutbetalingObject[];
-    utbetalingerFraNav: UtbetalingFraNavObject[];
-    administratorRoller: AdminRolle[];
+    ektefelle: string;
+    epost: string;
+    fnr: string;
+    kanVarsles: boolean;
+    kontonummer: string;
     locked: boolean;
-}
-
-export interface PersonaliaNavn {
-    fornavn: string;
-    mellomnavn: string;
-    etternavn: string;
+    navn: PdlPersonNavn;
+    sivilstand: string;
+    skattetatenUtbetalinger: SkatteutbetalingObject[];
+    skjerming: string;
+    starsborgerskap: string;
+    telefonnummer: string;
+    utbetalingerFraNav: UtbetalingFraNavObject[];
 }
 
 export interface Bostedsadresse {

@@ -1,19 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { addParams, getMockAltApiURL, getRedirectParams } from '../utils/restUtils';
+import React from 'react';
+import { addParams, getRedirectParams } from '../utils/restUtils';
 import { BodyLong, Table } from '@navikt/ds-react';
 import { Link } from 'react-router-dom';
 import { Bold } from '../styling/Styles';
+import { Personalia } from '../generated/model';
+import { useGetFastFnr } from '../generated/fiks-controller/fiks-controller';
 
-export const Personliste = ({ personliste }: { personliste: any[] }) => {
-    const [mockAltDefaultFnr, setMockAltDefaultFnr] = useState<string | undefined>(undefined);
-
-    useEffect(() => {
-        fetch(`${getMockAltApiURL()}/fiks/fast/fnr`)
-            .then((response) => response.text())
-            .then((text) => {
-                setMockAltDefaultFnr(text);
-            });
-    }, []);
+export const Personliste = ({ personliste }: { personliste: Personalia[] }) => {
+    const { data: mockAltDefaultFnr } = useGetFastFnr();
     const params = getRedirectParams();
 
     if (!personliste.length) return <BodyLong spacing>Fant ingen eksisterende testbrukere</BodyLong>;

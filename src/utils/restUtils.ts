@@ -1,4 +1,4 @@
-const erLocalhost = () => {
+export const erLocalhost = () => {
     return window.location.origin.indexOf('localhost:') > -1 || window.location.origin.indexOf('127.0.0.1:') > -1;
 };
 
@@ -36,32 +36,37 @@ export const getFagsystemmockURL = () => {
 
 export const getRedirectParams = (): string => {
     const query = new URLSearchParams(window.location.search);
-    const cookiename = query.get('cookiename');
-    let redirect = query.get('redirect');
-    if (!redirect) {
-        redirect = query.get('redirect_uri');
-    }
-    if (!redirect) {
-        redirect = query.get('goto');
-    }
+
     const expiry = query.get('expiry');
-    return cookiename
-        ? '&cookiename=' + cookiename
-        : '' + (redirect ? '&redirect=' + redirect : '') + (expiry ? '&expiry=' + expiry : '');
+    const cookieName = query.get('cookiename');
+    const redirect = query.get('redirect') || query.get('redirect_uri') || query.get('goto');
+
+    const newQuery = new URLSearchParams();
+    if (cookieName) newQuery.set('cookiename', cookieName);
+    if (redirect) newQuery.set('redirect', redirect);
+    if (expiry) newQuery.set('expiry', expiry);
+    return '&' + newQuery.toString();
+};
+
+type RedirectParams = {
+    cookiename?: string;
+    redirect?: string;
+    expiry?: string;
+};
+
+export const getRedirectParamsAsObject = (): RedirectParams => {
+    const query = new URLSearchParams(window.location.search);
+    return {
+        expiry: query.get('expiry') || undefined,
+        cookiename: query.get('cookiename') || undefined,
+        redirect: query.get('redirect') || undefined,
+    };
 };
 
 export const addParams = (params: string | null = null, firstChar: string = '?'): string => {
-    let returnParams = params;
-    if (!returnParams) {
-        returnParams = getRedirectParams();
-    }
+    const returnParams = params || getRedirectParams();
     return returnParams.length > 0 ? firstChar + returnParams : '';
 };
 
-export const isLoginSession = (params: string | null = null): boolean => {
-    let returnParams = params;
-    if (!returnParams) {
-        returnParams = getRedirectParams();
-    }
-    return returnParams.indexOf('redirect=') > -1;
-};
+export const isLoginSession = (params: string | null = null) =>
+    (params || getRedirectParams()).indexOf('redirect=') > -1;

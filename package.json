@@ -8,7 +8,9 @@
     "@navikt/ds-css": "^6.1.1",
     "@navikt/ds-react": "^6.1.1",
     "@navikt/ds-tailwind": "^6.1.1",
+    "@tanstack/react-query": "^5.25.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "axios": "^1.6.7",
     "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "react": "^18.2.0",
@@ -24,7 +26,9 @@
     "build": "vite build",
     "lint": "eslint ./src/**/*.{ts,tsx}",
     "prepare": "husky install",
-    "lintStaged": "lint-staged"
+    "lintStaged": "lint-staged",
+    "fetch-api": "curl -o ./mock-alt-api.json http://localhost:8989/sosialhjelp/mock-alt-api/v3/api-docs && prettier --write mock-alt-api.json",
+    "orval": "rm -rf ./src/generated & orval --prettier"
   },
   "eslintConfig": {
     "extends": [
@@ -55,6 +59,7 @@
     "eslint-config-react-app": "^7.0.1",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
+    "orval": "^6.25.0",
     "postcss": "^8.4.35",
     "prettier": "^3.2.5",
     "tailwindcss": "^3.4.1",
