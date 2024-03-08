@@ -2,12 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { addParams, getMockAltApiURL, getRedirectParams, isLoginSession } from '../../utils/restUtils';
 import { ArbeidsforholdObject, NyttArbeidsforhold, VisArbeidsforhold } from './arbeidsforhold/Arbeidsfohold';
-import { BostotteSakObject, NyBostotteSak, VisBostotteSak } from './husbanken/BostotteSak';
-import {
-    BostotteUtbetalingObject,
-    NyttBostotteUtbetaling,
-    VisBostotteUtbetaling,
-} from './husbanken/BostotteUtbetaling';
+import { NyBostotteSak } from './husbanken/BostotteSak';
+import { NyttBostotteUtbetaling } from './husbanken/BostotteUtbetaling';
 import { NyttSkatteutbetaling, SkatteutbetalingObject, VisSkatteutbetaling } from './skattetaten/Skattetaten';
 import { Collapse } from 'react-collapse';
 import { BarnObject, NyttBarn, VisBarn } from './barn/Barn';
@@ -36,7 +32,9 @@ import {
     Ingress,
 } from '@navikt/ds-react';
 import { AdminRolle, AdministratorRollerPanel, VisAdministratorRoller } from './roller/AdministratorRoller';
-import { PdlPersonNavn } from '../../generated/model';
+import { PdlPersonNavn, SakerDto, UtbetalingerDto } from '../../generated/model';
+import { VisBostotteSak } from './husbanken/VisBostotteSak';
+import { VisBostotteUtbetaling } from './husbanken/VisBostotteUtbetaling';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -46,8 +44,8 @@ export interface Personalia {
     arbeidsforhold: ArbeidsforholdObject[];
     barn: BarnObject[];
     bostedsadresse: Bostedsadresse;
-    bostotteSaker: BostotteSakObject[];
-    bostotteUtbetalinger: BostotteUtbetalingObject[];
+    bostotteSaker: SakerDto[];
+    bostotteUtbetalinger: UtbetalingerDto[];
     ektefelle: string;
     epost: string;
     fnr: string;
@@ -75,16 +73,7 @@ export function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
-const StyledPanel = styled(Panel)`
-    .navds-alert {
-        margin-bottom: 1rem;
-    }
-
-    .brukerIdent {
-        margin-bottom: 2rem;
-        max-width: 15rem;
-    }
-`;
+const StyledPanel = styled(Panel)``;
 
 const Knappegruppe = styled(FlexWrapper)`
     margin-bottom: 2rem;
@@ -95,10 +84,6 @@ export const NameWrapper = styled.div`
     display: flex;
     flex-wrap: wrap;
     column-gap: 1rem;
-
-    .navds-form-field {
-        flex: 1;
-    }
 `;
 
 const BarnWrapper = styled.div`
@@ -118,14 +103,6 @@ const GruppeStyle = styled.div`
 const InntektGruppeStyle = styled(GruppeStyle)`
     h2 {
         margin-bottom: 1rem;
-    }
-
-    .navds-fieldset {
-        margin-bottom: 2.5rem;
-    }
-
-    .leggTilBostotte {
-        margin-bottom: 1.5rem;
     }
 `;
 
@@ -166,10 +143,10 @@ export const PersonMockData = () => {
     const [skattutbetalinger, setSkattutbetalinger] = useState<SkatteutbetalingObject[]>([]);
 
     const [leggTilBostotteSak, setLeggTilBostotteSak] = useState<boolean>(false);
-    const [bostotteSaker, setBostotteSaker] = useState<BostotteSakObject[]>([]);
+    const [bostotteSaker, setBostotteSaker] = useState<SakerDto[]>([]);
 
     const [leggTilBostotteUtbetaling, setLeggTilBostotteUtbetaling] = useState<boolean>(false);
-    const [bostotteUtbetalinger, setBostotteUtbetalinger] = useState<BostotteUtbetalingObject[]>([]);
+    const [bostotteUtbetalinger, setBostotteUtbetalinger] = useState<UtbetalingerDto[]>([]);
 
     const [leggTilUtbetalingFraNav, setLeggTilUtbetalingFraNav] = useState<boolean>(false);
     const [utbetalingerFraNav, setUtbetalingerFraNav] = useState<UtbetalingFraNavObject[]>([]);
@@ -273,14 +250,12 @@ export const PersonMockData = () => {
         setLeggTilSkatt(false);
     };
 
-    const leggTilBostotteSakCallback = (nyBostotteSak: BostotteSakObject) => {
-        if (nyBostotteSak) {
-            setBostotteSaker([...bostotteSaker, nyBostotteSak]);
-        }
+    const leggTilBostotteSakCallback = (nyBostotteSak: SakerDto | null) => {
+        if (nyBostotteSak) setBostotteSaker([...bostotteSaker, nyBostotteSak]);
         setLeggTilBostotteSak(false);
     };
 
-    const leggTilBostotteUtbetalingCallback = (nyBostotteUtbetaling: BostotteUtbetalingObject) => {
+    const leggTilBostotteUtbetalingCallback = (nyBostotteUtbetaling: UtbetalingerDto) => {
         if (nyBostotteUtbetaling) {
             bostotteUtbetalinger.push(nyBostotteUtbetaling);
             setBostotteUtbetalinger(bostotteUtbetalinger);
@@ -428,7 +403,6 @@ export const PersonMockData = () => {
                 label="Ident / fødselsnummer"
                 disabled={editMode || lockedMode}
                 onChange={(evt: any) => setFnr(evt.target.value)}
-                className="brukerIdent"
             />
             <GruppeStyle>
                 <PersonOpplysningerFieldset
@@ -648,7 +622,7 @@ export const PersonMockData = () => {
                     )}
                 </Fieldset>
                 <Fieldset legend="Husbanken">
-                    {bostotteSaker.map((sak: BostotteSakObject, index: number) => {
+                    {bostotteSaker.map((sak: SakerDto, index: number) => {
                         return (
                             <VisBostotteSak
                                 bostotteSak={sak}
@@ -667,7 +641,7 @@ export const PersonMockData = () => {
                             Legg til sak
                         </Button>
                     )}
-                    {bostotteUtbetalinger.map((utbetaling: BostotteUtbetalingObject, index: number) => {
+                    {bostotteUtbetalinger.map((utbetaling: UtbetalingerDto, index: number) => {
                         return (
                             <VisBostotteUtbetaling
                                 bostotteUtbetaling={utbetaling}

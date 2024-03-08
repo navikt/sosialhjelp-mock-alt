@@ -1,66 +1,35 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
 import { Button } from '@navikt/ds-react';
-import { BostotteRolle, getBostotteRolleLabel } from './BostotteSak';
 import {
     AvbrytKnapp,
-    DefinitionList,
     Knappegruppe,
+    StyledFieldset,
     StyledInput,
     StyledPanel,
     StyledSelect,
-    StyledFieldset,
 } from '../../../styling/Styles';
 import { getIsoDateString } from '../../../utils/dateUtils';
-import SletteKnapp from '../../../components/SletteKnapp';
+import { SakerDtoRolle, UtbetalingerDto, UtbetalingerDtoMottaker } from '../../../generated/model';
+import { mottakerLabel, rolleLabel } from './labels';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
-export enum BostotteMottaker {
-    KOMMUNE = 'KOMMUNE',
-    HUSSTAND = 'HUSSTAND',
-}
+const { HUSSTAND, KOMMUNE } = UtbetalingerDtoMottaker;
+const { HOVEDPERSON, BIPERSON } = SakerDtoRolle;
 
-const getBostotteMottakerLabel = (key: BostotteMottaker) => {
-    switch (key) {
-        case 'KOMMUNE':
-            return 'Kommunen';
-        case 'HUSSTAND':
-            return 'Husstand';
-        default:
-            return '';
-    }
-};
-
-export interface BostotteUtbetalingObject {
-    belop: string;
-    utbetalingsdato: string;
-    mottaker: BostotteMottaker;
-    rolle: BostotteRolle;
-}
-
-interface Params {
-    isOpen: boolean;
-    callback: (data: any) => void;
-}
-
-export const NyttBostotteUtbetaling = ({ isOpen, callback }: Params) => {
+export const NyttBostotteUtbetaling = ({ isOpen, callback }: { isOpen: boolean; callback: (data: any) => void }) => {
     let sistManed = new Date();
     sistManed.setMonth(sistManed.getMonth() - 1);
 
-    const [belop, setBelop] = useState('1337');
+    const [belop, setBelop] = useState(1337);
     const [utbetalingsdato, setUtbetalingsdato] = useState<string>(getIsoDateString(sistManed));
-    const [mottaker, setMottaker] = useState<BostotteMottaker>(BostotteMottaker.HUSSTAND);
-    const [rolle, setRolle] = useState<BostotteRolle>(BostotteRolle.HOVEDPERSON);
+
+    const [mottaker, setMottaker] = useState<UtbetalingerDtoMottaker>(HUSSTAND);
+    const [rolle, setRolle] = useState<SakerDtoRolle>(HOVEDPERSON);
 
     const onLagre = (event: ClickEvent) => {
-        const nyttBostotteUtbetalingObject: BostotteUtbetalingObject = {
-            belop: belop.toString(),
-            utbetalingsdato: utbetalingsdato,
-            mottaker: mottaker,
-            rolle: rolle,
-        };
-
+        const nyttBostotteUtbetalingObject: UtbetalingerDto = { belop, utbetalingsdato, mottaker, rolle };
         callback(nyttBostotteUtbetalingObject);
         event.preventDefault();
     };
@@ -77,7 +46,7 @@ export const NyttBostotteUtbetaling = ({ isOpen, callback }: Params) => {
                         label="Beløp"
                         type="number"
                         value={belop}
-                        onChange={(evt: any) => setBelop(evt.target.value)}
+                        onChange={(evt: any) => setBelop(parseFloat(evt.target.value))}
                         htmlSize={20}
                     />
                     <StyledInput
@@ -91,52 +60,19 @@ export const NyttBostotteUtbetaling = ({ isOpen, callback }: Params) => {
                         onChange={(evt: any) => setMottaker(evt.target.value)}
                         value={mottaker}
                     >
-                        <option value={BostotteMottaker.HUSSTAND}>
-                            {getBostotteMottakerLabel(BostotteMottaker.HUSSTAND)}
-                        </option>
-                        <option value={BostotteMottaker.KOMMUNE}>
-                            {getBostotteMottakerLabel(BostotteMottaker.KOMMUNE)}
-                        </option>
+                        <option value={HUSSTAND}>{mottakerLabel[HUSSTAND]}</option>
+                        <option value={KOMMUNE}>{mottakerLabel[KOMMUNE]}</option>
                     </StyledSelect>
                     <StyledSelect label="Rolle" onChange={(evt: any) => setRolle(evt.target.value)} value={rolle}>
-                        <option value={BostotteRolle.HOVEDPERSON}>
-                            {getBostotteRolleLabel(BostotteRolle.HOVEDPERSON)}
-                        </option>
-                        <option value={BostotteRolle.BIPERSON}>{getBostotteRolleLabel(BostotteRolle.BIPERSON)}</option>
+                        <option value={HOVEDPERSON}>{rolleLabel[HOVEDPERSON]}</option>
+                        <option value={BIPERSON}>{rolleLabel[BIPERSON]}</option>
                     </StyledSelect>
                 </StyledFieldset>
                 <Knappegruppe>
-                    <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
-                        Legg til
-                    </Button>
-                    <AvbrytKnapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
-                        Avbryt
-                    </AvbrytKnapp>
+                    <Button onClick={onLagre}>Legg til</Button>
+                    <AvbrytKnapp onClick={onCancel}>Avbryt</AvbrytKnapp>
                 </Knappegruppe>
             </StyledPanel>
         </Collapse>
-    );
-};
-
-interface ViseParams {
-    bostotteUtbetaling: BostotteUtbetalingObject;
-    onSlett: () => void;
-}
-
-export const VisBostotteUtbetaling = ({ bostotteUtbetaling, onSlett }: ViseParams) => {
-    return (
-        <StyledPanel>
-            <DefinitionList>
-                <dt>Beløp</dt>
-                <dd>{bostotteUtbetaling.belop}</dd>
-                <dt>Utbetalingsdato </dt>
-                <dd>{bostotteUtbetaling.utbetalingsdato}</dd>
-                <dt>Mottaker </dt>
-                <dd>{getBostotteMottakerLabel(bostotteUtbetaling.mottaker)}</dd>
-                <dt>Rolle </dt>
-                <dd>{getBostotteRolleLabel(bostotteUtbetaling.rolle)}</dd>
-            </DefinitionList>
-            <SletteKnapp onClick={onSlett} />
-        </StyledPanel>
     );
 };

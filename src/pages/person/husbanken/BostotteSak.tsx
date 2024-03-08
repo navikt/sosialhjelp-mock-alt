@@ -1,103 +1,39 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-collapse';
-import { Button } from '@navikt/ds-react';
-import {
-    AvbrytKnapp,
-    DefinitionList,
-    FlexWrapper,
-    Knappegruppe,
-    StyledFieldset,
-    StyledInput,
-    StyledPanel,
-    StyledSelect,
-} from '../../../styling/Styles';
+import { Button, Fieldset, HStack, Select, TextField } from '@navikt/ds-react';
+import { AvbrytKnapp, Knappegruppe } from '../../../styling/Styles';
 import { getVedtakstype, VedtakKodeType, Vedtakskode } from './vedtak';
-import SletteKnapp from '../../../components/SletteKnapp';
+import { SakerDto, SakerDtoRolle, SakerDtoStatus } from '../../../generated/model';
+import { rolleLabel, statusLabel } from './labels';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
-export enum BostotteStatus {
-    VEDTATT = 'VEDTATT',
-    UNDER_BEHANDLING = 'UNDER_BEHANDLING',
-}
-const getBostotteStatusLabel = (key: BostotteStatus) => {
-    switch (key) {
-        case 'VEDTATT':
-            return 'Vedtak er fattet';
-        case 'UNDER_BEHANDLING':
-            return 'Under behandling';
-        default:
-            return '';
-    }
-};
-
-export enum BostotteRolle {
-    HOVEDPERSON = 'HOVEDPERSON',
-    BIPERSON = 'BIPERSON',
-}
-
-export const getBostotteRolleLabel = (key: BostotteRolle) => {
-    switch (key) {
-        case 'HOVEDPERSON':
-            return 'Hovedperson';
-        case 'BIPERSON':
-            return 'Biperson';
-        default:
-            return '';
-    }
-};
-
-export interface BostotteSakObject {
-    mnd: number;
-    ar: number;
-    status: BostotteStatus;
-    rolle: BostotteRolle;
-    vedtak: VedtakObject | null;
-}
-
-export interface VedtakObject {
-    kode: string;
-    beskrivelse: string;
-    type: string;
-}
-
-interface Params {
-    isOpen: boolean;
-    callback: (data: any) => void;
-}
-
-export const NyBostotteSak = ({ isOpen, callback }: Params) => {
+export const NyBostotteSak = ({ isOpen, callback }: { isOpen: boolean; callback: (data: SakerDto | null) => void }) => {
     let sistManed = new Date();
     sistManed.setMonth(sistManed.getMonth() - 1);
 
-    const [ar, setAr] = useState(sistManed.getFullYear().toString());
-    const [mnd, setMnd] = useState((sistManed.getMonth() + 1).toString());
-    const [status, setStatus] = useState<BostotteStatus>(BostotteStatus.UNDER_BEHANDLING);
-    const [rolle, setRolle] = useState<BostotteRolle>(BostotteRolle.HOVEDPERSON);
+    const [ar, setAr] = useState(sistManed.getFullYear());
+    const [mnd, setMnd] = useState(sistManed.getMonth() + 1);
+    const [status, setStatus] = useState<SakerDtoStatus>(SakerDtoStatus.UNDER_BEHANDLING);
+    const [rolle, setRolle] = useState<SakerDtoRolle>(SakerDtoRolle.HOVEDPERSON);
     const [vedtaksKode, setVedtaksKode] = useState<VedtakKodeType>('V00');
 
     const onLagre = (event: ClickEvent) => {
-        if (status === BostotteStatus.VEDTATT) {
-            const kode = vedtaksKode;
-            const beskrivelse = Vedtakskode[vedtaksKode];
-            const type = getVedtakstype(vedtaksKode);
-            const vedtaket: VedtakObject = { kode, beskrivelse, type };
-            const nyttBostotteSakObject: BostotteSakObject = {
-                ar: parseInt(ar),
-                mnd: parseInt(mnd),
-                status: status,
-                rolle: rolle,
-                vedtak: vedtaket,
+        if (status === SakerDtoStatus.VEDTATT) {
+            const nyttBostotteSakObject: SakerDto = {
+                ar,
+                mnd,
+                status,
+                rolle,
+                vedtak: {
+                    kode: vedtaksKode,
+                    beskrivelse: Vedtakskode[vedtaksKode],
+                    type: getVedtakstype(vedtaksKode),
+                },
             };
             callback(nyttBostotteSakObject);
         } else {
-            const nyttBostotteSakObject: BostotteSakObject = {
-                ar: parseInt(ar),
-                mnd: parseInt(mnd),
-                status: status,
-                rolle: rolle,
-                vedtak: null,
-            };
+            const nyttBostotteSakObject: SakerDto = { ar, mnd, status, rolle };
             callback(nyttBostotteSakObject);
         }
         event.preventDefault();
@@ -107,54 +43,62 @@ export const NyBostotteSak = ({ isOpen, callback }: Params) => {
         event.preventDefault();
     };
 
+    const { VEDTATT, UNDER_BEHANDLING } = SakerDtoStatus;
+    const { HOVEDPERSON, BIPERSON } = SakerDtoRolle;
     return (
         <Collapse isOpened={isOpen}>
-            <StyledPanel>
-                <StyledFieldset legend="Legg til sak fra Husbanken">
-                    <FlexWrapper>
-                        <StyledInput
+            <div className={'bg-white p-4'}>
+                <Fieldset legend="Legg til sak fra Husbanken">
+                    <HStack gap={'4'}>
+                        <TextField
                             label="År"
                             value={ar}
-                            type="number"
+                            type="text"
+                            inputMode="numeric"
                             onChange={(evt: any) => setAr(evt.target.value)}
-                            htmlSize={5}
+                            htmlSize={6}
                         />
-                        <StyledInput
+                        <TextField
                             label="Måned"
                             value={mnd}
-                            type="number"
+                            type="text"
+                            inputMode="numeric"
                             onChange={(evt: any) => setMnd(evt.target.value)}
-                            htmlSize={5}
+                            htmlSize={4}
                         />
-                    </FlexWrapper>
-                    <StyledSelect label="Status" onChange={(evt: any) => setStatus(evt.target.value)} value={status}>
-                        <option value={BostotteStatus.VEDTATT}>{getBostotteStatusLabel(BostotteStatus.VEDTATT)}</option>
-                        <option value={BostotteStatus.UNDER_BEHANDLING}>
-                            {getBostotteStatusLabel(BostotteStatus.UNDER_BEHANDLING)}
-                        </option>
-                    </StyledSelect>
-                    {status === BostotteStatus.VEDTATT && (
-                        <StyledSelect
+                    </HStack>
+                    <Select
+                        className={'w-48'}
+                        label="Status"
+                        onChange={(evt: any) => setStatus(evt.target.value)}
+                        value={status}
+                    >
+                        <option value={VEDTATT}>{statusLabel[VEDTATT]}</option>
+                        <option value={UNDER_BEHANDLING}>{statusLabel[UNDER_BEHANDLING]}</option>
+                    </Select>
+                    {status === VEDTATT && (
+                        <Select
                             label="Vedtak"
                             onChange={(evt: any) => setVedtaksKode(evt.target.value)}
                             value={vedtaksKode}
                         >
-                            {Object.entries(Vedtakskode).map(([key, label]): JSX.Element => {
-                                return (
-                                    <option key={key} value={key}>
-                                        {label}
-                                    </option>
-                                );
-                            })}
-                        </StyledSelect>
+                            {Object.entries(Vedtakskode).map(([key, label]) => (
+                                <option key={key} value={key}>
+                                    {label}
+                                </option>
+                            ))}
+                        </Select>
                     )}
-                    <StyledSelect label="Rolle" onChange={(evt: any) => setRolle(evt.target.value)} value={rolle}>
-                        <option value={BostotteRolle.HOVEDPERSON}>
-                            {getBostotteRolleLabel(BostotteRolle.HOVEDPERSON)}
-                        </option>
-                        <option value={BostotteRolle.BIPERSON}>{getBostotteRolleLabel(BostotteRolle.BIPERSON)}</option>
-                    </StyledSelect>
-                </StyledFieldset>
+                    <Select
+                        className={'w-48'}
+                        label="Rolle"
+                        onChange={(evt: any) => setRolle(evt.target.value)}
+                        value={rolle}
+                    >
+                        <option value={HOVEDPERSON}>{rolleLabel[HOVEDPERSON]}</option>
+                        <option value={BIPERSON}>{rolleLabel[BIPERSON]}</option>
+                    </Select>
+                </Fieldset>
                 <Knappegruppe>
                     <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
                         Legg til
@@ -163,36 +107,7 @@ export const NyBostotteSak = ({ isOpen, callback }: Params) => {
                         Avbryt
                     </AvbrytKnapp>
                 </Knappegruppe>
-            </StyledPanel>
+            </div>
         </Collapse>
-    );
-};
-
-interface ViseParams {
-    bostotteSak: BostotteSakObject;
-    onSlett: () => void;
-}
-
-export const VisBostotteSak = ({ bostotteSak, onSlett }: ViseParams) => {
-    return (
-        <StyledPanel>
-            <DefinitionList>
-                <dt>År</dt>
-                <dd>{bostotteSak.ar}</dd>
-                <dt>Måned</dt>
-                <dd>{bostotteSak.mnd}</dd>
-                <dt>Status</dt>
-                <dd>{getBostotteStatusLabel(bostotteSak.status)}</dd>
-                {bostotteSak.status === BostotteStatus.VEDTATT && (
-                    <>
-                        <dt>Ident</dt>
-                        <dd>{bostotteSak.vedtak?.beskrivelse}</dd>
-                    </>
-                )}
-                <dt>Rolle</dt>
-                <dd>{getBostotteRolleLabel(bostotteSak.rolle)}</dd>
-            </DefinitionList>
-            <SletteKnapp onClick={onSlett} />
-        </StyledPanel>
     );
 };

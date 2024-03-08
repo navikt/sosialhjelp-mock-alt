@@ -1310,9 +1310,9 @@
                     "value": { "type": "string" },
                     "attributes": { "type": "object", "additionalProperties": { "type": "string" } },
                     "maxAge": { "type": "integer", "format": "int32" },
-                    "domain": { "type": "string" },
                     "version": { "type": "integer", "format": "int32", "deprecated": true },
                     "path": { "type": "string" },
+                    "domain": { "type": "string" },
                     "comment": { "type": "string", "deprecated": true },
                     "secure": { "type": "boolean" },
                     "httpOnly": { "type": "boolean" }
@@ -1665,7 +1665,7 @@
                 }
             },
             "SakerDto": {
-                "required": ["ar", "mnd", "status"],
+                "required": ["ar", "mnd", "rolle", "status"],
                 "type": "object",
                 "properties": {
                     "mnd": { "type": "integer", "format": "int32" },
