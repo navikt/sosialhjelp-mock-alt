@@ -11,6 +11,7 @@ import {
     StyledSelect,
 } from '../../../styling/Styles';
 import SletteKnapp from '../../../components/SletteKnapp';
+import { FrontendSkattbarInntekt, FrontendSkattbarInntektType } from '../../../generated/model';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -24,25 +25,14 @@ export enum SkatteutbetalingType {
     ALDERSUFOEREETTERLATTEAVTALEFESTETOGKRIGSPENSJON = 'AldersUfoereEtterlatteAvtalefestetOgKrigspensjon',
 }
 
-const getSkatteutbetalingLabel = (key: SkatteutbetalingType) => {
-    switch (key) {
-        case 'Loennsinntekt':
-            return 'Lønnsinntekt';
-        case 'YtelseFraOffentlige':
-            return 'Ytelse fra det offentlige';
-        case 'PensjonEllerTrygd':
-            return 'Pensjon eller trygd';
-        case 'LottOgPartInnenFiske':
-            return 'Lott og part innen fiske';
-        case 'DagmammaIEgenBolig':
-            return 'Dagmamma i egen bolig';
-        case 'Naeringsinntekt':
-            return 'Næringsinntekt';
-        case 'AldersUfoereEtterlatteAvtalefestetOgKrigspensjon':
-            return 'Alder, uføre, etterlatte, avtalefestet og krigspensjon';
-        default:
-            return '';
-    }
+const skatteutbetalingLabels: Record<FrontendSkattbarInntektType, string> = {
+    Loennsinntekt: 'Lønnsinntekt',
+    YtelseFraOffentlige: 'Ytelse fra det offentlige',
+    PensjonEllerTrygd: 'Pensjon eller trygd',
+    LottOgPartInnenFiske: 'Lott og part innen fiske',
+    DagmammaIEgenBolig: 'Dagmamma i egen bolig',
+    Naeringsinntekt: 'Næringsinntekt',
+    AldersUfoereEtterlatteAvtalefestetOgKrigspensjon: 'Alder, uføre, etterlatte, avtalefestet og krigspensjon',
 };
 
 export interface SkatteutbetalingObject {
@@ -132,7 +122,7 @@ export const NyttSkatteutbetaling = ({ isOpen, callback }: Params) => {
                         {Object.values(SkatteutbetalingType).map((value: SkatteutbetalingType): JSX.Element => {
                             return (
                                 <option key={value} value={value}>
-                                    {getSkatteutbetalingLabel(value)}
+                                    {skatteutbetalingLabels[value]}
                                 </option>
                             );
                         })}
@@ -151,12 +141,13 @@ export const NyttSkatteutbetaling = ({ isOpen, callback }: Params) => {
     );
 };
 
-interface ViseParams {
-    skatteutbetaling: SkatteutbetalingObject;
+export const VisSkatteutbetaling = ({
+    skatteutbetaling,
+    onSlett,
+}: {
+    skatteutbetaling: FrontendSkattbarInntekt;
     onSlett: () => void;
-}
-
-export const VisSkatteutbetaling = ({ skatteutbetaling, onSlett }: ViseParams) => {
+}) => {
     return (
         <StyledPanel>
             <DefinitionList>
@@ -169,7 +160,7 @@ export const VisSkatteutbetaling = ({ skatteutbetaling, onSlett }: ViseParams) =
                 <dt>Måned</dt>
                 <dd>{skatteutbetaling.maned}</dd>
                 <dt>Type</dt>
-                <dd>{getSkatteutbetalingLabel(skatteutbetaling.type)}</dd>
+                <dd>{skatteutbetalingLabels[skatteutbetaling.type]}</dd>
             </DefinitionList>
             <SletteKnapp onClick={onSlett} />
         </StyledPanel>

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { addParams, getMockAltApiURL, getRedirectParams } from '../../utils/restUtils';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Personalia } from '../person/PersonMockData';
 import styled from 'styled-components';
 import { AvbrytKnapp, Knappegruppe } from '../../styling/Styles';
 import { Alert, Button, BodyShort, Fieldset, Panel, Select, TextField, Heading, Label } from '@navikt/ds-react';
+import { FrontendPersonalia } from '../../generated/model';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -76,7 +76,7 @@ export const Feilkonfigurering = () => {
                 .then((response) => response.text())
                 .then((text) => {
                     if (text.length > 1) {
-                        const nedlastet: Personalia = JSON.parse(text);
+                        const nedlastet: FrontendPersonalia = JSON.parse(text);
                         setLockedMode(nedlastet.locked);
                         setNavn(
                             nedlastet.navn.fornavn + ' ' + nedlastet.navn.mellomnavn + ' ' + nedlastet.navn.etternavn

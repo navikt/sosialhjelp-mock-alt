@@ -12,7 +12,7 @@ export interface AdresseState {
 export type AdresseAction =
     | { type: 'adressenavn'; value: string }
     | { type: 'husnummer'; value: string }
-    | { type: 'husbokstav'; value: string }
+    | { type: 'husbokstav'; value: string | undefined }
     | { type: 'postnummer'; value: string }
     | { type: 'kommunenummer'; value: string }
     | { type: 'validHusnummer'; value: boolean };

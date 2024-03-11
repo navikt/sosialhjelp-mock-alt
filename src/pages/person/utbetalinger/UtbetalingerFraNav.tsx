@@ -11,6 +11,7 @@ import {
 } from '../../../styling/Styles';
 import { getIsoDateString } from '../../../utils/dateUtils';
 import SletteKnapp from '../../../components/SletteKnapp';
+import { FrontendUtbetalingFraNav } from '../../../generated/model';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -104,25 +105,26 @@ export const NyttUtbetalingerFraNav = ({ isOpen, callback }: Params) => {
     );
 };
 
-interface ViseParams {
-    utbetalingFraNav: UtbetalingFraNavObject;
+export const VisUtbetalingerFraNav = ({
+    utbetalingFraNav: { belop, dato, skattebelop, ytelseskomponenttype, ytelsestype },
+    onSlett,
+}: {
+    utbetalingFraNav: FrontendUtbetalingFraNav;
     onSlett: () => void;
-}
-
-export const VisUtbetalingerFraNav = ({ utbetalingFraNav, onSlett }: ViseParams) => {
+}) => {
     return (
         <StyledPanel>
             <DefinitionList labelWidth={30}>
                 <dt>Beløp</dt>
-                <dd>{utbetalingFraNav.belop}</dd>
+                <dd>{belop}</dd>
                 <dt>Utbetalingsdato</dt>
-                <dd>{utbetalingFraNav.dato}</dd>
+                <dd>{dato}</dd>
                 <dt>Ytelsestype</dt>
-                <dd>{utbetalingFraNav.ytelsestype}</dd>
+                <dd>{ytelsestype}</dd>
                 <dt>Skattebeløp</dt>
-                <dd>{utbetalingFraNav.skattebelop}</dd>
+                <dd>{skattebelop}</dd>
                 <dt>Ytelseskomponenttype</dt>
-                <dd>{utbetalingFraNav.ytelseskomponenttype}</dd>
+                <dd>{ytelseskomponenttype}</dd>
             </DefinitionList>
             <SletteKnapp onClick={onSlett} />
         </StyledPanel>

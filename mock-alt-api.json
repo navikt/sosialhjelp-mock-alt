@@ -137,7 +137,9 @@
                 "tags": ["frontend-controller"],
                 "operationId": "frontendUpload",
                 "requestBody": {
-                    "content": { "application/json": { "schema": { "type": "string" } } },
+                    "content": {
+                        "application/json": { "schema": { "$ref": "#/components/schemas/FrontendPersonalia" } }
+                    },
                     "required": true
                 },
                 "responses": {
@@ -1303,15 +1305,221 @@
                 },
                 "additionalProperties": { "type": "array", "items": { "type": "string" } }
             },
+            "ForenkletBostedsadresse": {
+                "required": ["adressenavn", "husnummer", "kommunenummer", "postnummer"],
+                "type": "object",
+                "properties": {
+                    "adressenavn": { "type": "string" },
+                    "husnummer": { "type": "integer", "format": "int32" },
+                    "husbokstav": { "type": "string" },
+                    "postnummer": { "type": "string" },
+                    "kommunenummer": { "type": "string" }
+                }
+            },
+            "FrontendArbeidsforhold": {
+                "required": [
+                    "id",
+                    "ident",
+                    "orgnavn",
+                    "orgnummer",
+                    "sluttDato",
+                    "startDato",
+                    "stillingsProsent",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": { "type": "string" },
+                    "id": { "type": "string" },
+                    "startDato": { "type": "string" },
+                    "sluttDato": { "type": "string" },
+                    "stillingsProsent": { "type": "string" },
+                    "ident": { "type": "string" },
+                    "orgnummer": { "type": "string" },
+                    "orgnavn": { "type": "string" }
+                }
+            },
+            "FrontendBarn": {
+                "required": [
+                    "adressebeskyttelse",
+                    "bostedsadresse",
+                    "fnr",
+                    "foedsel",
+                    "folkeregisterpersonstatus",
+                    "navn"
+                ],
+                "type": "object",
+                "properties": {
+                    "fnr": { "type": "string" },
+                    "adressebeskyttelse": {
+                        "type": "string",
+                        "enum": ["STRENGT_FORTROLIG_UTLAND", "STRENGT_FORTROLIG", "FORTROLIG", "UGRADERT"]
+                    },
+                    "bostedsadresse": { "$ref": "#/components/schemas/ForenkletBostedsadresse" },
+                    "folkeregisterpersonstatus": {
+                        "type": "string",
+                        "enum": [
+                            "bosatt",
+                            "utflyttet",
+                            "forsvunnet",
+                            "doed",
+                            "opphoert",
+                            "foedselsregistrert",
+                            "midlertidig",
+                            "inaktiv",
+                            "ikkeBosatt",
+                            "aktiv"
+                        ]
+                    },
+                    "foedsel": { "type": "string", "format": "date" },
+                    "navn": { "$ref": "#/components/schemas/PdlPersonNavn" }
+                }
+            },
+            "FrontendPersonalia": {
+                "required": [
+                    "administratorRoller",
+                    "adressebeskyttelse",
+                    "arbeidsforhold",
+                    "barn",
+                    "bostedsadresse",
+                    "bostotteSaker",
+                    "bostotteUtbetalinger",
+                    "epost",
+                    "fnr",
+                    "kanVarsles",
+                    "kontonummer",
+                    "locked",
+                    "navn",
+                    "sivilstand",
+                    "skattetatenUtbetalinger",
+                    "skjerming",
+                    "starsborgerskap",
+                    "telefonnummer",
+                    "utbetalingerFraNav"
+                ],
+                "type": "object",
+                "properties": {
+                    "fnr": { "type": "string" },
+                    "navn": { "$ref": "#/components/schemas/PdlPersonNavn" },
+                    "adressebeskyttelse": {
+                        "type": "string",
+                        "enum": ["STRENGT_FORTROLIG_UTLAND", "STRENGT_FORTROLIG", "FORTROLIG", "UGRADERT"]
+                    },
+                    "skjerming": { "type": "boolean" },
+                    "sivilstand": { "type": "string" },
+                    "ektefelle": { "type": "string" },
+                    "barn": { "type": "array", "items": { "$ref": "#/components/schemas/FrontendBarn" } },
+                    "starsborgerskap": { "type": "string" },
+                    "bostedsadresse": { "$ref": "#/components/schemas/ForenkletBostedsadresse" },
+                    "telefonnummer": { "type": "string" },
+                    "epost": { "type": "string" },
+                    "kanVarsles": { "type": "boolean" },
+                    "kontonummer": { "type": "string" },
+                    "arbeidsforhold": {
+                        "type": "array",
+                        "items": { "$ref": "#/components/schemas/FrontendArbeidsforhold" }
+                    },
+                    "bostotteSaker": { "type": "array", "items": { "$ref": "#/components/schemas/SakerDto" } },
+                    "bostotteUtbetalinger": {
+                        "type": "array",
+                        "items": { "$ref": "#/components/schemas/UtbetalingerDto" }
+                    },
+                    "skattetatenUtbetalinger": {
+                        "type": "array",
+                        "items": { "$ref": "#/components/schemas/FrontendSkattbarInntekt" }
+                    },
+                    "utbetalingerFraNav": {
+                        "type": "array",
+                        "items": { "$ref": "#/components/schemas/FrontendUtbetalingFraNav" }
+                    },
+                    "administratorRoller": {
+                        "type": "array",
+                        "items": { "type": "string", "enum": ["MODIA_VEILEDER"] }
+                    },
+                    "locked": { "type": "boolean" }
+                }
+            },
+            "FrontendSkattbarInntekt": {
+                "required": ["beloep", "maned", "orgnummer", "trekk", "type"],
+                "type": "object",
+                "properties": {
+                    "beloep": { "type": "string" },
+                    "trekk": { "type": "string" },
+                    "orgnummer": { "type": "string" },
+                    "maned": { "type": "string" },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "Loennsinntekt",
+                            "YtelseFraOffentlige",
+                            "PensjonEllerTrygd",
+                            "LottOgPartInnenFiske",
+                            "DagmammaIEgenBolig",
+                            "Naeringsinntekt",
+                            "AldersUfoereEtterlatteAvtalefestetOgKrigspensjon"
+                        ]
+                    }
+                }
+            },
+            "FrontendUtbetalingFraNav": {
+                "required": ["belop", "dato", "skattebelop", "ytelseskomponenttype", "ytelsestype"],
+                "type": "object",
+                "properties": {
+                    "belop": { "type": "number", "format": "double" },
+                    "dato": { "type": "string", "format": "date" },
+                    "ytelsestype": { "type": "string" },
+                    "skattebelop": { "type": "number", "format": "double" },
+                    "ytelseskomponenttype": { "type": "string" }
+                }
+            },
+            "PdlPersonNavn": {
+                "required": ["etternavn", "fornavn", "mellomnavn"],
+                "type": "object",
+                "properties": {
+                    "fornavn": { "type": "string" },
+                    "mellomnavn": { "type": "string" },
+                    "etternavn": { "type": "string" }
+                }
+            },
+            "SakerDto": {
+                "required": ["ar", "mnd", "rolle", "status"],
+                "type": "object",
+                "properties": {
+                    "mnd": { "type": "integer", "format": "int32" },
+                    "ar": { "type": "integer", "format": "int32" },
+                    "status": { "type": "string", "enum": ["UNDER_BEHANDLING", "VEDTATT"] },
+                    "vedtak": { "$ref": "#/components/schemas/VedtakDto" },
+                    "rolle": { "type": "string", "enum": ["HOVEDPERSON", "BIPERSON"] }
+                }
+            },
+            "UtbetalingerDto": {
+                "required": ["belop", "mottaker", "rolle", "utbetalingsdato"],
+                "type": "object",
+                "properties": {
+                    "belop": { "type": "number", "format": "double" },
+                    "utbetalingsdato": { "type": "string", "format": "date" },
+                    "mottaker": { "type": "string", "enum": ["KOMMUNE", "HUSSTAND"] },
+                    "rolle": { "type": "string", "enum": ["HOVEDPERSON", "BIPERSON"] }
+                }
+            },
+            "VedtakDto": {
+                "required": ["beskrivelse", "kode", "type"],
+                "type": "object",
+                "properties": {
+                    "kode": { "type": "string" },
+                    "beskrivelse": { "type": "string" },
+                    "type": { "type": "string" }
+                }
+            },
             "Cookie": {
                 "type": "object",
                 "properties": {
                     "name": { "type": "string" },
                     "value": { "type": "string" },
                     "attributes": { "type": "object", "additionalProperties": { "type": "string" } },
+                    "path": { "type": "string" },
                     "maxAge": { "type": "integer", "format": "int32" },
                     "version": { "type": "integer", "format": "int32", "deprecated": true },
-                    "path": { "type": "string" },
                     "domain": { "type": "string" },
                     "comment": { "type": "string", "deprecated": true },
                     "secure": { "type": "boolean" },
@@ -1500,198 +1708,6 @@
                     "id": { "type": "string" },
                     "size": { "type": "integer", "format": "int64" },
                     "kanLastesned": { "type": "boolean" }
-                }
-            },
-            "ForenkletBostedsadresse": {
-                "required": ["adressenavn", "husnummer", "kommunenummer", "postnummer"],
-                "type": "object",
-                "properties": {
-                    "adressenavn": { "type": "string" },
-                    "husnummer": { "type": "integer", "format": "int32" },
-                    "husbokstav": { "type": "string" },
-                    "postnummer": { "type": "string" },
-                    "kommunenummer": { "type": "string" }
-                }
-            },
-            "FrontendArbeidsforhold": {
-                "required": [
-                    "id",
-                    "ident",
-                    "orgnavn",
-                    "orgnummer",
-                    "sluttDato",
-                    "startDato",
-                    "stillingsProsent",
-                    "type"
-                ],
-                "type": "object",
-                "properties": {
-                    "type": { "type": "string" },
-                    "id": { "type": "string" },
-                    "startDato": { "type": "string" },
-                    "sluttDato": { "type": "string" },
-                    "stillingsProsent": { "type": "string" },
-                    "ident": { "type": "string" },
-                    "orgnummer": { "type": "string" },
-                    "orgnavn": { "type": "string" }
-                }
-            },
-            "FrontendBarn": {
-                "required": [
-                    "adressebeskyttelse",
-                    "bostedsadresse",
-                    "fnr",
-                    "foedsel",
-                    "folkeregisterpersonstatus",
-                    "navn"
-                ],
-                "type": "object",
-                "properties": {
-                    "fnr": { "type": "string" },
-                    "adressebeskyttelse": {
-                        "type": "string",
-                        "enum": ["STRENGT_FORTROLIG_UTLAND", "STRENGT_FORTROLIG", "FORTROLIG", "UGRADERT"]
-                    },
-                    "bostedsadresse": { "$ref": "#/components/schemas/ForenkletBostedsadresse" },
-                    "folkeregisterpersonstatus": { "type": "string" },
-                    "foedsel": { "type": "string", "format": "date" },
-                    "navn": { "$ref": "#/components/schemas/PdlPersonNavn" }
-                }
-            },
-            "FrontendPersonalia": {
-                "required": [
-                    "administratorRoller",
-                    "adressebeskyttelse",
-                    "arbeidsforhold",
-                    "barn",
-                    "bostedsadresse",
-                    "bostotteSaker",
-                    "bostotteUtbetalinger",
-                    "epost",
-                    "fnr",
-                    "kanVarsles",
-                    "kontonummer",
-                    "locked",
-                    "navn",
-                    "sivilstand",
-                    "skattetatenUtbetalinger",
-                    "skjerming",
-                    "starsborgerskap",
-                    "telefonnummer",
-                    "utbetalingerFraNav"
-                ],
-                "type": "object",
-                "properties": {
-                    "fnr": { "type": "string" },
-                    "navn": { "$ref": "#/components/schemas/PdlPersonNavn" },
-                    "adressebeskyttelse": {
-                        "type": "string",
-                        "enum": ["STRENGT_FORTROLIG_UTLAND", "STRENGT_FORTROLIG", "FORTROLIG", "UGRADERT"]
-                    },
-                    "skjerming": { "type": "boolean" },
-                    "sivilstand": { "type": "string" },
-                    "ektefelle": { "type": "string" },
-                    "barn": { "type": "array", "items": { "$ref": "#/components/schemas/FrontendBarn" } },
-                    "starsborgerskap": { "type": "string" },
-                    "bostedsadresse": { "$ref": "#/components/schemas/ForenkletBostedsadresse" },
-                    "telefonnummer": { "type": "string" },
-                    "epost": { "type": "string" },
-                    "kanVarsles": { "type": "boolean" },
-                    "kontonummer": { "type": "string" },
-                    "arbeidsforhold": {
-                        "type": "array",
-                        "items": { "$ref": "#/components/schemas/FrontendArbeidsforhold" }
-                    },
-                    "bostotteSaker": { "type": "array", "items": { "$ref": "#/components/schemas/SakerDto" } },
-                    "bostotteUtbetalinger": {
-                        "type": "array",
-                        "items": { "$ref": "#/components/schemas/UtbetalingerDto" }
-                    },
-                    "skattetatenUtbetalinger": {
-                        "type": "array",
-                        "items": { "$ref": "#/components/schemas/FrontendSkattbarInntekt" }
-                    },
-                    "utbetalingerFraNav": {
-                        "type": "array",
-                        "items": { "$ref": "#/components/schemas/FrontendUtbetalingFraNav" }
-                    },
-                    "administratorRoller": {
-                        "type": "array",
-                        "items": { "type": "string", "enum": ["MODIA_VEILEDER"] }
-                    },
-                    "locked": { "type": "boolean" }
-                }
-            },
-            "FrontendSkattbarInntekt": {
-                "required": ["beloep", "maned", "orgnummer", "trekk", "type"],
-                "type": "object",
-                "properties": {
-                    "beloep": { "type": "string" },
-                    "trekk": { "type": "string" },
-                    "orgnummer": { "type": "string" },
-                    "maned": { "type": "string" },
-                    "type": {
-                        "type": "string",
-                        "enum": [
-                            "Loennsinntekt",
-                            "YtelseFraOffentlige",
-                            "PensjonEllerTrygd",
-                            "LottOgPartInnenFiske",
-                            "DagmammaIEgenBolig",
-                            "Naeringsinntekt",
-                            "AldersUfoereEtterlatteAvtalefestetOgKrigspensjon"
-                        ]
-                    }
-                }
-            },
-            "FrontendUtbetalingFraNav": {
-                "required": ["belop", "dato", "skattebelop", "ytelseskomponenttype", "ytelsestype"],
-                "type": "object",
-                "properties": {
-                    "belop": { "type": "number", "format": "double" },
-                    "dato": { "type": "string", "format": "date" },
-                    "ytelsestype": { "type": "string" },
-                    "skattebelop": { "type": "number", "format": "double" },
-                    "ytelseskomponenttype": { "type": "string" }
-                }
-            },
-            "PdlPersonNavn": {
-                "required": ["etternavn", "fornavn", "mellomnavn"],
-                "type": "object",
-                "properties": {
-                    "fornavn": { "type": "string" },
-                    "mellomnavn": { "type": "string" },
-                    "etternavn": { "type": "string" }
-                }
-            },
-            "SakerDto": {
-                "required": ["ar", "mnd", "rolle", "status"],
-                "type": "object",
-                "properties": {
-                    "mnd": { "type": "integer", "format": "int32" },
-                    "ar": { "type": "integer", "format": "int32" },
-                    "status": { "type": "string", "enum": ["UNDER_BEHANDLING", "VEDTATT"] },
-                    "vedtak": { "$ref": "#/components/schemas/VedtakDto" },
-                    "rolle": { "type": "string", "enum": ["HOVEDPERSON", "BIPERSON"] }
-                }
-            },
-            "UtbetalingerDto": {
-                "required": ["belop", "mottaker", "rolle", "utbetalingsdato"],
-                "type": "object",
-                "properties": {
-                    "belop": { "type": "number", "format": "double" },
-                    "utbetalingsdato": { "type": "string", "format": "date" },
-                    "mottaker": { "type": "string", "enum": ["KOMMUNE", "HUSSTAND"] },
-                    "rolle": { "type": "string", "enum": ["HOVEDPERSON", "BIPERSON"] }
-                }
-            },
-            "VedtakDto": {
-                "required": ["beskrivelse", "kode", "type"],
-                "type": "object",
-                "properties": {
-                    "kode": { "type": "string" },
-                    "beskrivelse": { "type": "string" },
-                    "type": { "type": "string" }
                 }
             },
             "ForelderBarnRelasjon": {

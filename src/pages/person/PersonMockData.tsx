@@ -6,60 +6,32 @@ import { NyBostotteSak } from './husbanken/BostotteSak';
 import { NyttBostotteUtbetaling } from './husbanken/BostotteUtbetaling';
 import { NyttSkatteutbetaling, SkatteutbetalingObject, VisSkatteutbetaling } from './skattetaten/Skattetaten';
 import { Collapse } from 'react-collapse';
-import { BarnObject, NyttBarn, VisBarn } from './barn/Barn';
+import { NyttBarn } from './barn/Barn';
 import styled from 'styled-components';
-import {
-    NyttUtbetalingerFraNav,
-    UtbetalingFraNavObject,
-    VisUtbetalingerFraNav,
-} from './utbetalinger/UtbetalingerFraNav';
+import { NyttUtbetalingerFraNav, VisUtbetalingerFraNav } from './utbetalinger/UtbetalingerFraNav';
 import { Adressebeskyttelse } from './personalia/adressebeskyttelse';
 import { Sivilstand } from './familie/familie';
 import { FlexWrapper, StyledSelect } from '../../styling/Styles';
 import Adresse from './adresse/Adresse';
 import { useAdresse } from './adresse/useAdresse';
 import { useAppStatus } from './useAppStatus';
+import { Alert, BodyShort, Button, Checkbox, Label, Heading, TextField, Fieldset } from '@navikt/ds-react';
+import { AdministratorRollerPanel, VisAdministratorRoller } from './roller/AdministratorRoller';
 import {
-    Alert,
-    BodyShort,
-    Button,
-    Checkbox,
-    Label,
-    Panel,
-    Heading,
-    TextField,
-    Fieldset,
-    Ingress,
-} from '@navikt/ds-react';
-import { AdminRolle, AdministratorRollerPanel, VisAdministratorRoller } from './roller/AdministratorRoller';
-import { PdlPersonNavn, SakerDto, UtbetalingerDto } from '../../generated/model';
+    FrontendBarn,
+    FrontendPersonalia,
+    FrontendPersonaliaAdministratorRollerItem,
+    FrontendPersonaliaAdressebeskyttelse,
+    FrontendSkattbarInntekt,
+    FrontendUtbetalingFraNav,
+    SakerDto,
+    UtbetalingerDto,
+} from '../../generated/model';
 import { VisBostotteSak } from './husbanken/VisBostotteSak';
 import { VisBostotteUtbetaling } from './husbanken/VisBostotteUtbetaling';
+import { VisBarn } from './barn/VisBarn';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
-
-export interface Personalia {
-    administratorRoller: AdminRolle[];
-    adressebeskyttelse: string;
-    arbeidsforhold: ArbeidsforholdObject[];
-    barn: BarnObject[];
-    bostedsadresse: Bostedsadresse;
-    bostotteSaker: SakerDto[];
-    bostotteUtbetalinger: UtbetalingerDto[];
-    ektefelle: string;
-    epost: string;
-    fnr: string;
-    kanVarsles: boolean;
-    kontonummer: string;
-    locked: boolean;
-    navn: PdlPersonNavn;
-    sivilstand: string;
-    skattetatenUtbetalinger: SkatteutbetalingObject[];
-    skjerming: string;
-    starsborgerskap: string;
-    telefonnummer: string;
-    utbetalingerFraNav: UtbetalingFraNavObject[];
-}
 
 export interface Bostedsadresse {
     adressenavn: string;
@@ -72,8 +44,6 @@ export interface Bostedsadresse {
 export function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
-
-const StyledPanel = styled(Panel)``;
 
 const Knappegruppe = styled(FlexWrapper)`
     margin-bottom: 2rem;
@@ -120,7 +90,7 @@ export const PersonMockData = () => {
     const [fornavn, setFornavn] = useState<string>('Ukjent');
     const [mellomnavn, setMellomnavn] = useState<string>('');
     const [etternavn, setEtternavn] = useState<string>('Mockperson');
-    const [adressebeskyttelse, setAdressebeskyttelse] = useState<string>('UGRADERT');
+    const [adressebeskyttelse, setAdressebeskyttelse] = useState<FrontendPersonaliaAdressebeskyttelse>('UGRADERT');
     const [skjerming, setSkjerming] = useState<string>('false');
     const [sivilstand, setSivilstand] = useState<string>('UOPPGITT');
     const [ektefelle, setEktefelle] = useState<string>('INGEN');
@@ -134,13 +104,13 @@ export const PersonMockData = () => {
     const [kontonummer, setKontonummer] = useState<string>('11112233333');
 
     const [visNyttBarnSkjema, setVisNyttBarnSkjema] = useState<boolean>(false);
-    const [barn, setBarn] = useState<BarnObject[]>([]);
+    const [barn, setBarn] = useState<FrontendBarn[]>([]);
 
     const [leggTilArbeidsforhold, setLeggTilArbeidsforhold] = useState<boolean>(false);
     const [arbeidsforhold, setArbeidsforhold] = useState<ArbeidsforholdObject[]>([]);
 
     const [leggTilSkatt, setLeggTilSkatt] = useState<boolean>(false);
-    const [skattutbetalinger, setSkattutbetalinger] = useState<SkatteutbetalingObject[]>([]);
+    const [skattutbetalinger, setSkattutbetalinger] = useState<FrontendSkattbarInntekt[]>([]);
 
     const [leggTilBostotteSak, setLeggTilBostotteSak] = useState<boolean>(false);
     const [bostotteSaker, setBostotteSaker] = useState<SakerDto[]>([]);
@@ -149,10 +119,10 @@ export const PersonMockData = () => {
     const [bostotteUtbetalinger, setBostotteUtbetalinger] = useState<UtbetalingerDto[]>([]);
 
     const [leggTilUtbetalingFraNav, setLeggTilUtbetalingFraNav] = useState<boolean>(false);
-    const [utbetalingerFraNav, setUtbetalingerFraNav] = useState<UtbetalingFraNavObject[]>([]);
+    const [utbetalingerFraNav, setUtbetalingerFraNav] = useState<FrontendUtbetalingFraNav[]>([]);
 
     const [editAdministratorRoller, setEditAdministratorRoller] = useState<boolean>(false);
-    const [administratorRoller, setAdministratorRoller] = useState<AdminRolle[]>([]);
+    const [administratorRoller, setAdministratorRoller] = useState<FrontendPersonaliaAdministratorRollerItem[]>([]);
 
     const { adresseState, dispatchAdresse } = useAdresse();
 
@@ -175,7 +145,7 @@ export const PersonMockData = () => {
                     throw new Error('HttpStatus ' + response.status);
                 })
                 .then((jsonObject) => {
-                    const nedlastet: Personalia = jsonObject;
+                    const nedlastet: FrontendPersonalia = jsonObject;
                     setEditMode(true);
                     setLockedMode(nedlastet.locked);
                     setFnr(nedlastet.fnr);
@@ -183,8 +153,8 @@ export const PersonMockData = () => {
                     setMellomnavn(nedlastet.navn.mellomnavn);
                     setEtternavn(nedlastet.navn.etternavn);
                     setAdressebeskyttelse(nedlastet.adressebeskyttelse);
-                    setSkjerming(nedlastet.skjerming);
-                    setEktefelle(nedlastet.ektefelle);
+                    setSkjerming(nedlastet.skjerming ? 'true' : 'false');
+                    setEktefelle(nedlastet.ektefelle || 'INGEN');
                     setSivilstand(nedlastet.sivilstand);
                     setBarn(nedlastet.barn);
                     setStatsborgerskap(nedlastet.starsborgerskap);
@@ -223,7 +193,7 @@ export const PersonMockData = () => {
             });
     }, [queryFnr, dispatchAdresse, dispatchAppStatus]);
 
-    const leggTilBarnCallback = (nyttTilBarn?: BarnObject) => {
+    const leggTilBarnCallback = (nyttTilBarn?: FrontendBarn) => {
         if (nyttTilBarn) {
             setBarn([...barn, nyttTilBarn]);
         }
@@ -263,7 +233,7 @@ export const PersonMockData = () => {
         setLeggTilBostotteUtbetaling(false);
     };
 
-    const leggTilUtbetalingFraNavCallback = (nyUtbetaling: UtbetalingFraNavObject) => {
+    const leggTilUtbetalingFraNavCallback = (nyUtbetaling: FrontendUtbetalingFraNav) => {
         if (nyUtbetaling) {
             utbetalingerFraNav.push(nyUtbetaling);
             setUtbetalingerFraNav(utbetalingerFraNav);
@@ -271,12 +241,12 @@ export const PersonMockData = () => {
         setLeggTilUtbetalingFraNav(false);
     };
 
-    const leggTilAdministratorRollerCallback = (roller: AdminRolle[]) => {
+    const leggTilAdministratorRollerCallback = (roller: FrontendPersonaliaAdministratorRollerItem[]) => {
         setAdministratorRoller(roller);
         setEditAdministratorRoller(false);
     };
 
-    const createPersonaliaObject = (): Personalia | null => {
+    const createPersonaliaObject = (): FrontendPersonalia | null => {
         const kontonr = brukKontonummer ? kontonummer : '';
 
         const husnummerAsNumber = Number(adresseState.husnummer);
@@ -293,7 +263,7 @@ export const PersonMockData = () => {
                 etternavn: etternavn,
             },
             adressebeskyttelse: adressebeskyttelse,
-            skjerming: skjerming,
+            skjerming: skjerming === 'true',
             sivilstand: sivilstand,
             ektefelle: ektefelle,
             barn: barn,
@@ -387,7 +357,7 @@ export const PersonMockData = () => {
     }
 
     return (
-        <StyledPanel>
+        <div>
             <Alert variant="warning">
                 <Heading spacing size="xsmall" level="2">
                     DETTE ER KUN FOR TESTING!
@@ -473,7 +443,7 @@ export const PersonMockData = () => {
                         <option value="XXX">Statsløs</option>
                         <option value="XUK">Ukjent/Mangler opplysninger</option>
                     </StyledSelect>
-                    <Fieldset legend={<Ingress>Kontaktinformasjon</Ingress>}>
+                    <Fieldset legend={'Kontaktinformasjon'}>
                         <TextField
                             label="Telefonnummer"
                             htmlSize={15}
@@ -496,7 +466,7 @@ export const PersonMockData = () => {
                             Kan varsles
                         </Checkbox>
                     </Fieldset>
-                    <Fieldset legend={<Ingress>Kontonummer</Ingress>}>
+                    <Fieldset legend={'Kontonummer'}>
                         {!lockedMode && (
                             <Checkbox
                                 disabled={lockedMode}
@@ -582,7 +552,7 @@ export const PersonMockData = () => {
                         <Label as="p" spacing>
                             Barn
                         </Label>
-                        {barn.map((obj: BarnObject, index: number) => {
+                        {barn.map((obj: FrontendBarn, index: number) => {
                             return (
                                 <VisBarn
                                     barn={obj}
@@ -605,15 +575,13 @@ export const PersonMockData = () => {
                     Inntekt og formue
                 </Heading>
                 <Fieldset legend="Skattetaten">
-                    {skattutbetalinger.map((utbetaling: SkatteutbetalingObject, index: number) => {
-                        return (
-                            <VisSkatteutbetaling
-                                skatteutbetaling={utbetaling}
-                                key={'skatt_' + index}
-                                onSlett={() => fjernObject(skattutbetalinger, setSkattutbetalinger, utbetaling)}
-                            />
-                        );
-                    })}
+                    {skattutbetalinger.map((utbetaling, index) => (
+                        <VisSkatteutbetaling
+                            skatteutbetaling={utbetaling}
+                            key={'skatt_' + index}
+                            onSlett={() => fjernObject(skattutbetalinger, setSkattutbetalinger, utbetaling)}
+                        />
+                    ))}
                     <NyttSkatteutbetaling isOpen={leggTilSkatt} callback={leggTilSkattCallback} />
                     {!lockedMode && !leggTilSkatt && (
                         <Button variant="secondary" onClick={() => setLeggTilSkatt(true)}>
@@ -661,15 +629,13 @@ export const PersonMockData = () => {
                     )}
                 </Fieldset>
                 <Fieldset legend="Nav utbetalinger">
-                    {utbetalingerFraNav.map((utbetaling: UtbetalingFraNavObject, index: number) => {
-                        return (
-                            <VisUtbetalingerFraNav
-                                utbetalingFraNav={utbetaling}
-                                key={'utbetalingFraNav_' + index}
-                                onSlett={() => fjernObject(utbetalingerFraNav, setUtbetalingerFraNav, utbetaling)}
-                            />
-                        );
-                    })}
+                    {utbetalingerFraNav.map((utbetaling, index) => (
+                        <VisUtbetalingerFraNav
+                            utbetalingFraNav={utbetaling}
+                            key={'utbetalingFraNav_' + index}
+                            onSlett={() => fjernObject(utbetalingerFraNav, setUtbetalingerFraNav, utbetaling)}
+                        />
+                    ))}
                     <NyttUtbetalingerFraNav
                         isOpen={leggTilUtbetalingFraNav}
                         callback={leggTilUtbetalingFraNavCallback}
@@ -716,6 +682,6 @@ export const PersonMockData = () => {
                     {lockedMode ? 'Tilbake' : 'Avbryt'}
                 </Button>
             </Knappegruppe>
-        </StyledPanel>
+        </div>
     );
 };

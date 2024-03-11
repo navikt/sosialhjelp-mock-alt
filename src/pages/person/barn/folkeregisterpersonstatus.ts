@@ -1,16 +1,6 @@
-export type FolkeregisterpersonstatusType =
-    | 'bosatt'
-    | 'utflyttet'
-    | 'forsvunnet'
-    | 'doed'
-    | 'opphoert'
-    | 'foedselsregistrert'
-    | 'midlertidig'
-    | 'inaktiv'
-    | 'ikkeBosatt'
-    | 'aktiv';
+import type { FrontendBarnFolkeregisterpersonstatus } from '../../../generated/model';
 
-export const Folkeregisterpersonstatus: { [key in FolkeregisterpersonstatusType]: string } = {
+export const Folkeregisterpersonstatus: Record<FrontendBarnFolkeregisterpersonstatus, string> = {
     bosatt: 'Bosatt',
     utflyttet: 'Utflyttet',
     forsvunnet: 'Forsvunnet',

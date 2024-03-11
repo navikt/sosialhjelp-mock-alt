@@ -4,24 +4,21 @@ import { Knappegruppe, StyledPanel } from '../../../styling/Styles';
 import { Button, Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import styled from 'styled-components';
 import SletteKnapp from '../../../components/SletteKnapp';
+import { FrontendPersonaliaAdministratorRollerItem } from '../../../generated/model';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
-interface Props {
-    initialRoller: AdminRolle[];
+const adminTekst = (rolle: FrontendPersonaliaAdministratorRollerItem) =>
+    rolle === FrontendPersonaliaAdministratorRollerItem.MODIA_VEILEDER
+        ? 'Modiaveileder (har tilgang til Modia sosial)'
+        : rolle;
+
+export const AdministratorRollerPanel = (props: {
+    initialRoller: FrontendPersonaliaAdministratorRollerItem[];
     setRoller: (data: any) => void;
-}
-
-export enum AdminRolle {
-    MODIA_VEILEDER = 'MODIA_VEILEDER',
-}
-
-const adminTekst = (rolle: AdminRolle) =>
-    rolle === AdminRolle.MODIA_VEILEDER ? 'Modiaveileder (har tilgang til Modia sosial)' : rolle;
-
-export const AdministratorRollerPanel = (props: Props) => {
+}) => {
     const { setRoller, initialRoller } = props;
-    const [checkboxState, setCheckboxState] = useState<AdminRolle[]>(initialRoller);
+    const [checkboxState, setCheckboxState] = useState<FrontendPersonaliaAdministratorRollerItem[]>(initialRoller);
 
     const onLagre = (event: ClickEvent) => {
         setRoller(checkboxState);
@@ -38,10 +35,12 @@ export const AdministratorRollerPanel = (props: Props) => {
             <StyledPanel>
                 <CheckboxGroup
                     legend="Administratorrolle"
-                    onChange={(value: AdminRolle[]) => setCheckboxState(value)}
+                    onChange={(value: FrontendPersonaliaAdministratorRollerItem[]) => setCheckboxState(value)}
                     value={checkboxState}
                 >
-                    <Checkbox value={AdminRolle.MODIA_VEILEDER}>{adminTekst(AdminRolle.MODIA_VEILEDER)}</Checkbox>
+                    <Checkbox value={FrontendPersonaliaAdministratorRollerItem.MODIA_VEILEDER}>
+                        {adminTekst(FrontendPersonaliaAdministratorRollerItem.MODIA_VEILEDER)}
+                    </Checkbox>
                 </CheckboxGroup>
                 <Knappegruppe>
                     <Button
@@ -59,14 +58,17 @@ export const AdministratorRollerPanel = (props: Props) => {
     );
 };
 
-interface ViseProps {
-    roller: AdminRolle[];
+export const VisAdministratorRoller = ({
+    roller,
+    lockedMode,
+    setIsEditing,
+    onSlett,
+}: {
+    roller: FrontendPersonaliaAdministratorRollerItem[];
     lockedMode: boolean;
     setIsEditing: () => void;
     onSlett: () => void;
-}
-
-export const VisAdministratorRoller = ({ roller, lockedMode, setIsEditing, onSlett }: ViseProps) => {
+}) => {
     if (roller.length === 0 && !lockedMode) {
         return (
             <Button variant="secondary" onClick={setIsEditing}>
@@ -77,7 +79,7 @@ export const VisAdministratorRoller = ({ roller, lockedMode, setIsEditing, onSle
     return (
         <StyledPanel>
             <StyledList>
-                {roller.map((rolle: AdminRolle) => {
+                {roller.map((rolle) => {
                     return <li key={rolle}>{adminTekst(rolle)}</li>;
                 })}
             </StyledList>
