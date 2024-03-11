@@ -124,7 +124,7 @@
         "/mock-alt/personalia": {
             "get": {
                 "tags": ["frontend-controller"],
-                "operationId": "frontendDownload",
+                "operationId": "getMockPerson",
                 "parameters": [{ "name": "ident", "in": "query", "required": true, "schema": { "type": "string" } }],
                 "responses": {
                     "200": {
@@ -135,7 +135,7 @@
             },
             "post": {
                 "tags": ["frontend-controller"],
-                "operationId": "frontendUpload",
+                "operationId": "putMockPerson",
                 "requestBody": {
                     "content": {
                         "application/json": { "schema": { "$ref": "#/components/schemas/FrontendPersonalia" } }
@@ -1517,10 +1517,10 @@
                     "name": { "type": "string" },
                     "value": { "type": "string" },
                     "attributes": { "type": "object", "additionalProperties": { "type": "string" } },
+                    "domain": { "type": "string" },
                     "path": { "type": "string" },
                     "maxAge": { "type": "integer", "format": "int32" },
                     "version": { "type": "integer", "format": "int32", "deprecated": true },
-                    "domain": { "type": "string" },
                     "comment": { "type": "string", "deprecated": true },
                     "secure": { "type": "boolean" },
                     "httpOnly": { "type": "boolean" }

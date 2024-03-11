@@ -1,4 +1,5 @@
-import { useReducer } from 'react';
+import { useMemo, useReducer } from 'react';
+import { ForenkletBostedsadresse } from '../../../generated/model';
 
 export interface AdresseState {
     adressenavn: string;
@@ -10,6 +11,7 @@ export interface AdresseState {
 }
 
 export type AdresseAction =
+    | { type: 'initialize'; value: ForenkletBostedsadresse }
     | { type: 'adressenavn'; value: string }
     | { type: 'husnummer'; value: string }
     | { type: 'husbokstav'; value: string | undefined }
@@ -18,6 +20,9 @@ export type AdresseAction =
     | { type: 'validHusnummer'; value: boolean };
 
 function adresseReducer(state: AdresseState, action: AdresseAction) {
+    if (action.type === 'initialize') {
+        return { ...state, ...(action.value as unknown as AdresseState), validHusnummer: true };
+    }
     return { ...state, [action.type]: action.value };
 }
 
@@ -32,6 +37,15 @@ const initialAdresseState: AdresseState = {
 
 export function useAdresse() {
     const [adresseState, dispatchAdresse] = useReducer(adresseReducer, initialAdresseState);
-
-    return { adresseState, dispatchAdresse };
+    const bostedsadresse: ForenkletBostedsadresse = useMemo(
+        () => ({
+            ...{
+                ...adresseState,
+                husnummer: parseInt(adresseState.husnummer),
+                validHusnummer: undefined,
+            },
+        }),
+        [adresseState]
+    );
+    return { adresseState, bostedsadresse, dispatchAdresse };
 }

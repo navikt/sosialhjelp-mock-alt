@@ -1,0 +1,30 @@
+import { FrontendPersonalia } from '../../generated/model';
+
+export const initialPersonalia: FrontendPersonalia = {
+    fnr: '',
+    navn: { fornavn: 'Ukjent', mellomnavn: '', etternavn: 'Mockperson' },
+    adressebeskyttelse: 'UGRADERT',
+    skjerming: false,
+    sivilstand: 'UOPPGITT',
+    ektefelle: 'INGEN',
+    barn: [],
+    starsborgerskap: 'NOR',
+    bostedsadresse: {
+        adressenavn: 'Mulholland Drive',
+        husnummer: 42,
+        husbokstav: '',
+        postnummer: '0101',
+        kommunenummer: '0301',
+    },
+    telefonnummer: '22222222',
+    epost: '',
+    kanVarsles: true,
+    kontonummer: '',
+    arbeidsforhold: [],
+    skattetatenUtbetalinger: [],
+    bostotteSaker: [],
+    bostotteUtbetalinger: [],
+    utbetalingerFraNav: [],
+    administratorRoller: [],
+    locked: false,
+};

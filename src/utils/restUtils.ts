@@ -63,6 +63,17 @@ export const getRedirectParamsAsObject = (): RedirectParams => {
     };
 };
 
+export const getRedirectUrl = (personident: string) => {
+    const url = new URL(`${getMockAltApiURL()}/login/cookie`);
+    url.searchParams.append('subject', personident);
+    url.searchParams.append('issuerId', 'selvbetjening');
+    url.searchParams.append('audience', 'someaudience');
+    for (const [key, value] of Object.entries(getRedirectParamsAsObject())) {
+        if (value) url.searchParams.append(key, value);
+    }
+    return url;
+};
+
 export const addParams = (params: string | null = null, firstChar: string = '?'): string => {
     const returnParams = params || getRedirectParams();
     return returnParams.length > 0 ? firstChar + returnParams : '';

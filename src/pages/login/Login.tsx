@@ -1,13 +1,6 @@
 import { Alert, Button, Heading } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
-import {
-    addParams,
-    getInnsynURL,
-    getMockAltApiURL,
-    getRedirectParams,
-    getRedirectParamsAsObject,
-    getSoknadURL,
-} from '../../utils/restUtils';
+import { addParams, getInnsynURL, getRedirectParams, getRedirectUrl, getSoknadURL } from '../../utils/restUtils';
 import { Link } from 'react-router-dom';
 import { Knappegruppe, StyledSelect } from '../../styling/Styles';
 import { usePersonListe } from '../../generated/frontend-controller/frontend-controller';
@@ -19,21 +12,13 @@ export const Login = () => {
 
     const [redirect, setRedirect] = useState(window.location.origin + '/sosialhjelp/mock-alt/login');
 
-    const hasRedirect = window.location.search.includes('redirect');
     if (!valgtFnr || !personliste) return;
 
     const params = getRedirectParams();
 
     const handleOnClick = () => {
-        const nextPage = new URL(`${getMockAltApiURL()}/login/cookie`);
-
-        nextPage.searchParams.append('subject', valgtFnr);
-        nextPage.searchParams.append('issuerId', 'selvbetjening');
-        nextPage.searchParams.append('audience', 'someaudience');
-        for (const [key, value] of Object.entries(getRedirectParamsAsObject())) {
-            if (value) nextPage.searchParams.append(key, value);
-        }
-        if (!hasRedirect) nextPage.searchParams.set('redirect', redirect);
+        const nextPage = getRedirectUrl(valgtFnr);
+        if (!window.location.search.includes('redirect')) nextPage.searchParams.set('redirect', redirect);
 
         window.location.href = nextPage.href;
     };
@@ -56,7 +41,7 @@ export const Login = () => {
                     </option>
                 ))}
             </StyledSelect>
-            {!hasRedirect && (
+            {!window.location.search.includes('redirect') && (
                 <StyledSelect
                     onChange={(event) => setRedirect(event.target.value)}
                     label="Velg tjeneste"

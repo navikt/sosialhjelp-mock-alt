@@ -1,92 +1,66 @@
 import * as React from 'react';
-import styled from 'styled-components';
-import { AdresseAction, AdresseState } from './useAdresse';
 import { useEffect, useRef } from 'react';
-import { Fieldset, TextField, Heading } from '@navikt/ds-react';
+import { AdresseAction, AdresseState } from './useAdresse';
+import { TextField } from '@navikt/ds-react';
 
-const AdresseBokser = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-
-    column-gap: 1rem;
-
-    .navds-form-field {
-        flex: 1;
-    }
-`;
-
-interface Props {
+const Adresse = ({
+    dispatch,
+    lockedMode,
+    state: { adressenavn, husbokstav, husnummer, kommunenummer, postnummer, validHusnummer },
+}: {
     lockedMode?: boolean;
     state: AdresseState;
     dispatch: React.Dispatch<AdresseAction>;
-    heading?: React.ReactNode;
-}
-
-const Adresse = (props: Props) => {
-    const { lockedMode, state, dispatch } = props;
-
+}) => {
     const inputRef = useRef<HTMLInputElement | null>(null);
 
     useEffect(() => {
-        if (!state.validHusnummer) {
-            inputRef?.current?.focus();
-        }
-    }, [state.validHusnummer]);
+        if (!validHusnummer) inputRef?.current?.focus();
+    }, [validHusnummer]);
 
     const onHusnummerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!state.validHusnummer) {
-            dispatch({ type: 'validHusnummer', value: true });
-        }
+        if (!validHusnummer) dispatch({ type: 'validHusnummer', value: true });
         dispatch({ type: 'husnummer', value: e.target.value });
     };
+
     return (
-        <Fieldset
-            legend={
-                props.heading ?? (
-                    <Heading level="2" size="medium">
-                        Bostedsadresse
-                    </Heading>
-                )
-            }
-        >
+        <>
             <TextField
                 label="Gateadresse"
-                disabled={!!lockedMode}
-                value={state.adressenavn}
+                disabled={lockedMode}
+                value={adressenavn}
                 onChange={(e) => dispatch({ type: 'adressenavn', value: e.target.value })}
             />
-            <AdresseBokser>
+            <div className={'flex gap-2 [&_.navds-form-field]:flex-1'}>
                 <TextField
                     label="Husnummer"
-                    disabled={!!lockedMode}
-                    value={state.husnummer}
-                    ref={(ref) => {
-                        inputRef.current = ref;
-                    }}
-                    error={state.validHusnummer ? null : 'Husnummer må være et heltall'}
+                    disabled={lockedMode}
+                    value={husnummer}
+                    ref={inputRef}
+                    error={validHusnummer ? null : 'Husnummer må være et heltall'}
                     onChange={onHusnummerChange}
                 />
                 <TextField
                     label="Husbokstav"
-                    disabled={!!lockedMode}
-                    value={state.husbokstav}
+                    disabled={lockedMode}
+                    value={husbokstav}
                     onChange={(e) => dispatch({ type: 'husbokstav', value: e.target.value })}
                 />
                 <TextField
                     label="Postnummer"
-                    disabled={!!lockedMode}
-                    value={state.postnummer}
+                    disabled={lockedMode}
+                    value={postnummer}
                     onChange={(e) => dispatch({ type: 'postnummer', value: e.target.value })}
                 />
                 <TextField
                     label="Kommunenummer"
                     className="kommunenr"
-                    disabled={!!lockedMode}
-                    value={state.kommunenummer}
+                    disabled={lockedMode}
+                    value={kommunenummer}
                     onChange={(e) => dispatch({ type: 'kommunenummer', value: e.target.value })}
                 />
-            </AdresseBokser>
-        </Fieldset>
+            </div>
+        </>
     );
 };
 export default Adresse;

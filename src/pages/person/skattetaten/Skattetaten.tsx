@@ -35,24 +35,17 @@ const skatteutbetalingLabels: Record<FrontendSkattbarInntektType, string> = {
     AldersUfoereEtterlatteAvtalefestetOgKrigspensjon: 'Alder, uføre, etterlatte, avtalefestet og krigspensjon',
 };
 
-export interface SkatteutbetalingObject {
-    beloep: string;
-    trekk: string;
-    orgnummer: string;
-    maned: string;
-    type: SkatteutbetalingType;
-}
-
-interface Params {
-    isOpen: boolean;
-    callback: (data: any) => void;
-}
-
 function getMonthDateString(date: Date) {
     return date.getFullYear() + '-' + (date.getMonth() < 9 ? '0' : '') + (date.getMonth() + 1);
 }
 
-export const NyttSkatteutbetaling = ({ isOpen, callback }: Params) => {
+export const NyttSkatteutbetaling = ({
+    isOpen,
+    callback,
+}: {
+    isOpen: boolean;
+    callback: (data: FrontendSkattbarInntekt | null) => void;
+}) => {
     let month_1 = new Date();
     month_1.setMonth(month_1.getMonth() - 1);
     let month_2 = new Date();
@@ -69,7 +62,7 @@ export const NyttSkatteutbetaling = ({ isOpen, callback }: Params) => {
     const [type, setType] = useState<SkatteutbetalingType>(SkatteutbetalingType.LOENNSINNTEKT);
 
     const onLagre = (event: ClickEvent) => {
-        const nyttSkatteutbetalingObject: SkatteutbetalingObject = {
+        const nyttSkatteutbetalingObject: FrontendSkattbarInntekt = {
             beloep: belop,
             trekk: trekk,
             orgnummer: orgnummer,
