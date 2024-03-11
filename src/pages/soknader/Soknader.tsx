@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { getFagsystemmockURL, getMockAltApiURL } from '../../utils/restUtils';
-import styled from 'styled-components';
 import { BodyShort, Button, Heading, Table, Alert } from '@navikt/ds-react';
 import { Link } from 'react-router-dom';
-
-const SeMerKnap = styled(Button)`
-    margin: 0 auto;
-    display: block;
-`;
+import { useSoknadsListe } from '../../generated/frontend-controller/frontend-controller';
 
 interface Vedlegg {
     navn: string;
@@ -79,40 +74,25 @@ const SoknadTabell = ({ soknadsliste, antallVist }: { soknadsliste: SoknadsInfo[
 };
 
 export const Soknader = () => {
-    const [soknadsliste, setSoknadsliste] = useState<SoknadsInfo[]>([]);
     const [antallVist, setAntallVist] = useState(DEFAULT_ANTALL_VIST);
 
     const onSeMerClicked = () => {
         setAntallVist(antallVist + DEFAULT_ANTALL_VIST);
     };
 
-    useEffect(() => {
-        fetch(`${getMockAltApiURL()}/mock-alt/soknad/liste`)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('HTTP error ' + response.status);
-                }
-                return response;
-            })
-            .then((response) => response.json())
-            .then((json) => {
-                setSoknadsliste(json);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }, []);
+    const { data: soknadsliste } = useSoknadsListe();
 
+    if (!soknadsliste) return null;
     return (
         <div>
             <Heading level="2" size="large" spacing>
                 Søknader
             </Heading>
             <SoknadTabell soknadsliste={soknadsliste} antallVist={antallVist} />
-            {soknadsliste?.length > antallVist && (
-                <SeMerKnap size="small" onClick={onSeMerClicked}>
+            {soknadsliste?.length > DEFAULT_ANTALL_VIST && (
+                <Button size="small" onClick={onSeMerClicked}>
                     Se flere
-                </SeMerKnap>
+                </Button>
             )}
         </div>
     );
