@@ -11,10 +11,19 @@ import { Feilkonfigurering } from './pages/feil/Feilkonfigurering';
 import { Soknader } from './pages/soknader/Soknader';
 import { Oversikt } from './pages/Oversikt';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { logWarning } from './generated/frontend-logg-controller/frontend-logg-controller';
+import { SoknadView } from './pages/soknad/SoknadView';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
 const queryClient = new QueryClient();
+const query = new URLSearchParams(window.location.search);
+
+// Ser at redirect_uri og goto er støttede synonymer for "redirect" i Login.tsx/getRedirectParams.
+// Antakeligvis er det ingen som bruker dem, men jeg vil ikke fjerne det før vi er sikre.
+if (query.get('redirect_uri') || query.get('goto')) {
+    logWarning({ message: 'Joda, bruk av redirect_uri eller goto forekommer' });
+}
 
 root.render(
     <React.StrictMode>
@@ -42,6 +51,7 @@ root.render(
                                 <Route path="/login" element={<Login />} />
                                 <Route path="/person" element={<PersonMockData />} />
                                 <Route path="/feil" element={<Feilkonfigurering />} />
+                                <Route path="/soknader/:soknadId" element={<SoknadView />} />
                                 <Route path="/soknader" element={<Soknader />} />
                                 <Route index element={<Oversikt />} />
                                 <Route path="*" element={<div>404</div>} />

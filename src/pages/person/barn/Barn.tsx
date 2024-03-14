@@ -10,7 +10,7 @@ import { Folkeregisterpersonstatus } from './folkeregisterpersonstatus';
 import {
     FrontendBarn,
     FrontendBarnAdressebeskyttelse,
-    FrontendBarnFolkeregisterpersonstatus,
+    PdlFolkeregisterpersonstatusStatus,
 } from '../../../generated/model';
 import { isValid, parse, subYears } from 'date-fns';
 import { getTilfeldigFnr } from '../../../generated/fiks-controller/fiks-controller';
@@ -31,7 +31,7 @@ export const NyttBarn = ({
         fnr: '',
         adressebeskyttelse: 'UGRADERT',
         bostedsadresse,
-        folkeregisterpersonstatus: 'bosatt',
+        folkeregisterpersonstatus: { status: 'bosatt' },
         foedsel: getIsoDateString(subYears(new Date(), 10)),
         navn: { fornavn: 'Ukjent', mellomnavn: '', etternavn: 'Mockbarn' },
     });
@@ -95,11 +95,13 @@ export const NyttBarn = ({
                 </StyledSelect>
                 <StyledSelect
                     label="Folkeregisterpersonstatus"
-                    value={barn.folkeregisterpersonstatus}
+                    value={barn.folkeregisterpersonstatus.status}
                     onChange={(evt) =>
                         setBarn((prev) => ({
                             ...prev,
-                            folkeregisterpersonstatus: evt.target.value as FrontendBarnFolkeregisterpersonstatus,
+                            folkeregisterpersonstatus: {
+                                status: evt.target.value as PdlFolkeregisterpersonstatusStatus,
+                            },
                         }))
                     }
                 >

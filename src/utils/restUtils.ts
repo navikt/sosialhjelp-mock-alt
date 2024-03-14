@@ -35,29 +35,21 @@ export const getRedirectParams = (): string => {
     return '&' + newQuery.toString();
 };
 
-type RedirectParams = {
-    cookiename?: string;
-    redirect?: string;
-    expiry?: string;
-};
-
-export const getRedirectParamsAsObject = (): RedirectParams => {
-    const query = new URLSearchParams(window.location.search);
-    return {
-        expiry: query.get('expiry') || undefined,
-        cookiename: query.get('cookiename') || undefined,
-        redirect: query.get('redirect') || undefined,
-    };
-};
+const REDIRECT_SEARCH_PARAM_KEYS = ['cookiename', 'expiry', 'redirect'] as const;
 
 export const getRedirectUrl = (personident: string) => {
     const url = new URL(`${getMockAltApiURL()}/login/cookie`);
+    const query = new URLSearchParams(window.location.search);
+
     url.searchParams.append('subject', personident);
     url.searchParams.append('issuerId', 'selvbetjening');
     url.searchParams.append('audience', 'someaudience');
-    for (const [key, value] of Object.entries(getRedirectParamsAsObject())) {
+
+    REDIRECT_SEARCH_PARAM_KEYS.forEach((key) => {
+        const value = query.get(key);
         if (value) url.searchParams.append(key, value);
-    }
+    });
+
     return url;
 };
 

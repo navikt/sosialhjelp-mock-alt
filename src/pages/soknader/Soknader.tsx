@@ -49,7 +49,9 @@ const SoknadTabell = ({ soknadsliste, antallVist }: { soknadsliste: SoknadsInfo[
                     .slice(0, antallVist)
                     .map(({ fiksDigisosId, sokerFnr, sokerNavn, tittel, vedlegg, vedleggSomMangler }: SoknadsInfo) => (
                         <Table.Row key={fiksDigisosId}>
-                            <Table.DataCell>{fiksDigisosId}</Table.DataCell>
+                            <Table.DataCell>
+                                <Link to={fiksDigisosId}>{fiksDigisosId}</Link>
+                            </Table.DataCell>
                             <Table.DataCell className={'whitespace-nowrap hidden'}>{sokerNavn}</Table.DataCell>
                             <Table.DataCell>{sokerFnr}</Table.DataCell>
                             <Table.DataCell>{tittel}</Table.DataCell>

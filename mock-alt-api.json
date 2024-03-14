@@ -121,6 +121,71 @@
                 }
             }
         },
+        "/mock-alt/v2/logg/warn": {
+            "post": {
+                "tags": ["frontend-logg-controller"],
+                "operationId": "logWarning",
+                "requestBody": {
+                    "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LogEntryRequest" } } },
+                    "required": true
+                },
+                "responses": { "200": { "description": "OK" } }
+            }
+        },
+        "/mock-alt/v2/logg/info": {
+            "post": {
+                "tags": ["frontend-logg-controller"],
+                "operationId": "logInfo",
+                "requestBody": {
+                    "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LogEntryRequest" } } },
+                    "required": true
+                },
+                "responses": { "200": { "description": "OK" } }
+            }
+        },
+        "/mock-alt/v2/logg/error": {
+            "post": {
+                "tags": ["frontend-logg-controller"],
+                "operationId": "logError",
+                "requestBody": {
+                    "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LogEntryRequest" } } },
+                    "required": true
+                },
+                "responses": { "200": { "description": "OK" } }
+            }
+        },
+        "/mock-alt/v2/brukere/": {
+            "get": {
+                "tags": ["frontend-user-controller-v-2"],
+                "operationId": "listMockPersonerV2",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Personalia" } }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["frontend-user-controller-v-2"],
+                "operationId": "postMockPersonV2",
+                "requestBody": {
+                    "content": {
+                        "application/json": { "schema": { "$ref": "#/components/schemas/FrontendPersonalia" } }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Unit" } } }
+                    }
+                }
+            }
+        },
         "/mock-alt/personalia": {
             "get": {
                 "tags": ["frontend-controller"],
@@ -423,8 +488,9 @@
                 "operationId": "exchangeAzuretoken",
                 "parameters": [{ "name": "issuer", "in": "path", "required": true, "schema": { "type": "string" } }],
                 "requestBody": {
-                    "content": { "application/json": { "schema": { "type": "string" } } },
-                    "required": true
+                    "content": {
+                        "application/json": { "schema": { "$ref": "#/components/schemas/AzureTokenRequest" } }
+                    }
                 },
                 "responses": {
                     "200": {
@@ -535,6 +601,83 @@
                     "200": {
                         "description": "OK",
                         "content": { "application/json;charset=UTF-8": { "schema": { "type": "string" } } }
+                    }
+                }
+            }
+        },
+        "/mock-alt/v2/soknader": {
+            "get": {
+                "tags": ["frontend-soknad-controller-v-2"],
+                "operationId": "soknadsListeV2",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": { "$ref": "#/components/schemas/FrontendSoknad" }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/mock-alt/v2/soknader/{fiksDigisosId}/soknadZip": {
+            "get": {
+                "tags": ["frontend-soknad-controller-v-2"],
+                "operationId": "getSoknadZipV2",
+                "parameters": [
+                    { "name": "fiksDigisosId", "in": "path", "required": true, "schema": { "type": "string" } }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": { "application/zip": { "schema": { "type": "string", "format": "byte" } } }
+                    }
+                }
+            }
+        },
+        "/mock-alt/v2/soknader/{fiksDigisosId}/soknadJSON": {
+            "get": {
+                "tags": ["frontend-soknad-controller-v-2"],
+                "operationId": "getSoknadJsonV2",
+                "parameters": [
+                    { "name": "fiksDigisosId", "in": "path", "required": true, "schema": { "type": "string" } }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/JsonSoknad" } } }
+                    }
+                }
+            }
+        },
+        "/mock-alt/v2/soknader/{fiksDigisosId}/ettersendelseZip": {
+            "get": {
+                "tags": ["frontend-soknad-controller-v-2"],
+                "operationId": "zipEttersendelseV2",
+                "parameters": [
+                    { "name": "fiksDigisosId", "in": "path", "required": true, "schema": { "type": "string" } }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": { "application/zip": { "schema": { "type": "string", "format": "byte" } } }
+                    }
+                }
+            }
+        },
+        "/mock-alt/v2/brukere/{ident}": {
+            "get": {
+                "tags": ["frontend-user-controller-v-2"],
+                "operationId": "getMockPersonV2",
+                "parameters": [{ "name": "ident", "in": "path", "required": true, "schema": { "type": "string" } }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/FrontendPersonalia" } } }
                     }
                 }
             }
@@ -1305,6 +1448,11 @@
                 },
                 "additionalProperties": { "type": "array", "items": { "type": "string" } }
             },
+            "LogEntryRequest": {
+                "required": ["message"],
+                "type": "object",
+                "properties": { "message": { "type": "string" } }
+            },
             "ForenkletBostedsadresse": {
                 "required": ["adressenavn", "husnummer", "kommunenummer", "postnummer"],
                 "type": "object",
@@ -1356,21 +1504,7 @@
                         "enum": ["STRENGT_FORTROLIG_UTLAND", "STRENGT_FORTROLIG", "FORTROLIG", "UGRADERT"]
                     },
                     "bostedsadresse": { "$ref": "#/components/schemas/ForenkletBostedsadresse" },
-                    "folkeregisterpersonstatus": {
-                        "type": "string",
-                        "enum": [
-                            "bosatt",
-                            "utflyttet",
-                            "forsvunnet",
-                            "doed",
-                            "opphoert",
-                            "foedselsregistrert",
-                            "midlertidig",
-                            "inaktiv",
-                            "ikkeBosatt",
-                            "aktiv"
-                        ]
-                    },
+                    "folkeregisterpersonstatus": { "$ref": "#/components/schemas/PdlFolkeregisterpersonstatus" },
                     "foedsel": { "type": "string", "format": "date" },
                     "navn": { "$ref": "#/components/schemas/PdlPersonNavn" }
                 }
@@ -1472,6 +1606,27 @@
                     "ytelseskomponenttype": { "type": "string" }
                 }
             },
+            "PdlFolkeregisterpersonstatus": {
+                "required": ["status"],
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "bosatt",
+                            "utflyttet",
+                            "forsvunnet",
+                            "doed",
+                            "opphoert",
+                            "foedselsregistrert",
+                            "midlertidig",
+                            "inaktiv",
+                            "ikkebosatt",
+                            "aktiv"
+                        ]
+                    }
+                }
+            },
             "PdlPersonNavn": {
                 "required": ["etternavn", "fornavn", "mellomnavn"],
                 "type": "object",
@@ -1511,16 +1666,17 @@
                     "type": { "type": "string" }
                 }
             },
+            "Unit": { "type": "object" },
             "Cookie": {
                 "type": "object",
                 "properties": {
                     "name": { "type": "string" },
                     "value": { "type": "string" },
                     "attributes": { "type": "object", "additionalProperties": { "type": "string" } },
-                    "domain": { "type": "string" },
-                    "path": { "type": "string" },
                     "maxAge": { "type": "integer", "format": "int32" },
+                    "path": { "type": "string" },
                     "version": { "type": "integer", "format": "int32", "deprecated": true },
+                    "domain": { "type": "string" },
                     "comment": { "type": "string", "deprecated": true },
                     "secure": { "type": "boolean" },
                     "httpOnly": { "type": "boolean" }
@@ -1536,7 +1692,6 @@
                     "vedlegg": { "type": "array", "items": { "type": "string", "format": "binary" } }
                 }
             },
-            "Unit": { "type": "object" },
             "LinkedMultiValueMapStringObject": {
                 "type": "object",
                 "properties": {
@@ -1573,6 +1728,15 @@
                 "properties": {
                     "fnr": { "type": "string" },
                     "feilsituasjoner": { "type": "array", "items": { "$ref": "#/components/schemas/Feilsituasjon" } }
+                }
+            },
+            "AzureTokenRequest": {
+                "type": "object",
+                "properties": {
+                    "grant_type": { "type": "string" },
+                    "scope": { "type": "string" },
+                    "assertion": { "type": "string" },
+                    "audience": { "type": "string" }
                 }
             },
             "AzuredingsResponse": {
@@ -1708,6 +1872,468 @@
                     "id": { "type": "string" },
                     "size": { "type": "integer", "format": "int64" },
                     "kanLastesned": { "type": "boolean" }
+                }
+            },
+            "JsonAdresse": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "system", "utdatert"] },
+                    "type": {
+                        "type": "string",
+                        "enum": ["gateadresse", "matrikkeladresse", "postboks", "ustrukturert"]
+                    },
+                    "adresseValg": { "type": "string", "enum": ["folkeregistrert", "midlertidig", "soknad"] }
+                }
+            },
+            "JsonAnsvar": {
+                "type": "object",
+                "properties": {
+                    "barn": { "$ref": "#/components/schemas/JsonBarn" },
+                    "borSammenMed": { "$ref": "#/components/schemas/JsonBorSammenMed" },
+                    "erFolkeregistrertSammen": { "$ref": "#/components/schemas/JsonErFolkeregistrertSammen" },
+                    "harDeltBosted": { "$ref": "#/components/schemas/JsonHarDeltBosted" },
+                    "samvarsgrad": { "$ref": "#/components/schemas/JsonSamvarsgrad" }
+                }
+            },
+            "JsonArbeid": {
+                "type": "object",
+                "properties": {
+                    "forhold": { "type": "array", "items": { "$ref": "#/components/schemas/JsonArbeidsforhold" } },
+                    "situasjon": { "$ref": "#/components/schemas/JsonArbeidssituasjon" },
+                    "kommentarTilArbeidsforhold": { "$ref": "#/components/schemas/JsonKommentarTilArbeidsforhold" }
+                }
+            },
+            "JsonArbeidsforhold": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "system", "utdatert"] },
+                    "arbeidsgivernavn": { "type": "string" },
+                    "fom": { "type": "string" },
+                    "tom": { "type": "string" },
+                    "stillingsprosent": { "type": "integer", "format": "int32" },
+                    "stillingstype": { "type": "string", "enum": ["variabel", "fast", "fastOgVariabel"] },
+                    "overstyrtAvBruker": { "type": "boolean" }
+                }
+            },
+            "JsonArbeidssituasjon": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "utdatert"] },
+                    "erIJobb": { "type": "boolean" },
+                    "jobbGrad": { "type": "string", "enum": ["heltid", "deltid"] }
+                }
+            },
+            "JsonBarn": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "system", "utdatert"] },
+                    "navn": { "$ref": "#/components/schemas/JsonNavn" },
+                    "fodselsdato": { "type": "string" },
+                    "personIdentifikator": { "type": "string" },
+                    "harDiskresjonskode": { "type": "boolean" }
+                }
+            },
+            "JsonBarnebidrag": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "utdatert"] },
+                    "verdi": { "type": "string", "enum": ["betaler", "mottar", "begge", "ingen"] }
+                }
+            },
+            "JsonBegrunnelse": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "utdatert"] },
+                    "hvorforSoke": { "type": "string" },
+                    "hvaSokesOm": { "type": "string" }
+                }
+            },
+            "JsonBorSammenMed": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "utdatert"] },
+                    "verdi": { "type": "boolean" }
+                }
+            },
+            "JsonBosituasjon": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "utdatert"] },
+                    "botype": {
+                        "type": "string",
+                        "enum": [
+                            "eier",
+                            "leier",
+                            "kommunal",
+                            "ingen",
+                            "institusjon",
+                            "krisesenter",
+                            "fengsel",
+                            "venner",
+                            "foreldre",
+                            "familie",
+                            "annet"
+                        ]
+                    },
+                    "antallPersoner": { "type": "integer", "format": "int32" }
+                }
+            },
+            "JsonBostotte": {
+                "type": "object",
+                "properties": {
+                    "saker": { "type": "array", "items": { "$ref": "#/components/schemas/JsonBostotteSak" } }
+                }
+            },
+            "JsonBostotteSak": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["system", "utdatert"] },
+                    "type": { "type": "string" },
+                    "dato": { "type": "string" },
+                    "status": { "type": "string" },
+                    "beskrivelse": { "type": "string" },
+                    "vedtaksstatus": { "type": "string", "enum": ["INNVILGET", "AVSLAG", "AVVIST"] }
+                }
+            },
+            "JsonData": {
+                "type": "object",
+                "properties": {
+                    "personalia": { "$ref": "#/components/schemas/JsonPersonalia" },
+                    "arbeid": { "$ref": "#/components/schemas/JsonArbeid" },
+                    "utdanning": { "$ref": "#/components/schemas/JsonUtdanning" },
+                    "familie": { "$ref": "#/components/schemas/JsonFamilie" },
+                    "begrunnelse": { "$ref": "#/components/schemas/JsonBegrunnelse" },
+                    "bosituasjon": { "$ref": "#/components/schemas/JsonBosituasjon" },
+                    "okonomi": { "$ref": "#/components/schemas/JsonOkonomi" }
+                }
+            },
+            "JsonDriftsinformasjon": {
+                "type": "object",
+                "properties": {
+                    "utbetalingerFraNavFeilet": { "type": "boolean" },
+                    "inntektFraSkatteetatenFeilet": { "type": "boolean" },
+                    "stotteFraHusbankenFeilet": { "type": "boolean" }
+                }
+            },
+            "JsonEktefelle": {
+                "type": "object",
+                "properties": {
+                    "navn": { "$ref": "#/components/schemas/JsonNavn" },
+                    "fodselsdato": { "type": "string" },
+                    "personIdentifikator": { "type": "string" }
+                }
+            },
+            "JsonErFolkeregistrertSammen": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["system", "utdatert"] },
+                    "verdi": { "type": "boolean" }
+                }
+            },
+            "JsonFamilie": {
+                "type": "object",
+                "properties": {
+                    "sivilstatus": { "$ref": "#/components/schemas/JsonSivilstatus" },
+                    "folkeregistrertMedEktefelleAvviksforklaring": {
+                        "$ref": "#/components/schemas/JsonFolkeregistrertMedEktefelleAvviksforklaring"
+                    },
+                    "forsorgerplikt": { "$ref": "#/components/schemas/JsonForsorgerplikt" }
+                }
+            },
+            "JsonFolkeregistrertMedEktefelleAvviksforklaring": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "utdatert"] },
+                    "verdi": { "type": "string" }
+                }
+            },
+            "JsonForsorgerplikt": {
+                "type": "object",
+                "properties": {
+                    "harForsorgerplikt": { "$ref": "#/components/schemas/JsonHarForsorgerplikt" },
+                    "barnebidrag": { "$ref": "#/components/schemas/JsonBarnebidrag" },
+                    "ansvar": { "type": "array", "items": { "$ref": "#/components/schemas/JsonAnsvar" } }
+                }
+            },
+            "JsonHarDeltBosted": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "utdatert"] },
+                    "verdi": { "type": "boolean" }
+                }
+            },
+            "JsonHarForsorgerplikt": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "system", "utdatert"] },
+                    "verdi": { "type": "boolean" }
+                }
+            },
+            "JsonKommentarTilArbeidsforhold": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "utdatert"] },
+                    "verdi": { "type": "string" }
+                }
+            },
+            "JsonKompatibilitet": {
+                "type": "object",
+                "properties": {
+                    "minVersion": { "type": "string" },
+                    "maxVersion": { "type": "string" },
+                    "text": { "type": "string" }
+                }
+            },
+            "JsonKontonummer": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "system", "utdatert"] },
+                    "harIkkeKonto": { "type": "boolean" },
+                    "verdi": { "type": "string" }
+                }
+            },
+            "JsonNavn": {
+                "type": "object",
+                "properties": {
+                    "fornavn": { "type": "string" },
+                    "mellomnavn": { "type": "string" },
+                    "etternavn": { "type": "string" }
+                }
+            },
+            "JsonNordiskBorger": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "system", "utdatert"] },
+                    "verdi": { "type": "boolean" }
+                }
+            },
+            "JsonOkonomi": {
+                "type": "object",
+                "properties": {
+                    "opplysninger": { "$ref": "#/components/schemas/JsonOkonomiopplysninger" },
+                    "oversikt": { "$ref": "#/components/schemas/JsonOkonomioversikt" }
+                }
+            },
+            "JsonOkonomiOpplysningUtbetaling": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "system", "utdatert"] },
+                    "type": { "type": "string" },
+                    "tittel": { "type": "string" },
+                    "organisasjon": { "$ref": "#/components/schemas/JsonOrganisasjon" },
+                    "belop": { "type": "integer", "format": "int32" },
+                    "netto": { "type": "number", "format": "double" },
+                    "brutto": { "type": "number", "format": "double" },
+                    "skattetrekk": { "type": "number", "format": "double" },
+                    "andreTrekk": { "type": "number", "format": "double" },
+                    "utbetalingsdato": { "type": "string" },
+                    "periodeFom": { "type": "string" },
+                    "periodeTom": { "type": "string" },
+                    "komponenter": {
+                        "type": "array",
+                        "items": { "$ref": "#/components/schemas/JsonOkonomiOpplysningUtbetalingKomponent" }
+                    },
+                    "overstyrtAvBruker": { "type": "boolean" },
+                    "mottaker": { "type": "string", "enum": ["Husstand", "Kommune"] }
+                }
+            },
+            "JsonOkonomiOpplysningUtbetalingKomponent": {
+                "type": "object",
+                "properties": {
+                    "type": { "type": "string" },
+                    "belop": { "type": "number", "format": "double" },
+                    "satsType": { "type": "string" },
+                    "satsAntall": { "type": "number", "format": "double" },
+                    "satsBelop": { "type": "number", "format": "double" }
+                }
+            },
+            "JsonOkonomiOpplysningUtgift": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "system", "utdatert"] },
+                    "type": { "type": "string" },
+                    "tittel": { "type": "string" },
+                    "belop": { "type": "integer", "format": "int32" },
+                    "overstyrtAvBruker": { "type": "boolean" }
+                }
+            },
+            "JsonOkonomibekreftelse": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "system", "utdatert"] },
+                    "type": { "type": "string" },
+                    "tittel": { "type": "string" },
+                    "verdi": { "type": "boolean" },
+                    "bekreftelsesDato": { "type": "string" }
+                }
+            },
+            "JsonOkonomibeskrivelserAvAnnet": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "utdatert"] },
+                    "verdi": { "type": "string" },
+                    "sparing": { "type": "string" },
+                    "utbetaling": { "type": "string" },
+                    "boutgifter": { "type": "string" },
+                    "barneutgifter": { "type": "string" }
+                }
+            },
+            "JsonOkonomiopplysninger": {
+                "type": "object",
+                "properties": {
+                    "bekreftelse": {
+                        "type": "array",
+                        "items": { "$ref": "#/components/schemas/JsonOkonomibekreftelse" }
+                    },
+                    "beskrivelseAvAnnet": { "$ref": "#/components/schemas/JsonOkonomibeskrivelserAvAnnet" },
+                    "utbetaling": {
+                        "type": "array",
+                        "items": { "$ref": "#/components/schemas/JsonOkonomiOpplysningUtbetaling" }
+                    },
+                    "utgift": {
+                        "type": "array",
+                        "items": { "$ref": "#/components/schemas/JsonOkonomiOpplysningUtgift" }
+                    },
+                    "bostotte": { "$ref": "#/components/schemas/JsonBostotte" }
+                }
+            },
+            "JsonOkonomioversikt": {
+                "type": "object",
+                "properties": {
+                    "inntekt": {
+                        "type": "array",
+                        "items": { "$ref": "#/components/schemas/JsonOkonomioversiktInntekt" }
+                    },
+                    "utgift": {
+                        "type": "array",
+                        "items": { "$ref": "#/components/schemas/JsonOkonomioversiktUtgift" }
+                    },
+                    "formue": { "type": "array", "items": { "$ref": "#/components/schemas/JsonOkonomioversiktFormue" } }
+                }
+            },
+            "JsonOkonomioversiktFormue": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "system", "utdatert"] },
+                    "type": { "type": "string" },
+                    "tittel": { "type": "string" },
+                    "belop": { "type": "integer", "format": "int32" },
+                    "overstyrtAvBruker": { "type": "boolean" }
+                }
+            },
+            "JsonOkonomioversiktInntekt": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "system", "utdatert"] },
+                    "type": { "type": "string" },
+                    "tittel": { "type": "string" },
+                    "brutto": { "type": "integer", "format": "int32" },
+                    "netto": { "type": "integer", "format": "int32" },
+                    "overstyrtAvBruker": { "type": "boolean" }
+                }
+            },
+            "JsonOkonomioversiktUtgift": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "system", "utdatert"] },
+                    "type": { "type": "string" },
+                    "tittel": { "type": "string" },
+                    "belop": { "type": "integer", "format": "int32" },
+                    "overstyrtAvBruker": { "type": "boolean" }
+                }
+            },
+            "JsonOrganisasjon": {
+                "type": "object",
+                "properties": { "navn": { "type": "string" }, "organisasjonsnummer": { "type": "string" } }
+            },
+            "JsonPersonIdentifikator": {
+                "type": "object",
+                "properties": { "kilde": { "type": "string", "enum": ["system"] }, "verdi": { "type": "string" } }
+            },
+            "JsonPersonalia": {
+                "type": "object",
+                "properties": {
+                    "personIdentifikator": { "$ref": "#/components/schemas/JsonPersonIdentifikator" },
+                    "navn": { "$ref": "#/components/schemas/JsonSokernavn" },
+                    "statsborgerskap": { "$ref": "#/components/schemas/JsonStatsborgerskap" },
+                    "nordiskBorger": { "$ref": "#/components/schemas/JsonNordiskBorger" },
+                    "telefonnummer": { "$ref": "#/components/schemas/JsonTelefonnummer" },
+                    "kontonummer": { "$ref": "#/components/schemas/JsonKontonummer" },
+                    "folkeregistrertAdresse": { "$ref": "#/components/schemas/JsonAdresse" },
+                    "oppholdsadresse": { "$ref": "#/components/schemas/JsonAdresse" },
+                    "postadresse": { "$ref": "#/components/schemas/JsonAdresse" }
+                }
+            },
+            "JsonSamvarsgrad": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "utdatert"] },
+                    "verdi": { "type": "integer", "format": "int32" }
+                }
+            },
+            "JsonSivilstatus": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "system", "utdatert"] },
+                    "status": { "type": "string", "enum": ["gift", "ugift", "samboer", "enke", "skilt", "separert"] },
+                    "ektefelle": { "$ref": "#/components/schemas/JsonEktefelle" },
+                    "ektefelleHarDiskresjonskode": { "type": "boolean" },
+                    "folkeregistrertMedEktefelle": { "type": "boolean" },
+                    "borSammenMed": { "type": "boolean" },
+                    "borIkkeSammenMedBegrunnelse": { "type": "string" }
+                }
+            },
+            "JsonSokernavn": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["system"] },
+                    "fornavn": { "type": "string" },
+                    "mellomnavn": { "type": "string" },
+                    "etternavn": { "type": "string" }
+                }
+            },
+            "JsonSoknad": {
+                "type": "object",
+                "properties": {
+                    "version": { "type": "string" },
+                    "data": { "$ref": "#/components/schemas/JsonData" },
+                    "innsendingstidspunkt": { "type": "string" },
+                    "mottaker": { "$ref": "#/components/schemas/JsonSoknadsmottaker" },
+                    "driftsinformasjon": { "$ref": "#/components/schemas/JsonDriftsinformasjon" },
+                    "kompatibilitet": {
+                        "type": "array",
+                        "items": { "$ref": "#/components/schemas/JsonKompatibilitet" }
+                    }
+                }
+            },
+            "JsonSoknadsmottaker": {
+                "type": "object",
+                "properties": {
+                    "kommunenummer": { "type": "string" },
+                    "enhetsnummer": { "type": "string" },
+                    "navEnhetsnavn": { "type": "string" }
+                }
+            },
+            "JsonStatsborgerskap": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "system", "utdatert"] },
+                    "verdi": { "type": "string" }
+                }
+            },
+            "JsonTelefonnummer": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "system", "utdatert"] },
+                    "verdi": { "type": "string" }
+                }
+            },
+            "JsonUtdanning": {
+                "type": "object",
+                "properties": {
+                    "kilde": { "type": "string", "enum": ["bruker", "system", "utdatert"] },
+                    "erStudent": { "type": "boolean" },
+                    "studentgrad": { "type": "string", "enum": ["heltid", "deltid"] }
                 }
             },
             "ForelderBarnRelasjon": {
