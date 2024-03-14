@@ -624,6 +624,25 @@
                 }
             }
         },
+        "/mock-alt/v2/soknader/{fiksDigisosId}/vedleggJSON": {
+            "get": {
+                "tags": ["frontend-soknad-controller-v-2"],
+                "operationId": "getVedleggJsonV2",
+                "parameters": [
+                    { "name": "fiksDigisosId", "in": "path", "required": true, "schema": { "type": "string" } }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": { "$ref": "#/components/schemas/JsonVedleggSpesifikasjon" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/mock-alt/v2/soknader/{fiksDigisosId}/soknadZip": {
             "get": {
                 "tags": ["frontend-soknad-controller-v-2"],
@@ -1872,6 +1891,30 @@
                     "id": { "type": "string" },
                     "size": { "type": "integer", "format": "int64" },
                     "kanLastesned": { "type": "boolean" }
+                }
+            },
+            "JsonFiler": {
+                "type": "object",
+                "properties": { "filnavn": { "type": "string" }, "sha512": { "type": "string" } }
+            },
+            "JsonVedlegg": {
+                "type": "object",
+                "properties": {
+                    "type": { "type": "string" },
+                    "tilleggsinfo": { "type": "string" },
+                    "status": { "type": "string" },
+                    "filer": { "type": "array", "items": { "$ref": "#/components/schemas/JsonFiler" } },
+                    "hendelseType": {
+                        "type": "string",
+                        "enum": ["dokumentasjonEtterspurt", "dokumentasjonkrav", "soknad", "bruker"]
+                    },
+                    "hendelseReferanse": { "type": "string" }
+                }
+            },
+            "JsonVedleggSpesifikasjon": {
+                "type": "object",
+                "properties": {
+                    "vedlegg": { "type": "array", "items": { "$ref": "#/components/schemas/JsonVedlegg" } }
                 }
             },
             "JsonAdresse": {
