@@ -1,38 +1,25 @@
-export const erLocalhost = () => {
-    return window.location.origin.indexOf('localhost:') > -1 || window.location.origin.indexOf('127.0.0.1:') > -1;
-};
+export const erLocalhost = () =>
+    window.location.origin.indexOf('localhost:') > -1 || window.location.origin.indexOf('127.0.0.1:') > -1;
 
-export const getMockAltApiURL = () => {
-    if (erLocalhost()) {
-        return 'http://localhost:8989/sosialhjelp/mock-alt-api';
-    } else {
-        return 'https://digisos.ekstern.dev.nav.no/sosialhjelp/mock-alt-api';
-    }
-};
+export const getMockAltApiURL = () =>
+    erLocalhost()
+        ? 'http://localhost:8989/sosialhjelp/mock-alt-api'
+        : 'https://digisos.ekstern.dev.nav.no/sosialhjelp/mock-alt-api';
 
-export const getSoknadURL = () => {
-    if (erLocalhost()) {
-        return 'http://localhost:3000/sosialhjelp/soknad/informasjon';
-    } else {
-        return 'https://digisos.ekstern.dev.nav.no/sosialhjelp/soknad/informasjon';
-    }
-};
+export const getSoknadURL = () =>
+    erLocalhost()
+        ? 'http://localhost:3000/sosialhjelp/soknad/informasjon'
+        : 'https://digisos.ekstern.dev.nav.no/sosialhjelp/soknad/informasjon';
 
-export const getInnsynURL = () => {
-    if (erLocalhost()) {
-        return 'http://localhost:3000/sosialhjelp/innsyn';
-    } else {
-        return 'https://digisos.ekstern.dev.nav.no/sosialhjelp/innsyn';
-    }
-};
+export const getInnsynURL = () =>
+    erLocalhost()
+        ? 'http://localhost:3000/sosialhjelp/innsyn'
+        : 'https://digisos.ekstern.dev.nav.no/sosialhjelp/innsyn';
 
-export const getFagsystemmockURL = () => {
-    if (erLocalhost()) {
-        return 'http://localhost:3000/sosialhjelp/fagsystem-mock';
-    } else {
-        return 'https://digisos.ekstern.dev.nav.no/sosialhjelp/fagsystem-mock';
-    }
-};
+export const getFagsystemmockURL = () =>
+    erLocalhost()
+        ? 'http://localhost:3000/sosialhjelp/fagsystem-mock'
+        : 'https://digisos.ekstern.dev.nav.no/sosialhjelp/fagsystem-mock';
 
 export const getRedirectParams = (): string => {
     const query = new URLSearchParams(window.location.search);
