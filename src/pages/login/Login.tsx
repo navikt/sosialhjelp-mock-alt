@@ -10,6 +10,18 @@ export const Login = () => {
     const { data: personliste } = usePersonListe();
     useEffect(() => setValgtFnr(personliste?.[0].fnr), [personliste]);
 
+    // Innsyn bruker fremdeles "redirect_uri", så vi konformerer tilbake til "redirect" her
+    useEffect(() => {
+        const query = new URLSearchParams(window.location.search);
+        const legacy_redirect = query.get('redirect_uri') || query.get('goto');
+        if (legacy_redirect) {
+            query.delete('redirect_uri');
+            query.delete('goto');
+            query.set('redirect', legacy_redirect);
+            window.location.search = query.toString();
+        }
+    }, []);
+
     const [redirect, setRedirect] = useState(window.location.origin + '/sosialhjelp/mock-alt/login');
 
     if (!valgtFnr || !personliste) return;
