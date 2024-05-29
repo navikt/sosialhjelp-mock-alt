@@ -28,4 +28,16 @@
     .navds-table__data-cell {
         color: var(--a-gray-50);
     }
+
+    .navds-panel {
+        background-color: var(--a-gray-800) !important;
+    }
+
+    .navds-alert--warning {
+        background-color: var(--a-orange-900) !important;
+    }
+
+    .navds-alert--info {
+        background-color: var(--a-blue-900) !important;
+    }
 }

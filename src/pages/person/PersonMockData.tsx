@@ -39,6 +39,9 @@ const GruppeStyle = styled.div`
     label {
         margin-top: 1rem;
     }
+    @media (prefers-color-scheme: dark) {
+        background-color: #2d2d2d;
+    }
 `;
 
 export const PersonMockData = () => {

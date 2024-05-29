@@ -40,7 +40,7 @@ export const Login = () => {
             <Heading level="2" size="large">
                 Logg inn
             </Heading>
-            <Alert variant="warning" className={'dark:text-gray-900 mb-2'}>
+            <Alert variant="warning" className={'mb-2'}>
                 <Heading spacing size="small" level="3">
                     DETTE ER KUN FOR TESTING!
                 </Heading>
