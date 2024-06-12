@@ -1,6 +1,13 @@
 import { Alert, Button, Heading } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
-import { addParams, getInnsynURL, getRedirectParams, getRedirectUrl, getSoknadURL } from '../../utils/restUtils';
+import {
+    addParams,
+    getInnsynURL,
+    getModiaURL,
+    getRedirectParams,
+    getRedirectUrl,
+    getSoknadURL,
+} from '../../utils/restUtils';
 import { Link } from 'react-router-dom';
 import { Knappegruppe, StyledSelect } from '../../styling/Styles';
 import { usePersonListe } from '../../generated/frontend-controller/frontend-controller';
@@ -67,6 +74,9 @@ export const Login = () => {
                     </option>
                     <option key="innsyn" value={getInnsynURL()}>
                         Innsyn
+                    </option>
+                    <option key="modia" value={getModiaURL()}>
+                        Modia
                     </option>
                 </StyledSelect>
             )}

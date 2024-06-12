@@ -21,6 +21,9 @@ export const getFagsystemmockURL = () =>
         ? 'http://localhost:3000/sosialhjelp/fagsystem-mock'
         : 'https://digisos.ekstern.dev.nav.no/sosialhjelp/fagsystem-mock';
 
+export const getModiaURL = () =>
+    erLocalhost() ? 'http://localhost:5173/sosialhjelp/modia' : 'https://digisos.ekstern.dev.nav.no/sosialhjelp/modia';
+
 export const getRedirectParams = (): string => {
     const query = new URLSearchParams(window.location.search);
 
