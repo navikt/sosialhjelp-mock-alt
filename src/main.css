@@ -13,15 +13,19 @@
         color: black;
     }
 
+    .navds-button--secondary {
+        color: #aab0ba !important;
+    }
+
     .navds-table--zebra-stripes
-        .navds-table__body
-        :where(.navds-table__row:nth-child(even):not(.navds-table__row--selected)) {
+        > .navds-table__body
+        > :where(.navds-table__row:nth-child(even):not(.navds-table__row--selected)) {
         background-color: var(--a-gray-800) !important;
     }
 
     .navds-table--zebra-stripes
-        .navds-table__body
-        :where(.navds-table__row:nth-child(odd):not(.navds-table__row--selected)) {
+        > .navds-table__body
+        > :where(.navds-table__row:nth-child(odd):not(.navds-table__row--selected)) {
         background-color: var(--a-gray-600) !important;
     }
 
