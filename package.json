@@ -21,7 +21,7 @@
     "react-router-dom": "^6.26.0",
     "styled-components": "^6.1.12",
     "vite": "^5.3.5",
-    "web-vitals": "^4.2.2"
+    "web-vitals": "^4.2.4"
   },
   "scripts": {
     "start": "cross-env PORT=3008 vite",
