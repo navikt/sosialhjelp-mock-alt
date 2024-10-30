@@ -55,7 +55,7 @@ export const NyttBarn = ({
                 <TextField
                     value={barn.fnr}
                     label="Ident"
-                    onChange={(evt: any) =>
+                    onChange={(evt) =>
                         setBarn((prev) => ({
                             ...prev,
                             fnr: evt.target.value,

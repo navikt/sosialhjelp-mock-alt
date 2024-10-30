@@ -18,7 +18,13 @@ type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseE
 const { HUSSTAND, KOMMUNE } = UtbetalingerDtoMottaker;
 const { HOVEDPERSON, BIPERSON } = SakerDtoRolle;
 
-export const NyttBostotteUtbetaling = ({ isOpen, callback }: { isOpen: boolean; callback: (data: any) => void }) => {
+export const NyttBostotteUtbetaling = ({
+    isOpen,
+    callback,
+}: {
+    isOpen: boolean;
+    callback: (data: UtbetalingerDto | null) => void;
+}) => {
     let sistManed = new Date();
     sistManed.setMonth(sistManed.getMonth() - 1);
 
@@ -46,24 +52,28 @@ export const NyttBostotteUtbetaling = ({ isOpen, callback }: { isOpen: boolean; 
                         label="Beløp"
                         type="number"
                         value={belop}
-                        onChange={(evt: any) => setBelop(parseFloat(evt.target.value))}
+                        onChange={(evt) => setBelop(parseFloat(evt.target.value))}
                         htmlSize={20}
                     />
                     <StyledInput
                         label="Utbetalingsdato (åååå-mm-dd)"
                         value={utbetalingsdato}
-                        onChange={(evt: any) => setUtbetalingsdato(evt.target.value)}
+                        onChange={(evt) => setUtbetalingsdato(evt.target.value)}
                         htmlSize={20}
                     />
                     <StyledSelect
                         label="Mottaker"
-                        onChange={(evt: any) => setMottaker(evt.target.value)}
+                        onChange={(evt) => setMottaker(evt.target.value as UtbetalingerDtoMottaker)}
                         value={mottaker}
                     >
                         <option value={HUSSTAND}>{mottakerLabel[HUSSTAND]}</option>
                         <option value={KOMMUNE}>{mottakerLabel[KOMMUNE]}</option>
                     </StyledSelect>
-                    <StyledSelect label="Rolle" onChange={(evt: any) => setRolle(evt.target.value)} value={rolle}>
+                    <StyledSelect
+                        label="Rolle"
+                        onChange={(evt) => setRolle(evt.target.value as SakerDtoRolle)}
+                        value={rolle}
+                    >
                         <option value={HOVEDPERSON}>{rolleLabel[HOVEDPERSON]}</option>
                         <option value={BIPERSON}>{rolleLabel[BIPERSON]}</option>
                     </StyledSelect>

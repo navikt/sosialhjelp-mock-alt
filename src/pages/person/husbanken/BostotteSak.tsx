@@ -12,8 +12,8 @@ export const NyBostotteSak = ({ isOpen, callback }: { isOpen: boolean; callback:
     let sistManed = new Date();
     sistManed.setMonth(sistManed.getMonth() - 1);
 
-    const [ar, setAr] = useState(sistManed.getFullYear());
-    const [mnd, setMnd] = useState(sistManed.getMonth() + 1);
+    const [ar, setAr] = useState(sistManed.getFullYear().toString());
+    const [mnd, setMnd] = useState(`${sistManed.getMonth() + 1}`);
     const [status, setStatus] = useState<SakerDtoStatus>(SakerDtoStatus.UNDER_BEHANDLING);
     const [rolle, setRolle] = useState<SakerDtoRolle>(SakerDtoRolle.HOVEDPERSON);
     const [vedtaksKode, setVedtaksKode] = useState<VedtakKodeType>('V00');
@@ -21,8 +21,8 @@ export const NyBostotteSak = ({ isOpen, callback }: { isOpen: boolean; callback:
     const onLagre = (event: ClickEvent) => {
         if (status === SakerDtoStatus.VEDTATT) {
             const nyttBostotteSakObject: SakerDto = {
-                ar,
-                mnd,
+                ar: parseInt(ar),
+                mnd: parseInt(mnd),
                 status,
                 rolle,
                 vedtak: {
@@ -33,7 +33,7 @@ export const NyBostotteSak = ({ isOpen, callback }: { isOpen: boolean; callback:
             };
             callback(nyttBostotteSakObject);
         } else {
-            const nyttBostotteSakObject: SakerDto = { ar, mnd, status, rolle };
+            const nyttBostotteSakObject: SakerDto = { ar: parseInt(ar), mnd: parseInt(mnd), status, rolle };
             callback(nyttBostotteSakObject);
         }
         event.preventDefault();
@@ -55,7 +55,7 @@ export const NyBostotteSak = ({ isOpen, callback }: { isOpen: boolean; callback:
                             value={ar}
                             type="text"
                             inputMode="numeric"
-                            onChange={(evt: any) => setAr(evt.target.value)}
+                            onChange={(evt) => setAr(evt.target.value)}
                             htmlSize={6}
                         />
                         <TextField
@@ -63,14 +63,14 @@ export const NyBostotteSak = ({ isOpen, callback }: { isOpen: boolean; callback:
                             value={mnd}
                             type="text"
                             inputMode="numeric"
-                            onChange={(evt: any) => setMnd(evt.target.value)}
+                            onChange={(evt) => setMnd(evt.target.value)}
                             htmlSize={4}
                         />
                     </HStack>
                     <Select
                         className={'w-48'}
                         label="Status"
-                        onChange={(evt: any) => setStatus(evt.target.value)}
+                        onChange={(evt) => setStatus(evt.target.value as SakerDtoStatus)}
                         value={status}
                     >
                         <option value={VEDTATT}>{statusLabel[VEDTATT]}</option>
@@ -79,7 +79,7 @@ export const NyBostotteSak = ({ isOpen, callback }: { isOpen: boolean; callback:
                     {status === VEDTATT && (
                         <Select
                             label="Vedtak"
-                            onChange={(evt: any) => setVedtaksKode(evt.target.value)}
+                            onChange={(evt) => setVedtaksKode(evt.target.value as VedtakKodeType)}
                             value={vedtaksKode}
                         >
                             {Object.entries(Vedtakskode).map(([key, label]) => (
@@ -92,7 +92,7 @@ export const NyBostotteSak = ({ isOpen, callback }: { isOpen: boolean; callback:
                     <Select
                         className={'w-48'}
                         label="Rolle"
-                        onChange={(evt: any) => setRolle(evt.target.value)}
+                        onChange={(evt) => setRolle(evt.target.value as SakerDtoRolle)}
                         value={rolle}
                     >
                         <option value={HOVEDPERSON}>{rolleLabel[HOVEDPERSON]}</option>

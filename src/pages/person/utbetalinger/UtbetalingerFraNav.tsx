@@ -15,17 +15,9 @@ import { FrontendUtbetalingFraNav } from '../../../generated/model';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
-export interface UtbetalingFraNavObject {
-    belop: string;
-    dato: string;
-    ytelsestype: string;
-    skattebelop: string;
-    ytelseskomponenttype: string;
-}
-
 interface Params {
     isOpen: boolean;
-    callback: (data: any) => void;
+    callback: (data: FrontendUtbetalingFraNav | null) => void;
 }
 
 export const NyttUtbetalingerFraNav = ({ isOpen, callback }: Params) => {
@@ -39,11 +31,11 @@ export const NyttUtbetalingerFraNav = ({ isOpen, callback }: Params) => {
     const [ytelseskomponenttype, setYtelseskomponenttype] = useState<string>('');
 
     const onLagre = (event: ClickEvent) => {
-        const nyttUtbetalingerFraNavObject: UtbetalingFraNavObject = {
-            belop: belop,
+        const nyttUtbetalingerFraNavObject: FrontendUtbetalingFraNav = {
+            belop: parseInt(belop),
             dato: dato,
             ytelsestype: ytelsestype,
-            skattebelop: skattebelop,
+            skattebelop: parseInt(skattebelop),
             ytelseskomponenttype: ytelseskomponenttype,
         };
 
@@ -62,31 +54,31 @@ export const NyttUtbetalingerFraNav = ({ isOpen, callback }: Params) => {
                     <StyledInput
                         label="Beløp"
                         value={belop}
-                        onChange={(evt: any) => setBelop(evt.target.value)}
+                        onChange={(evt) => setBelop(evt.target.value)}
                         htmlSize={20}
                     />
                     <StyledInput
                         label="Utbetalingsdato (åååå-mm-dd)"
                         value={dato}
-                        onChange={(evt: any) => setDato(evt.target.value)}
+                        onChange={(evt) => setDato(evt.target.value)}
                         htmlSize={20}
                     />
                     <StyledInput
                         label="Ytelsestype"
                         value={ytelsestype}
-                        onChange={(evt: any) => setYtelsestype(evt.target.value)}
+                        onChange={(evt) => setYtelsestype(evt.target.value)}
                         htmlSize={30}
                     />
                     <StyledInput
                         label="Skattebeløp"
                         value={skattebelop}
-                        onChange={(evt: any) => setSkattebelop(evt.target.value)}
+                        onChange={(evt) => setSkattebelop(evt.target.value)}
                         htmlSize={20}
                     />
                     <StyledInput
                         label="Ytelseskomponenttype"
                         value={ytelseskomponenttype}
-                        onChange={(evt: any) => setYtelseskomponenttype(evt.target.value)}
+                        onChange={(evt) => setYtelseskomponenttype(evt.target.value)}
                     />
                 </StyledFieldset>
                 <Knappegruppe>

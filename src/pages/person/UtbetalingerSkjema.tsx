@@ -25,7 +25,7 @@ export const UtbetalingerSkjema = ({
             ))}
             <NyttUtbetalingerFraNav
                 isOpen={leggTilUtbetalingFraNav}
-                callback={(nyUtbetaling: FrontendUtbetalingFraNav) => {
+                callback={(nyUtbetaling) => {
                     if (nyUtbetaling) {
                         utbetalingerFraNav.push(nyUtbetaling);
                         onChange(utbetalingerFraNav);

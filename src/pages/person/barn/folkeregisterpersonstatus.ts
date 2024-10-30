@@ -1,6 +1,6 @@
-import type { FrontendBarnFolkeregisterpersonstatus } from '../../../generated/model';
+import type { PdlFolkeregisterpersonstatusStatus } from '../../../generated/model';
 
-export const Folkeregisterpersonstatus: Record<FrontendBarnFolkeregisterpersonstatus, string> = {
+export const Folkeregisterpersonstatus: Record<PdlFolkeregisterpersonstatusStatus, string> = {
     bosatt: 'Bosatt',
     utflyttet: 'Utflyttet',
     forsvunnet: 'Forsvunnet',
@@ -9,6 +9,6 @@ export const Folkeregisterpersonstatus: Record<FrontendBarnFolkeregisterpersonst
     foedselsregistrert: 'Fødselsregistrert',
     midlertidig: 'Midlertidig',
     inaktiv: 'Inaktiv',
-    ikkeBosatt: 'Ikke bosatt',
+    ikkebosatt: 'Ikke bosatt',
     aktiv: 'Aktiv',
 };

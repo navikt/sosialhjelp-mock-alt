@@ -1,6 +1,7 @@
 import { Button } from '@navikt/ds-react';
-import { ArbeidsforholdObject, NyttArbeidsforhold, VisArbeidsforhold } from './arbeidsforhold/Arbeidsfohold';
+import { NyttArbeidsforhold, VisArbeidsforhold } from './arbeidsforhold/Arbeidsfohold';
 import React, { useState } from 'react';
+import { ArbeidsforholdObject } from './arbeidsforhold/types';
 
 export const ArbeidsforholdSkjema = ({
     arbeidsforhold,
@@ -24,7 +25,7 @@ export const ArbeidsforholdSkjema = ({
             ))}
             <NyttArbeidsforhold
                 isOpen={leggTilArbeidsforhold}
-                callback={(nyttTilArbeidsforhold: ArbeidsforholdObject) => {
+                callback={(nyttTilArbeidsforhold) => {
                     if (nyttTilArbeidsforhold) {
                         onChange([...arbeidsforhold, nyttTilArbeidsforhold]);
                     }

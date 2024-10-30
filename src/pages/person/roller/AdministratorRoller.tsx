@@ -15,7 +15,7 @@ const adminTekst = (rolle: FrontendPersonaliaAdministratorRollerItem) =>
 
 export const AdministratorRollerPanel = (props: {
     initialRoller: FrontendPersonaliaAdministratorRollerItem[];
-    setRoller: (data: any) => void;
+    setRoller: (data: FrontendPersonaliaAdministratorRollerItem[]) => void;
 }) => {
     const { setRoller, initialRoller } = props;
     const [checkboxState, setCheckboxState] = useState<FrontendPersonaliaAdministratorRollerItem[]>(initialRoller);

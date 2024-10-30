@@ -1,41 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { MouseEventHandler, useEffect, useState } from 'react';
 import { Collapse } from 'react-collapse';
 import { getMockAltApiURL } from '../../../utils/restUtils';
 import { Button, Panel, TextField } from '@navikt/ds-react';
 import {
+    AvbrytKnapp,
     DefinitionList,
     Knappegruppe,
+    SmallTextField,
+    StyledFieldset,
     StyledPanel,
     StyledSelect,
-    SmallTextField,
-    AvbrytKnapp,
-    StyledFieldset,
 } from '../../../styling/Styles';
 import styled from 'styled-components';
 import { getIsoDateString } from '../../../utils/dateUtils';
 import SletteKnapp from '../../../components/SletteKnapp';
-
-type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
-
-export enum ArbeidsforholdType {
-    PERSON = 'Person',
-    ORGANISASJON = 'Organisasjon',
-}
-
-export interface ArbeidsforholdObject {
-    type: string;
-    id: string;
-    startDato: string;
-    sluttDato: string;
-    stillingsProsent: string;
-    ident: string;
-    orgnummer: string;
-    orgnavn: string;
-}
+import { ArbeidsforholdObject, ArbeidsforholdType } from './types';
 
 interface Params {
     isOpen: boolean;
-    callback: (data: any) => void;
+    callback: (data: ArbeidsforholdObject | null) => void;
 }
 
 const ArbeidsforholdPanel = styled(Panel)`
@@ -79,7 +62,7 @@ export const NyttArbeidsforhold = ({ isOpen, callback }: Params) => {
             });
     }, []);
 
-    const onLagre = (event: ClickEvent) => {
+    const onLagre: MouseEventHandler = (event) => {
         const nyttArbeidsforholdObject: ArbeidsforholdObject = {
             type: arbeidgivertype,
             id: arbeidsforholdId,
@@ -94,7 +77,8 @@ export const NyttArbeidsforhold = ({ isOpen, callback }: Params) => {
         callback(nyttArbeidsforholdObject);
         event.preventDefault();
     };
-    const onCancel = (event: ClickEvent) => {
+
+    const onCancel: MouseEventHandler = (event) => {
         callback(null);
         event.preventDefault();
     };
@@ -106,28 +90,28 @@ export const NyttArbeidsforhold = ({ isOpen, callback }: Params) => {
                     <SmallTextField
                         label="Id"
                         value={arbeidsforholdId}
-                        onChange={(evt: any) => setArbeidsforholdId(evt.target.value)}
+                        onChange={(evt) => setArbeidsforholdId(evt.target.value)}
                     />
                     <InputWrapper>
                         <TextField
                             label="Startdato (åååå-mm-dd)"
                             value={startdato}
-                            onChange={(evt: any) => setStartdato(evt.target.value)}
+                            onChange={(evt) => setStartdato(evt.target.value)}
                         />
                         <TextField
                             label="Sluttdato (åååå-mm-dd)"
                             value={sluttdato}
-                            onChange={(evt: any) => setSluttdato(evt.target.value)}
+                            onChange={(evt) => setSluttdato(evt.target.value)}
                         />
                     </InputWrapper>
                     <SmallTextField
                         label="Stillingsprosent (%)"
                         value={stillingsprosent}
-                        onChange={(evt: any) => setStillingsprosent(evt.target.value)}
+                        onChange={(evt) => setStillingsprosent(evt.target.value)}
                     />
                     <StyledSelect
                         label="Arbeidsgivertype"
-                        onChange={(evt: any) => setArbeidgivertype(evt.target.value)}
+                        onChange={(evt) => setArbeidgivertype(evt.target.value)}
                         value={arbeidgivertype}
                     >
                         <option value={ArbeidsforholdType.ORGANISASJON}>Arbeidsgiver med orgnummer</option>
@@ -138,7 +122,7 @@ export const NyttArbeidsforhold = ({ isOpen, callback }: Params) => {
                             label="Ident"
                             value={ident}
                             type="number"
-                            onChange={(evt: any) => setIdent(evt.target.value)}
+                            onChange={(evt) => setIdent(evt.target.value)}
                         />
                     )}
                     {arbeidgivertype === ArbeidsforholdType.ORGANISASJON && (
@@ -146,23 +130,19 @@ export const NyttArbeidsforhold = ({ isOpen, callback }: Params) => {
                             <TextField
                                 label="Organisasjonsnavn"
                                 value={organisasjonsNavn}
-                                onChange={(evt: any) => setOrganisasjonsNavn(evt.target.value)}
+                                onChange={(evt) => setOrganisasjonsNavn(evt.target.value)}
                             />
                             <TextField
                                 label="Orgnummer"
                                 value={orgnummer}
-                                onChange={(evt: any) => setOrgnummer(evt.target.value)}
+                                onChange={(evt) => setOrgnummer(evt.target.value)}
                             />
                         </InputWrapper>
                     )}
                 </StyledFieldset>
                 <Knappegruppe>
-                    <Button onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onLagre(event)}>
-                        Legg til
-                    </Button>
-                    <AvbrytKnapp onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onCancel(event)}>
-                        Avbryt
-                    </AvbrytKnapp>
+                    <Button onClick={onLagre}>Legg til</Button>
+                    <AvbrytKnapp onClick={onCancel}>Avbryt</AvbrytKnapp>
                 </Knappegruppe>
             </ArbeidsforholdPanel>
         </Collapse>

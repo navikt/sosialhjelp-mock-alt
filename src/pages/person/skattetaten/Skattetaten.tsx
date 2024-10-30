@@ -12,18 +12,9 @@ import {
 } from '../../../styling/Styles';
 import SletteKnapp from '../../../components/SletteKnapp';
 import { FrontendSkattbarInntekt, FrontendSkattbarInntektType } from '../../../generated/model';
+import { SkatteutbetalingType } from './types';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
-
-export enum SkatteutbetalingType {
-    LOENNSINNTEKT = 'Loennsinntekt',
-    YTELSEFRAOFFENTLIGE = 'YtelseFraOffentlige',
-    PENSJONELLERTRYGD = 'PensjonEllerTrygd',
-    LOTTOGPARTINNENFISKE = 'LottOgPartInnenFiske',
-    DAGMAMMAIEGENBOLIG = 'DagmammaIEgenBolig',
-    NAERINGSINNTEKT = 'Naeringsinntekt',
-    ALDERSUFOEREETTERLATTEAVTALEFESTETOGKRIGSPENSJON = 'AldersUfoereEtterlatteAvtalefestetOgKrigspensjon',
-}
 
 const skatteutbetalingLabels: Record<FrontendSkattbarInntektType, string> = {
     Loennsinntekt: 'Lønnsinntekt',
@@ -85,23 +76,23 @@ export const NyttSkatteutbetaling = ({
                     <TextField
                         label="Beløp"
                         value={belop}
-                        onChange={(evt: any) => setBelop(evt.target.value)}
+                        onChange={(evt) => setBelop(evt.target.value)}
                         htmlSize={20}
                     />
                     <StyledInput
                         label="Trekk"
                         value={trekk}
-                        onChange={(evt: any) => setTrekk(evt.target.value)}
+                        onChange={(evt) => setTrekk(evt.target.value)}
                         htmlSize={20}
                     />
                     <StyledInput
                         label="Orgnummer"
                         type="number"
                         value={orgnummer}
-                        onChange={(evt: any) => setOrgnummer(evt.target.value)}
+                        onChange={(evt) => setOrgnummer(evt.target.value)}
                         htmlSize={20}
                     />
-                    <StyledSelect label="Måned" onChange={(evt: any) => setManed(evt.target.value)} value={maned}>
+                    <StyledSelect label="Måned" onChange={(evt) => setManed(evt.target.value)} value={maned}>
                         <option value={getMonthDateString(month_1)}>{getMonthDateString(month_1)}</option>
                         <option value={getMonthDateString(month_2)}>{getMonthDateString(month_2)}</option>
                         <option value={getMonthDateString(month_3)}>{getMonthDateString(month_3)}</option>
@@ -109,16 +100,14 @@ export const NyttSkatteutbetaling = ({
                     </StyledSelect>
                     <StyledSelect
                         label="Velg arbeidsgivertype"
-                        onChange={(evt: any) => setType(evt.target.value)}
+                        onChange={(evt) => setType(evt.target.value as SkatteutbetalingType)}
                         value={type}
                     >
-                        {Object.values(SkatteutbetalingType).map((value: SkatteutbetalingType): JSX.Element => {
-                            return (
-                                <option key={value} value={value}>
-                                    {skatteutbetalingLabels[value]}
-                                </option>
-                            );
-                        })}
+                        {Object.values(SkatteutbetalingType).map((value) => (
+                            <option key={value} value={value}>
+                                {skatteutbetalingLabels[value]}
+                            </option>
+                        ))}
                     </StyledSelect>
                 </StyledFieldset>
                 <Knappegruppe>

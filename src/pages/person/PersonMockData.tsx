@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { addParams, getRedirectParams, getRedirectUrl, isLoginSession } from '../../utils/restUtils';
-import { ArbeidsforholdObject } from './arbeidsforhold/Arbeidsfohold';
 import { Collapse } from 'react-collapse';
 import styled from 'styled-components';
 import { Adressebeskyttelse } from './personalia/adressebeskyttelse';
@@ -29,6 +28,7 @@ import { UtbetalingerSkjema } from './UtbetalingerSkjema';
 import { SkatteutbetalingerSkjema } from './SkatteutbetalingerSkjema';
 import { BostotteSakSkjema } from './BostotteSakSkjema';
 import { BostotteUtbetalingSkjema } from './BostotteUtbetalingSkjema';
+import { ArbeidsforholdObject } from './arbeidsforhold/types';
 
 type ClickEvent = React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -119,8 +119,12 @@ export const PersonMockData = () => {
             } else {
                 navigate('/' + addParams(params));
             }
-        } catch (error: any) {
-            dispatchAppStatus({ type: 'postError', msg: error.toString() });
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                dispatchAppStatus({ type: 'postError', msg: error.toString() });
+            } else {
+                dispatchAppStatus({ type: 'postError', msg: `Ukjent feil: ${JSON.stringify(error, null, 2)}` });
+            }
         }
 
         event.preventDefault();
@@ -345,7 +349,7 @@ export const PersonMockData = () => {
                     {editAdministratorRoller ? (
                         <AdministratorRollerPanel
                             initialRoller={administratorRoller}
-                            setRoller={(roller: FrontendPersonaliaAdministratorRollerItem[]) => {
+                            setRoller={(roller) => {
                                 setAdministratorRoller(roller);
                                 setEditAdministratorRoller(false);
                             }}

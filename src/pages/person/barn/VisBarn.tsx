@@ -20,7 +20,7 @@ export const VisBarn = ({ barn, onSlett }: { barn: FrontendBarn; onSlett: () => 
                 <dt>Adressebeskyttelse</dt>
                 <dd>{Adressebeskyttelse[barn.adressebeskyttelse]}</dd>
                 <dt>Folkeregisterpersonstatus</dt>
-                <dd>{Folkeregisterpersonstatus[barn.folkeregisterpersonstatus]}</dd>
+                <dd>{Folkeregisterpersonstatus[barn.folkeregisterpersonstatus.status]}</dd>
                 <dt>Adresse</dt>
                 <dd>
                     {barn.bostedsadresse.adressenavn}, {barn.bostedsadresse.husnummer}, {barn.bostedsadresse.husbokstav}

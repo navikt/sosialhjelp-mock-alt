@@ -156,7 +156,7 @@ export const Feilkonfigurering = () => {
                 value={fnr}
                 label="Ident / Fødselsnummer"
                 disabled={lockedMode || editMode}
-                onChange={(evt: any) => setFnr(evt.target.value)}
+                onChange={(evt) => setFnr(evt.target.value)}
             />
             {navn?.length > 0 && (
                 <BodyShort>
@@ -196,41 +196,41 @@ export const Feilkonfigurering = () => {
                                     type="number"
                                     label="Feilkode"
                                     disabled={lockedMode}
-                                    onChange={(evt: any) => setFeilkode(evt.target.value)}
+                                    onChange={(evt) => setFeilkode(evt.target.value)}
                                 />
                                 <TextField
                                     value={feilkodeSansynlighet}
                                     type="number"
                                     label="Sansynlighet for å få feilkode"
                                     disabled={lockedMode}
-                                    onChange={(evt: any) => setFeilkodeSansynlighet(evt.target.value)}
+                                    onChange={(evt) => setFeilkodeSansynlighet(evt.target.value)}
                                 />
                                 <TextField
                                     value={feilmelding}
                                     label="Feilmelding"
                                     disabled={lockedMode}
-                                    onChange={(evt: any) => setFeilmelding(evt.target.value)}
+                                    onChange={(evt) => setFeilmelding(evt.target.value)}
                                 />
                                 <TextField
                                     value={timeout}
                                     type="number"
                                     label="Timeout"
                                     disabled={lockedMode}
-                                    onChange={(evt: any) => setTimeout(evt.target.value)}
+                                    onChange={(evt) => setTimeout(evt.target.value)}
                                 />
                                 <TextField
                                     value={timeoutSansynlighet}
                                     type="number"
                                     label="Sansynlighet for å få timeout"
                                     disabled={lockedMode}
-                                    onChange={(evt: any) => setTimeoutSansynlighet(evt.target.value)}
+                                    onChange={(evt) => setTimeoutSansynlighet(evt.target.value)}
                                 />
                             </Fieldset>
                             <Fieldset legend="Gjelder for">
                                 <Select
                                     label="Klasse"
                                     disabled={lockedMode}
-                                    onChange={(evt: any) => setKlasse(evt.target.value)}
+                                    onChange={(evt) => setKlasse(evt.target.value)}
                                     value={klasse}
                                 >
                                     <option value="*">* Alle *</option>
@@ -243,7 +243,7 @@ export const Feilkonfigurering = () => {
                                 <Select
                                     label="Funksjon"
                                     disabled={lockedMode}
-                                    onChange={(evt: any) => setFunksjon(evt.target.value)}
+                                    onChange={(evt) => setFunksjon(evt.target.value)}
                                     value={funksjon}
                                 >
                                     <option value="*">* Alle *</option>

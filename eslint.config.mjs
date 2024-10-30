@@ -8,10 +8,10 @@ import reactRefresh from "eslint-plugin-react-refresh";
 /** @type {import("eslint").Linter.FlatConfig[]} */
 export default [
     {
-        ignores: ["./dist"],
+        ignores: ["./dist", "src/generated/**"],
     },
     {
-        files: ["**/*.{ts,tsx}"],
+        files: ["**/*.ts", "**/*.tsx"],
         languageOptions: {
             ecmaVersion: 2022,
             sourceType: "module",

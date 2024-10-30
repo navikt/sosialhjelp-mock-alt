@@ -26,7 +26,7 @@ export const BostotteUtbetalingSkjema = ({
             ))}
             <NyttBostotteUtbetaling
                 isOpen={leggTilBostotteUtbetaling}
-                callback={(nyBostotteUtbetaling: UtbetalingerDto) => {
+                callback={(nyBostotteUtbetaling) => {
                     if (nyBostotteUtbetaling) {
                         bostotteUtbetalinger.push(nyBostotteUtbetaling);
                         onChange(bostotteUtbetalinger);
