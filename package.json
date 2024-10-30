@@ -4,24 +4,23 @@
   "private": true,
   "homepage": "/sosialhjelp/mock-alt",
   "dependencies": {
-    "@microlink/react-json-view": "^1.23.1",
-    "@navikt/aksel-icons": "^6.13.0",
-    "@navikt/ds-css": "^6.13.0",
-    "@navikt/ds-react": "^6.13.0",
-    "@navikt/ds-tailwind": "^6.13.0",
-    "@tanstack/react-query": "^5.51.21",
-    "@vitejs/plugin-react": "^4.3.1",
-    "axios": "^1.7.3",
+    "@microlink/react-json-view": "^1.23.4",
+    "@navikt/aksel-icons": "^7.4.0",
+    "@navikt/ds-css": "^7.4.0",
+    "@navikt/ds-react": "^7.4.0",
+    "@navikt/ds-tailwind": "^7.4.0",
+    "@tanstack/react-query": "^5.59.16",
+    "@vitejs/plugin-react": "^4.3.3",
+    "axios": "^1.7.7",
     "cross-env": "^7.0.3",
-    "date-fns": "^3.6.0",
-    "eslint": "^8",
+    "date-fns": "^4.1.0",
     "react": "^18.3.1",
     "react-collapse": "^5.1.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.26.0",
-    "styled-components": "^6.1.12",
-    "vite": "^5.3.5",
-    "web-vitals": "^4.2.2"
+    "react-router-dom": "^6.27.0",
+    "styled-components": "^6.1.13",
+    "vite": "^5.4.10",
+    "web-vitals": "^4.2.4"
   },
   "scripts": {
     "start": "cross-env PORT=3008 vite",
@@ -31,12 +30,6 @@
     "lintStaged": "lint-staged",
     "fetch-api": "curl -o ./mock-alt-api.json http://localhost:8989/sosialhjelp/mock-alt-api/v3/api-docs && prettier --write mock-alt-api.json",
     "orval": "rm -rf ./src/generated & orval --prettier"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
@@ -51,22 +44,25 @@
     ]
   },
   "devDependencies": {
-    "@types/node": "^22.1.0",
+    "@eslint/js": "^9.13.0",
+    "@types/node": "^22.8.4",
     "@types/object-hash": "^3.0.6",
-    "@types/react": "^18.3.3",
+    "@types/react": "^18.3.12",
     "@types/react-collapse": "^5.0.4",
-    "@types/react-dom": "^18.3.0",
+    "@types/react-dom": "^18.3.1",
     "@types/react-router-dom": "^5.3.3",
     "autoprefixer": "^10.4.20",
     "classnames": "^2.5.1",
+    "eslint": "^8.57.1",
     "eslint-config-react-app": "^7.0.1",
-    "husky": "^9.1.4",
-    "lint-staged": "^15.2.8",
-    "orval": "^7.0.1",
-    "postcss": "^8.4.41",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "orval": "^7.2.0",
+    "postcss": "^8.4.47",
     "prettier": "^3.3.3",
-    "tailwindcss": "^3.4.7",
-    "typescript": "^5.5.4"
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.12.2"
   },
   "lint-staged": {
     "*.{ts,tsx,css,md}": "prettier --write",
