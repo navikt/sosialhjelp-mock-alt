@@ -55,7 +55,11 @@ export const SoknadView = () => {
                     <tbody>
                         <tr>
                             <th>Innsendingstidspunkt:</th>
-                            <td>{format(parseJSON(soknadJson.innsendingstidspunkt!), 'PPpp', { locale: nb })}</td>
+                            {soknadJson.innsendingstidspunkt ? (
+                                <td>{format(parseJSON(soknadJson.innsendingstidspunkt), 'PPpp', { locale: nb })}</td>
+                            ) : (
+                                <td>Intet tidspunkt</td>
+                            )}
                         </tr>
                         <tr>
                             <th>Checksum soknadJSON:</th>
