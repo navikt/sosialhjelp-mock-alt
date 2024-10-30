@@ -97,30 +97,6 @@
                 }
             }
         },
-        "/pdl_endpoint_url": {
-            "post": {
-                "tags": ["pdl-controller"],
-                "operationId": "pdlEndpoint",
-                "parameters": [
-                    {
-                        "name": "parameters",
-                        "in": "query",
-                        "required": true,
-                        "schema": { "$ref": "#/components/schemas/MultiValueMapStringString" }
-                    }
-                ],
-                "requestBody": {
-                    "content": { "application/json": { "schema": { "type": "string" } } },
-                    "required": true
-                },
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": { "application/json;charset=UTF-8": { "schema": { "type": "string" } } }
-                    }
-                }
-            }
-        },
         "/mock-alt/v2/logg/warn": {
             "post": {
                 "tags": ["frontend-logg-controller"],
@@ -276,26 +252,6 @@
                 }
             }
         },
-        "/internal/unleash/api/client/register": {
-            "post": {
-                "tags": ["unleash-controller"],
-                "operationId": "unleashRegister",
-                "parameters": [{ "name": "request", "in": "query", "required": true, "schema": { "type": "string" } }],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            }
-        },
-        "/internal/unleash/api/client/metrics": {
-            "post": {
-                "tags": ["unleash-controller"],
-                "operationId": "unleashMetrics",
-                "parameters": [{ "name": "request", "in": "query", "required": true, "schema": { "type": "string" } }],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            }
-        },
         "/innsyn-api/api/v1/digisosapi/{fiksDigisosId}/filOpplasting": {
             "post": {
                 "tags": ["innsyn-controller"],
@@ -333,126 +289,6 @@
                     "content": { "application/json": { "schema": { "type": "string" } } },
                     "required": true
                 },
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            }
-        },
-        "/fiks/digisos/api/v2/soknader/{kommuneNr}/{fiksDigisosId}": {
-            "post": {
-                "tags": ["fiks-controller"],
-                "operationId": "lastOppSoknad",
-                "parameters": [
-                    { "name": "kommuneNr", "in": "path", "required": true, "schema": { "type": "string" } },
-                    { "name": "fiksDigisosId", "in": "path", "required": true, "schema": { "type": "string" } }
-                ],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            }
-        },
-        "/fiks/digisos/api/v1/{fiksOrgId}/{fiksDigisosId}": {
-            "post": {
-                "tags": ["fiks-controller"],
-                "operationId": "oppdaterSoknadInnsyn",
-                "parameters": [
-                    { "name": "fiksOrgId", "in": "path", "required": true, "schema": { "type": "string" } },
-                    { "name": "fiksDigisosId", "in": "path", "required": true, "schema": { "type": "string" } }
-                ],
-                "requestBody": { "content": { "application/json": { "schema": { "type": "string" } } } },
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            }
-        },
-        "/fiks/digisos/api/v1/{fiksOrgId}/{digisosId}/filer": {
-            "post": {
-                "tags": ["fiks-controller"],
-                "operationId": "lastOppFilerInnsyn",
-                "parameters": [
-                    { "name": "digisosId", "in": "path", "required": true, "schema": { "type": "string" } },
-                    { "name": "fiksOrgId", "in": "path", "required": true, "schema": { "type": "string" } },
-                    {
-                        "name": "body",
-                        "in": "query",
-                        "required": true,
-                        "schema": { "$ref": "#/components/schemas/LinkedMultiValueMapStringObject" }
-                    }
-                ],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            }
-        },
-        "/fiks/digisos/api/v1/soknader/{kommunenummer}/{digisosId}/{navEksternRefId}": {
-            "post": {
-                "tags": ["fiks-controller"],
-                "operationId": "lastOppFiler",
-                "parameters": [
-                    { "name": "kommunenummer", "in": "path", "required": true, "schema": { "type": "string" } },
-                    { "name": "digisosId", "in": "path", "required": true, "schema": { "type": "string" } },
-                    { "name": "navEksternRefId", "in": "path", "required": true, "schema": { "type": "string" } },
-                    {
-                        "name": "body",
-                        "in": "query",
-                        "required": true,
-                        "schema": { "$ref": "#/components/schemas/LinkedMultiValueMapStringObject" }
-                    }
-                ],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            }
-        },
-        "/fiks/digisos/api/v1/nav/soknader/soknader": {
-            "post": {
-                "tags": ["fiks-controller"],
-                "operationId": "listSoknaderModia",
-                "parameters": [
-                    { "name": "sporingsId", "in": "query", "required": true, "schema": { "type": "string" } }
-                ],
-                "requestBody": {
-                    "content": { "application/json": { "schema": { "type": "string" } } },
-                    "required": true
-                },
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            }
-        },
-        "/fiks/digisos/api/v1/mellomlagring/{navEksternRefId}": {
-            "get": {
-                "tags": ["fiks-mellomlagring-controller"],
-                "operationId": "getAllMellomlagredeVedlegg",
-                "parameters": [
-                    { "name": "navEksternRefId", "in": "path", "required": true, "schema": { "type": "string" } }
-                ],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "object" } } } }
-                }
-            },
-            "post": {
-                "tags": ["fiks-mellomlagring-controller"],
-                "operationId": "postMellomlagretVedlegg",
-                "parameters": [
-                    { "name": "navEksternRefId", "in": "path", "required": true, "schema": { "type": "string" } },
-                    {
-                        "name": "body",
-                        "in": "query",
-                        "required": true,
-                        "schema": { "$ref": "#/components/schemas/LinkedMultiValueMapStringObject" }
-                    }
-                ],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            },
-            "delete": {
-                "tags": ["fiks-mellomlagring-controller"],
-                "operationId": "deleteAllMellomlagredeVedlegg",
-                "parameters": [
-                    { "name": "navEksternRefId", "in": "path", "required": true, "schema": { "type": "string" } }
-                ],
                 "responses": {
                     "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
                 }
@@ -835,55 +671,26 @@
                 }
             }
         },
+        "/kodeverk/api/v1/kodeverk/{kodeverknavn}/koder/betydninger": {
+            "get": {
+                "tags": ["kodeverk-controller"],
+                "operationId": "hentKodeverkMedNyUrl",
+                "parameters": [
+                    { "name": "kodeverknavn", "in": "path", "required": true, "schema": { "type": "string" } }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/KodeverkDto" } } }
+                    }
+                }
+            }
+        },
         "/jwks/{issuer}": {
             "get": {
                 "tags": ["well-known-controller"],
                 "operationId": "getMockAltJwks",
                 "parameters": [{ "name": "issuer", "in": "path", "required": true, "schema": { "type": "string" } }],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            }
-        },
-        "/internal/unleash/api/client/features": {
-            "get": {
-                "tags": ["unleash-controller"],
-                "operationId": "unleashToggles",
-                "parameters": [{ "name": "request", "in": "query", "required": true, "schema": { "type": "string" } }],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            }
-        },
-        "/internal/isReady": {
-            "get": {
-                "tags": ["is-alive-controller"],
-                "operationId": "isReady",
-                "parameters": [
-                    {
-                        "name": "parameters",
-                        "in": "query",
-                        "required": true,
-                        "schema": { "$ref": "#/components/schemas/MultiValueMapStringString" }
-                    }
-                ],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            }
-        },
-        "/internal/isAlive": {
-            "get": {
-                "tags": ["is-alive-controller"],
-                "operationId": "isAlive",
-                "parameters": [
-                    {
-                        "name": "parameters",
-                        "in": "query",
-                        "required": true,
-                        "schema": { "$ref": "#/components/schemas/MultiValueMapStringString" }
-                    }
-                ],
                 "responses": {
                     "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
                 }
@@ -966,131 +773,6 @@
                 "parameters": [
                     { "name": "dokumentlagerId", "in": "path", "required": true, "schema": { "type": "string" } }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": { "*/*": { "schema": { "type": "string", "format": "byte" } } }
-                    }
-                }
-            }
-        },
-        "/fiks/digisos/api/v1/soknader/{digisosId}": {
-            "get": {
-                "tags": ["fiks-controller"],
-                "operationId": "hentSoknadInnsyn",
-                "parameters": [{ "name": "digisosId", "in": "path", "required": true, "schema": { "type": "string" } }],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/DigisosSak" } } }
-                    }
-                }
-            }
-        },
-        "/fiks/digisos/api/v1/soknader/{digisosId}/dokumenter/{dokumentlagerId}": {
-            "get": {
-                "tags": ["fiks-controller"],
-                "operationId": "hentDokumentFraLagerInnsyn",
-                "parameters": [
-                    { "name": "digisosId", "in": "path", "required": true, "schema": { "type": "string" } },
-                    { "name": "dokumentlagerId", "in": "path", "required": true, "schema": { "type": "string" } }
-                ],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            }
-        },
-        "/fiks/digisos/api/v1/soknader/soknader": {
-            "get": {
-                "tags": ["fiks-controller"],
-                "operationId": "listSoknaderInnsyn",
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            }
-        },
-        "/fiks/digisos/api/v1/nav/soknader/{digisosId}": {
-            "get": {
-                "tags": ["fiks-controller"],
-                "operationId": "hentSoknadModia",
-                "parameters": [
-                    { "name": "digisosId", "in": "path", "required": true, "schema": { "type": "string" } },
-                    { "name": "sporingsId", "in": "query", "required": true, "schema": { "type": "string" } }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/DigisosSak" } } }
-                    }
-                }
-            }
-        },
-        "/fiks/digisos/api/v1/nav/soknader/{digisosId}/dokumenter/{dokumentlagerId}": {
-            "get": {
-                "tags": ["fiks-controller"],
-                "operationId": "hentDokumentFraLagerModia",
-                "parameters": [
-                    { "name": "digisosId", "in": "path", "required": true, "schema": { "type": "string" } },
-                    { "name": "dokumentlagerId", "in": "path", "required": true, "schema": { "type": "string" } },
-                    { "name": "sporingsId", "in": "query", "required": true, "schema": { "type": "string" } }
-                ],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            }
-        },
-        "/fiks/digisos/api/v1/nav/kommuner": {
-            "get": {
-                "tags": ["fiks-controller"],
-                "operationId": "hentKommuneInfoListe",
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            }
-        },
-        "/fiks/digisos/api/v1/nav/kommuner/{kommunenummer}": {
-            "get": {
-                "tags": ["fiks-controller"],
-                "operationId": "hentKommuneInfo",
-                "parameters": [
-                    { "name": "kommunenummer", "in": "path", "required": true, "schema": { "type": "string" } }
-                ],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            }
-        },
-        "/fiks/digisos/api/v1/mellomlagring/{navEksternRefId}/{digisosDokumentId}": {
-            "get": {
-                "tags": ["fiks-mellomlagring-controller"],
-                "operationId": "getMellomlagretVedlegg",
-                "parameters": [
-                    { "name": "navEksternRefId", "in": "path", "required": true, "schema": { "type": "string" } },
-                    { "name": "digisosDokumentId", "in": "path", "required": true, "schema": { "type": "string" } }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": { "*/*": { "schema": { "type": "string", "format": "byte" } } }
-                    }
-                }
-            },
-            "delete": {
-                "tags": ["fiks-mellomlagring-controller"],
-                "operationId": "deleteMellomlagretVedlegg",
-                "parameters": [
-                    { "name": "navEksternRefId", "in": "path", "required": true, "schema": { "type": "string" } },
-                    { "name": "digisosDokumentId", "in": "path", "required": true, "schema": { "type": "string" } }
-                ],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            }
-        },
-        "/fiks/digisos/api/v1/dokumentlager-public-key": {
-            "get": {
-                "tags": ["fiks-controller"],
-                "operationId": "hentDokumentLagerNokkel",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1324,64 +1006,6 @@
                     }
                 }
             }
-        },
-        "/internal/prometheus": {
-            "get": {
-                "tags": ["prometheus-controller"],
-                "operationId": "fakePrometheus",
-                "parameters": [{ "name": "request", "in": "query", "required": true, "schema": { "type": "string" } }],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            },
-            "put": {
-                "tags": ["prometheus-controller"],
-                "operationId": "fakePrometheus_3",
-                "parameters": [{ "name": "request", "in": "query", "required": true, "schema": { "type": "string" } }],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            },
-            "post": {
-                "tags": ["prometheus-controller"],
-                "operationId": "fakePrometheus_2",
-                "parameters": [{ "name": "request", "in": "query", "required": true, "schema": { "type": "string" } }],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            },
-            "delete": {
-                "tags": ["prometheus-controller"],
-                "operationId": "fakePrometheus_5",
-                "parameters": [{ "name": "request", "in": "query", "required": true, "schema": { "type": "string" } }],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            },
-            "options": {
-                "tags": ["prometheus-controller"],
-                "operationId": "fakePrometheus_6",
-                "parameters": [{ "name": "request", "in": "query", "required": true, "schema": { "type": "string" } }],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            },
-            "head": {
-                "tags": ["prometheus-controller"],
-                "operationId": "fakePrometheus_1",
-                "parameters": [{ "name": "request", "in": "query", "required": true, "schema": { "type": "string" } }],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            },
-            "patch": {
-                "tags": ["prometheus-controller"],
-                "operationId": "fakePrometheus_4",
-                "parameters": [{ "name": "request", "in": "query", "required": true, "schema": { "type": "string" } }],
-                "responses": {
-                    "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
-                }
-            }
         }
     },
     "components": {
@@ -1459,14 +1083,6 @@
                 }
             },
             "ForsendelsesId": { "type": "object", "properties": { "id": { "type": "string", "format": "uuid" } } },
-            "MultiValueMapStringString": {
-                "type": "object",
-                "properties": {
-                    "all": { "type": "object", "additionalProperties": { "type": "string" }, "writeOnly": true },
-                    "empty": { "type": "boolean" }
-                },
-                "additionalProperties": { "type": "array", "items": { "type": "string" } }
-            },
             "LogEntryRequest": {
                 "required": ["message"],
                 "type": "object",
@@ -1692,10 +1308,10 @@
                     "name": { "type": "string" },
                     "value": { "type": "string" },
                     "attributes": { "type": "object", "additionalProperties": { "type": "string" } },
-                    "maxAge": { "type": "integer", "format": "int32" },
-                    "path": { "type": "string" },
-                    "version": { "type": "integer", "format": "int32", "deprecated": true },
                     "domain": { "type": "string" },
+                    "path": { "type": "string" },
+                    "maxAge": { "type": "integer", "format": "int32" },
+                    "version": { "type": "integer", "format": "int32", "deprecated": true },
                     "comment": { "type": "string", "deprecated": true },
                     "secure": { "type": "boolean" },
                     "httpOnly": { "type": "boolean" }
@@ -1710,14 +1326,6 @@
                     "vedtaksIds": { "type": "array", "items": { "type": "string" } },
                     "vedlegg": { "type": "array", "items": { "type": "string", "format": "binary" } }
                 }
-            },
-            "LinkedMultiValueMapStringObject": {
-                "type": "object",
-                "properties": {
-                    "empty": { "type": "boolean" },
-                    "all": { "type": "object", "additionalProperties": { "type": "object" }, "writeOnly": true }
-                },
-                "additionalProperties": { "type": "array", "items": { "type": "object" } }
             },
             "Feilsituasjon": {
                 "required": [
@@ -2496,75 +2104,6 @@
                 "properties": {
                     "saker": { "type": "array", "items": { "$ref": "#/components/schemas/SakerDto" } },
                     "utbetalinger": { "type": "array", "items": { "$ref": "#/components/schemas/UtbetalingerDto" } }
-                }
-            },
-            "DigisosSak": {
-                "required": ["fiksDigisosId", "fiksOrgId", "kommunenummer", "sistEndret", "sokerFnr"],
-                "type": "object",
-                "properties": {
-                    "fiksDigisosId": { "type": "string" },
-                    "sokerFnr": { "type": "string" },
-                    "fiksOrgId": { "type": "string" },
-                    "kommunenummer": { "type": "string" },
-                    "sistEndret": { "type": "integer", "format": "int64" },
-                    "originalSoknadNAV": { "$ref": "#/components/schemas/OriginalSoknadNAV" },
-                    "ettersendtInfoNAV": { "$ref": "#/components/schemas/EttersendtInfoNAV" },
-                    "digisosSoker": { "$ref": "#/components/schemas/DigisosSoker" },
-                    "tilleggsinformasjon": { "$ref": "#/components/schemas/Tilleggsinformasjon" }
-                }
-            },
-            "DigisosSoker": {
-                "required": ["dokumenter", "metadata", "timestampSistOppdatert"],
-                "type": "object",
-                "properties": {
-                    "metadata": { "type": "string" },
-                    "dokumenter": { "type": "array", "items": { "$ref": "#/components/schemas/DokumentInfo" } },
-                    "timestampSistOppdatert": { "type": "integer", "format": "int64" }
-                }
-            },
-            "DokumentInfo": {
-                "required": ["dokumentlagerDokumentId", "filnavn", "storrelse"],
-                "type": "object",
-                "properties": {
-                    "filnavn": { "type": "string" },
-                    "dokumentlagerDokumentId": { "type": "string" },
-                    "storrelse": { "type": "integer", "format": "int64" }
-                }
-            },
-            "Ettersendelse": {
-                "required": ["navEksternRefId", "timestampSendt", "vedlegg", "vedleggMetadata"],
-                "type": "object",
-                "properties": {
-                    "navEksternRefId": { "type": "string" },
-                    "vedleggMetadata": { "type": "string" },
-                    "vedlegg": { "type": "array", "items": { "$ref": "#/components/schemas/DokumentInfo" } },
-                    "timestampSendt": { "type": "integer", "format": "int64" }
-                }
-            },
-            "EttersendtInfoNAV": {
-                "required": ["ettersendelser"],
-                "type": "object",
-                "properties": {
-                    "ettersendelser": { "type": "array", "items": { "$ref": "#/components/schemas/Ettersendelse" } }
-                }
-            },
-            "OriginalSoknadNAV": {
-                "required": [
-                    "metadata",
-                    "navEksternRefId",
-                    "soknadDokument",
-                    "timestampSendt",
-                    "vedlegg",
-                    "vedleggMetadata"
-                ],
-                "type": "object",
-                "properties": {
-                    "navEksternRefId": { "type": "string" },
-                    "metadata": { "type": "string" },
-                    "vedleggMetadata": { "type": "string" },
-                    "soknadDokument": { "$ref": "#/components/schemas/DokumentInfo" },
-                    "vedlegg": { "type": "array", "items": { "$ref": "#/components/schemas/DokumentInfo" } },
-                    "timestampSendt": { "type": "integer", "format": "int64" }
                 }
             },
             "NavnDto": {
