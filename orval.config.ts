@@ -1,4 +1,6 @@
-const config = {
+import { defineConfig } from 'orval';
+
+export default defineConfig({
     'mock-alt-api': {
         input: './mock-alt-api.json',
         output: {
@@ -16,10 +18,9 @@ const config = {
             // som støtter msw v2.
             mock: false,
         },
+
         hooks: {
             afterAllFilesWrite: 'prettier --write',
         },
     },
-};
-
-export default config;
+});
