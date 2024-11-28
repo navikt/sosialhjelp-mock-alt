@@ -7,11 +7,11 @@ on:
       - '**'      # Don't build any tags
   workflow_dispatch:
 
-permissions:
-  contents: read
-  id-token: write
 jobs:
   deploy:
+    permissions:
+      contents: read
+      id-token: write
     name: Build and deploy to dev
     runs-on: ubuntu-latest
     steps:
