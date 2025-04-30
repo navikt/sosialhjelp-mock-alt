@@ -29,14 +29,17 @@ jobs:
         run: npm run orval
       - name: Build application
         run: npm run build
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
       - name: Build and push docker image to GAR
         uses: nais/docker-build-push@v0
         id: docker-build-push
         with:
           team: teamdigisos
-          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           tag: latest
+          platforms: linux/amd64,linux/arm64/v8
           build_secrets: |
             NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
       - name: Deploy til dev
