@@ -1,5 +1,6 @@
 FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:latest-dev AS builder
 
+USER root
 ENV NODE_ENV=production
 
 COPY package*.json ./
