@@ -1,6 +1,5 @@
 FROM cgr.dev/chainguard/node:latest-dev AS builder
 
-USER ROOT
 ENV NODE_ENV=production
 
 COPY package*.json ./
