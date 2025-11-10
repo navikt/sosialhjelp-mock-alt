@@ -39,7 +39,7 @@ jobs:
         with:
           team: teamdigisos
           tag: latest
-          platforms: linux/amd64,linux/arm64/v8
+          platforms: linux/amd64
           build_secrets: |
             NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
       - name: Deploy til dev
