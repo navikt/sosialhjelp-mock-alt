@@ -9,7 +9,7 @@ RUN npm install --include=dev
 COPY . .
 RUN npm run build
 
-FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/nginx AS production
+FROM cgr.dev/chainguard/nginx AS production
 COPY --from=builder dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
