@@ -38,6 +38,7 @@ export const NyttBarn = ({
 
     useEffect(
         () =>
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setBarn((prev) => ({
                 ...prev,
                 bostedsadresse,

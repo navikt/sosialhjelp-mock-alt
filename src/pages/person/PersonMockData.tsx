@@ -115,6 +115,7 @@ export const PersonMockData = () => {
             dispatchAppStatus({ type: 'success' });
 
             if (isLoginSession(params)) {
+                // eslint-disable-next-line react-hooks/immutability
                 window.location.href = getRedirectUrl(personalia.fnr).href;
             } else {
                 navigate('/' + addParams(params));

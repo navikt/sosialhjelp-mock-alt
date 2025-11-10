@@ -8,6 +8,7 @@ import { usePersonListe } from '../../generated/frontend-controller/frontend-con
 export const Login = () => {
     const [valgtFnr, setValgtFnr] = useState<string>();
     const { data: personliste } = usePersonListe();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     useEffect(() => setValgtFnr(personliste?.[0].fnr), [personliste]);
 
     // Innsyn bruker fremdeles "redirect_uri", så vi konformerer tilbake til "redirect" her

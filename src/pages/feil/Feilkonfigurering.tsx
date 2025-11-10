@@ -65,6 +65,7 @@ export const Feilkonfigurering = () => {
     const navigate = useNavigate();
     useEffect(() => {
         if (queryFnr !== null && queryFnr.length > 1) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setFnr(queryFnr);
             setEditMode(true);
         }
