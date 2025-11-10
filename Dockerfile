@@ -1,15 +1,17 @@
-FROM node:22-alpine AS builder
+FROM cgr.dev/chainguard/node:latest-dev AS builder
 
+USER ROOT
 ENV NODE_ENV=production
 
-COPY package.json .
-COPY package-lock.json .
+COPY package*.json ./
+
 RUN npm install --include=dev
 
 COPY . .
 RUN npm run build
 
-FROM nginx:alpine AS server
-
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+FROM cgr.dev/chainguard/nginx AS production
 COPY --from=builder dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 8080
