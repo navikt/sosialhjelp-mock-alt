@@ -31,7 +31,8 @@
     "prepare": "husky install",
     "lintStaged": "lint-staged",
     "fetch-api": "curl -o ./mock-alt-api.json http://localhost:8989/sosialhjelp/mock-alt-api/v3/api-docs && prettier --write mock-alt-api.json",
-    "orval": "rm -rf ./src/generated & orval --prettier"
+    "orval": "rm -rf ./src/generated & orval --prettier",
+    "preinstall": "npx -y only-allow pnpm"
   },
   "browserslist": {
     "production": [

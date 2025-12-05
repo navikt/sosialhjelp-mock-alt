@@ -1,12 +1,15 @@
 FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:latest-dev AS builder
-
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 USER root
 WORKDIR /app
 ENV NODE_ENV=production
 
-COPY package*.json ./
+COPY package.json ./
+COPY pnpm-*.yaml ./
 
-RUN npm install --include=dev
+RUN pnpm install
 
 COPY . .
 RUN npm run build
