@@ -1,7 +1,5 @@
 FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:latest-dev AS builder
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+
 USER root
 WORKDIR /app
 ENV NODE_ENV=production
@@ -9,10 +7,10 @@ ENV NODE_ENV=production
 COPY package.json ./
 COPY pnpm-*.yaml ./
 
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 
 COPY . .
-RUN npm run build
+RUN pnpm run build
 
 FROM cgr.dev/chainguard/nginx AS production
 COPY --from=builder /app/dist /usr/share/nginx/html
