@@ -2,3 +2,6 @@ minimumReleaseAge: 10080
 
 minimumReleaseAgeExclude:
   - axios@1.15.0
+
+allowBuilds:
+  esbuild: false
