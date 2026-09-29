@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { addParams, getRedirectParams, getRedirectUrl, isLoginSession } from '../../utils/restUtils';
+import { addParams, getRedirectParams, getRedirectUrl, getReturnTo, isLoginSession } from '../../utils/restUtils';
 import { Collapse } from 'react-collapse';
 import styled from 'styled-components';
 import { Adressebeskyttelse } from './personalia/adressebeskyttelse';
@@ -58,6 +58,7 @@ export const PersonMockData = () => {
     const { adresseState, bostedsadresse, dispatchAdresse } = useAdresse();
     const queryFnr = new URLSearchParams(useLocation().search).get('brukerID');
     const params = getRedirectParams();
+    const returnTo = getReturnTo();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -114,7 +115,9 @@ export const PersonMockData = () => {
 
             dispatchAppStatus({ type: 'success' });
 
-            if (isLoginSession(params)) {
+            if (returnTo) {
+                navigate('/login' + addParams(params));
+            } else if (isLoginSession(params)) {
                 // eslint-disable-next-line react-hooks/immutability
                 window.location.href = getRedirectUrl(personalia.fnr).href;
             } else {
@@ -372,13 +375,18 @@ export const PersonMockData = () => {
             <div className={'flex gap-4'}>
                 {!lockedMode && (
                     <Button variant="primary" onClick={onCreateUser}>
-                        {editMode ? 'Lagre endringer' : 'Opprett bruker'} {isLoginSession(params) && ' og logg inn'}
+                        {editMode ? 'Lagre endringer' : 'Opprett bruker'}
+                        {returnTo ? ' og gå tilbake til innlogging' : isLoginSession(params) && ' og logg inn'}
                     </Button>
                 )}
                 <Button
                     variant="secondary"
                     onClick={(event: ClickEvent): void => {
-                        navigate('/' + addParams(params));
+                        if (returnTo) {
+                            navigate('/login' + addParams(params));
+                        } else {
+                            navigate('/' + addParams(params));
+                        }
                         event.preventDefault();
                     }}
                 >

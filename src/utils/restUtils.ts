@@ -27,12 +27,28 @@ export const getRedirectParams = (): string => {
     const expiry = query.get('expiry');
     const cookieName = query.get('cookiename');
     const redirect = query.get('redirect') || query.get('redirect_uri') || query.get('goto');
+    const returnTo = getReturnTo();
 
     const newQuery = new URLSearchParams();
     if (cookieName) newQuery.set('cookiename', cookieName);
     if (redirect) newQuery.set('redirect', redirect);
     if (expiry) newQuery.set('expiry', expiry);
+    if (returnTo) newQuery.set('returnTo', returnTo);
     return '&' + newQuery.toString();
+};
+
+export const getReturnTo = (): string | null => {
+    const returnTo = new URLSearchParams(window.location.search).get('returnTo');
+    if (!returnTo) return null;
+
+    try {
+        const url = new URL(returnTo);
+        const isLocalhost = ['localhost', '127.0.0.1'].includes(url.hostname) && url.protocol === 'http:';
+        const isDevMockLogin = url.origin === 'https://sosiauth2.ekstern.dev.nav.no';
+        return isLocalhost || isDevMockLogin ? url.href : null;
+    } catch {
+        return null;
+    }
 };
 
 const REDIRECT_SEARCH_PARAM_KEYS = ['cookiename', 'expiry', 'redirect'] as const;

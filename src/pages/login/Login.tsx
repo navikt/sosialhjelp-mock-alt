@@ -1,6 +1,13 @@
 import { Alert, Button, Heading } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
-import { addParams, getInnsynURL, getRedirectParams, getRedirectUrl, getSoknadURL } from '../../utils/restUtils';
+import {
+    addParams,
+    getInnsynURL,
+    getRedirectParams,
+    getRedirectUrl,
+    getReturnTo,
+    getSoknadURL,
+} from '../../utils/restUtils';
 import { Link } from 'react-router-dom';
 import { Knappegruppe, StyledSelect } from '../../styling/Styles';
 import { usePersonListe } from '../../generated/frontend-controller/frontend-controller';
@@ -24,12 +31,34 @@ export const Login = () => {
     }, []);
 
     const [redirect, setRedirect] = useState(window.location.origin + '/sosialhjelp/mock-alt/login');
+    const returnTo = getReturnTo();
 
     if (!valgtFnr || !personliste) return;
 
     const params = getRedirectParams();
 
     const handleOnClick = () => {
+        if (returnTo) {
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = returnTo;
+
+            const username = document.createElement('input');
+            username.type = 'hidden';
+            username.name = 'username';
+            username.value = valgtFnr;
+
+            const claims = document.createElement('input');
+            claims.type = 'hidden';
+            claims.name = 'claims';
+            claims.value = JSON.stringify({ pid: valgtFnr, acr: 'idporten-loa-high', client_id: 'default' });
+
+            form.append(username, claims);
+            document.body.appendChild(form);
+            form.submit();
+            return;
+        }
+
         const nextPage = getRedirectUrl(valgtFnr);
         if (!window.location.search.includes('redirect')) nextPage.searchParams.set('redirect', redirect);
 
@@ -54,7 +83,7 @@ export const Login = () => {
                     </option>
                 ))}
             </StyledSelect>
-            {!window.location.search.includes('redirect') && (
+            {!returnTo && !window.location.search.includes('redirect') && (
                 <StyledSelect
                     onChange={(event) => setRedirect(event.target.value)}
                     label="Velg tjeneste"
